@@ -123,7 +123,7 @@ class PauliString:
 
     @guppy
     def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return not parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
+        return parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
 
 PauliString.check()
 ```
@@ -148,7 +148,7 @@ class PauliString(Generic[n]):
 
     @guppy
     def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return parity_sum(self.xs, other.zs) == parity_sum(self.zs, other.xs) == 0
+        return parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
 
 PauliString.check()
 ```
