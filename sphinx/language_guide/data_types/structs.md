@@ -153,6 +153,54 @@ class PauliString(Generic[n]):
 PauliString.check()
 ```
 
+## Testing our `PauliString` struct
+
+Now that we have defined a struct to represent an $n$ qubit Pauli string with 2 arrays of $n$ bits, let's test that the struct methods perform as expected.
+
+
+First we will define instances of the struct representing the $XII$, $ZII$ 
+
+
+```{code-cell} ipython3
+from guppylang.std.builtins import result
+
+@guppy.comptime
+def main() -> None:
+    pauli_X0 = PauliString(
+        array(True, False, False), array(False, False, False)
+    )  # Pauli string XII
+    pauli_Z0 = PauliString(
+        array(False, False, False), array(True, False, False)
+    )  # Pauli string ZII
+
+    pauli_XXZ = PauliString(
+        array(True, True, False), array(False, False, True)
+    )  # Pauli string XXZ
+    pauli_XZX = PauliString(
+        array(True, False, True), array(False, True, False)
+    )  # Pauli string XZX
+
+    print("Testing PauliString.__eq__()...")
+    result("[XII == ZII?", pauli_X0 == pauli_Z0) # Expect False
+    result("[XII == ZII?", pauli_X0 == pauli_X0) # Expect True
+
+
+    print("Testing PauliString.commutes_with()...")
+    result("[XII, ZII] == 0?", pauli_X0.commutes_with(pauli_Z0))
+    result("[ZII, XII] == 0?", pauli_Z0.commutes_with(pauli_X0))
+    result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
+    result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
+```
+
+```{code-cell} ipython3
+for shot in main.emulator(1).run().results:
+    for entry in shot:
+        name, res = entry
+        print(f"{name} ? {bool(res)}")
+```
+
+
+
 ## Structs with linear fields are linear
 
 As discussed in the section on [linearity](../ownership.md#linear-types), objects of linear types cannot be copied and must be used once and only once.
