@@ -71,8 +71,34 @@ def bad_function(b: bool) -> int:
 bad_function.check() # Check fails!
 ```
 
-Type annotations are only required for function definitions, otherwise Guppy infers types most of the time. A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
+The Guppy compiler can infer types most of the time, meaning that type annotations are usually only required for function definitions. However, it can be necessary to provide type annotations where the type cannot be determined. An example of this is when initialising `nothing` in the following program:
 
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def foo() -> None:
+    q = nothing()
+
+    q.unwrap_nothing()
+
+foo.check()
+```
+
+In this example, the Guppy compiler cannot infer what the type of `q` should be. To fix this, we can provide a type hint `Option[qubit]` for the compiler.
+
+```{code-cell} ipython3
+@guppy
+def foo() -> None:
+    q = nothing[qubit]()
+
+    q.unwrap_nothing()
+
+foo.check()
+```
+
+A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
 
 ## Generics
 
