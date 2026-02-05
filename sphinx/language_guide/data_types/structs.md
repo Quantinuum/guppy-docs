@@ -165,7 +165,7 @@ We will define instances of the struct representing the $XII$, $ZII$, $XXZ$ and 
 ```{code-cell} ipython3
 from guppylang.std.builtins import result
 
-@guppy.comptime
+@guppy
 def main() -> None:
     pauli_X0 = PauliString(
         array(True, False, False), array(False, False, False)
@@ -183,6 +183,7 @@ def main() -> None:
 
     result("XII == ZII?", pauli_X0 == pauli_Z0) # Expect 0 (False)
 
+    # We expect the return value of 0 (False) for all of these checks.
     result("[XII, ZII] == 0?", pauli_X0.commutes_with(pauli_Z0))
     result("[ZII, XII] == 0?", pauli_Z0.commutes_with(pauli_X0))
     result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
