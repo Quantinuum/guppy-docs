@@ -181,13 +181,15 @@ def main() -> None:
         array(True, False, True), array(False, True, False)
     )  # Pauli string XZX
 
-    result("[XII == ZII?", pauli_X0 == pauli_Z0) # Expect 0 (False)
+    result("XII == ZII?", pauli_X0 == pauli_Z0) # Expect 0 (False)
 
     result("[XII, ZII] == 0?", pauli_X0.commutes_with(pauli_Z0))
     result("[ZII, XII] == 0?", pauli_Z0.commutes_with(pauli_X0))
     result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
     result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
 ```
+
+Now that we have defined the `main` with the test cases for our struct, we can execute the program with Selene to verify 
 
 
 ```{code-cell} ipython3
