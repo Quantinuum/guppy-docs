@@ -143,22 +143,23 @@ class PauliString(Generic[n]):
     zs: array[bool, n]
 
     @guppy
-    def __eq__(self: "PauliString", other: "PauliString") -> bool:
+    def __eq__(self: "PauliString[n]", other: "PauliString[n]") -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: "PauliString", other: "PauliString") -> bool:
+    def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
         return parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
 
 PauliString.check()
 ```
 
+Note how we have to specify the generic type in both the struct definition and the method signatures.
+
 ## Testing our `PauliString` struct
 
 Now that we have defined a struct to represent an $n$ qubit Pauli string with 2 arrays of $n$ bits, let's test that the struct methods perform as expected.
 
-
-First we will define instances of the struct representing the $XII$, $ZII$ 
+We will define instances of the struct representing the $XII$, $ZII$, $XXZ$ and $XZX$ Pauli strings. We can then use these string to test the equality and commutation methods.
 
 
 ```{code-cell} ipython3
@@ -180,23 +181,21 @@ def main() -> None:
         array(True, False, True), array(False, True, False)
     )  # Pauli string XZX
 
-    print("Testing PauliString.__eq__()...")
-    result("[XII == ZII?", pauli_X0 == pauli_Z0) # Expect False
-    result("[XII == ZII?", pauli_X0 == pauli_X0) # Expect True
+    result("[XII == ZII?", pauli_X0 == pauli_Z0) # Expect 0 (False)
 
-
-    print("Testing PauliString.commutes_with()...")
     result("[XII, ZII] == 0?", pauli_X0.commutes_with(pauli_Z0))
     result("[ZII, XII] == 0?", pauli_Z0.commutes_with(pauli_X0))
     result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
     result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
 ```
 
+
 ```{code-cell} ipython3
+print("Testing PauliString.__eq__() and PauliString.commutes_with()...")
 for shot in main.emulator(1).run().results:
     for entry in shot:
         name, res = entry
-        print(f"{name} ? {bool(res)}")
+        print(f"{name}, {bool(res)}")
 ```
 
 
