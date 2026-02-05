@@ -153,7 +153,7 @@ class PauliString(Generic[n]):
 PauliString.check()
 ```
 
-Note how we have to specify the generic type in both the struct definition and the method signatures.
+Note that we have to specify the generic type in both the struct definition and the method signatures.
 
 ## Testing our `PauliString` struct
 
