@@ -91,11 +91,58 @@ In this example, the Guppy compiler cannot infer what the type of `q` should be.
 ```{code-cell} ipython3
 @guppy
 def foo() -> None:
-    q = nothing[qubit]()
+    q: Option[qubit] = nothing()
 
     q.unwrap_nothing()
 
 foo.check()
+```
+
+Where type hinting can often be required is for functions that have a generic return value. Consider the following `append` function for an array of qubits. 
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+n = guppy.nat_var("n")
+m = guppy.nat_var("m")
+
+@guppy
+def append(q_arr: array[qlib.qubit, n]@owned, qb: qlib.qubit@owned) -> array[qlib.qubit, m]:
+    q_arr_opt = array(nothing[qlib.qubit]() for _ in range(m))
+    
+    idx = 0
+    for q in q_arr:
+        q_arr_opt[idx].swap(some(q)).unwrap_nothing()
+        idx +=1
+    
+    q_arr_opt[m].swap(some(qb)).unwrap_nothing()
+    
+    qs = array(q.unwrap() for q in q_arr_opt)
+    
+    return qs
+
+@guppy
+def main() -> None:
+    qb = array(qubit() for _ in range(2))
+    qb_new = append(qb, qubit())
+    
+    discard_array(qb_new)
+
+main.check()
+```
+
+The compiler is unable to reason about the size of the array being returned from the function. However, we know the size of the array that should be returned and can provide this information with a type hint
+
+```{code-cell} ipython3
+@guppy
+def main() -> None:
+    qb = array(qubit() for _ in range(2))
+    qb_new = append(qb, qubit())
+    
+    discard_array(qb_new)
+
+main.check()
 ```
 
 A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
