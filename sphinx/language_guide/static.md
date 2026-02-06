@@ -108,17 +108,19 @@ n = guppy.nat_var("n")
 m = guppy.nat_var("m")
 
 @guppy
-def append(q_arr: array[qlib.qubit, n]@owned, qb: qlib.qubit@owned) -> array[qlib.qubit, m]:
-    q_arr_opt = array(nothing[qlib.qubit]() for _ in range(m))
+def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
+    q_arr_opt = array(nothing[qubit]() for _ in range(m))
     
     idx = 0
     for q in q_arr:
         q_arr_opt[idx].swap(some(q)).unwrap_nothing()
-        idx +=1
+        idx += 1
     
     q_arr_opt[m].swap(some(qb)).unwrap_nothing()
     
     qs = array(q.unwrap() for q in q_arr_opt)
+    
+    return qs
     
     return qs
 
@@ -138,7 +140,7 @@ The compiler is unable to reason about the size of the array being returned from
 @guppy
 def main() -> None:
     qb = array(qubit() for _ in range(2))
-    qb_new = append(qb, qubit())
+    qb_new: array[qubit, 2] = append(qb, qubit())
     
     discard_array(qb_new)
 
