@@ -98,62 +98,7 @@ def foo() -> None:
 foo.check()
 ```
 
-Where type hinting can often be required is for functions that have a generic return value. Consider the following `append` function for an array of qubits. 
-
-```{code-cell} ipython3
-from guppylang.std.quantum import discard_array, qubit
-from guppylang.std.builtins import array, owned
-from guppylang.std.option import nothing, some
-
-n = guppy.nat_var("n")
-m = guppy.nat_var("m")
-
-@guppy
-def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
-    q_arr_opt = array(nothing[qubit]() for _ in range(m))
-    
-    idx = 0
-    for q in q_arr:
-        q_arr_opt[idx].swap(some(q)).unwrap_nothing()
-        idx += 1
-    
-    q_arr_opt[m].swap(some(qb)).unwrap_nothing()
-    
-    qs = array(q.unwrap() for q in q_arr_opt)
-    
-    return qs
-```
-
-When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size of the array.
-
-```{code-cell} ipython3
----
-tags: [raises-exception]
----
-@guppy
-def main() -> None:
-    qb = array(qubit() for _ in range(2))
-    qb_new = append(qb, qubit())
-    
-    discard_array(qb_new)
-
-main.check()
-```
-
-However, as we know the size of the array that should be returned, we can provide this information with a type hint for the compiler:
-
-```{code-cell} ipython3
-@guppy
-def main() -> None:
-    qb = array(qubit() for _ in range(2))
-    qb_new: array[qubit, 2] = append(qb, qubit())
-    
-    discard_array(qb_new)
-
-main.check()
-```
-
-A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
+An example of where type annotations can be required is for generic functions is introduced below. A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
 
 ## Generics
 
@@ -235,4 +180,59 @@ def rep_code(q: array[qubit, n]) -> array[bool, n]:
     return measure_array(a)
 
 rep_code.check()
+```
+
+As we saw above, it can sometimes be necessary to provide type annotations for the Guppy compiler. Functions that have a generic return value can often require annotation.Consider the following `append` function which takes an array of qubits and appends a qubit to the end.
+
+```{code-cell} ipython3
+from guppylang.std.quantum import discard_array, qubit
+from guppylang.std.builtins import array, owned
+from guppylang.std.option import nothing, some
+
+n = guppy.nat_var("n")
+m = guppy.nat_var("m")
+
+@guppy
+def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
+    q_arr_opt = array(nothing[qubit]() for _ in range(m))
+    
+    idx = 0
+    for q in q_arr:
+        q_arr_opt[idx].swap(some(q)).unwrap_nothing()
+        idx += 1
+    
+    q_arr_opt[m].swap(some(qb)).unwrap_nothing()
+    
+    qs = array(q.unwrap() for q in q_arr_opt)
+    
+    return qs
+```
+
+When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size of the array.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def main() -> None:
+    qb = array(qubit() for _ in range(2))
+    qb_new = append(qb, qubit())
+    
+    discard_array(qb_new)
+
+main.check()
+```
+
+However, as we know the size of the array that should be returned, we can provide this information with a type hint for the compiler:
+
+```{code-cell} ipython3
+@guppy
+def main() -> None:
+    qb = array(qubit() for _ in range(2))
+    qb_new: array[qubit, 2] = append(qb, qubit())
+    
+    discard_array(qb_new)
+
+main.check()
 ```
