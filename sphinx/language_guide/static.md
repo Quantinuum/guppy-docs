@@ -104,6 +104,11 @@ Where type hinting can often be required is for functions that have a generic re
 ---
 tags: [raises-exception]
 ---
+
+from guppylang.std.quantum import discard_array, qubit
+from guppylang.std.builtins import array, owned
+from guppylang.std.option import nothing, some
+
 n = guppy.nat_var("n")
 m = guppy.nat_var("m")
 
@@ -119,8 +124,6 @@ def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
     q_arr_opt[m].swap(some(qb)).unwrap_nothing()
     
     qs = array(q.unwrap() for q in q_arr_opt)
-    
-    return qs
     
     return qs
 
