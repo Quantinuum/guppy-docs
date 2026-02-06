@@ -8,6 +8,6 @@ jobs:
     add-to-project:
         uses: quantinuum/hugrverse-actions/.github/workflows/add-to-project.yml@main
         with:
-            project-url: https://github.com/orgs/quantinuum-dev/projects/10
+            project-url: https://github.com/orgs/quantinuum/projects/23
         secrets:
-            GITHUB_PAT: ${{ secrets.PROJECT_TOKEN }}
+            GITHUB_PAT: ${{ secrets.HUGRBOT_PAT }}
