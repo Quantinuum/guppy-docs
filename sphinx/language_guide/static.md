@@ -101,10 +101,6 @@ foo.check()
 Where type hinting can often be required is for functions that have a generic return value. Consider the following `append` function for an array of qubits. 
 
 ```{code-cell} ipython3
----
-tags: [raises-exception]
----
-
 from guppylang.std.quantum import discard_array, qubit
 from guppylang.std.builtins import array, owned
 from guppylang.std.option import nothing, some
@@ -126,7 +122,14 @@ def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
     qs = array(q.unwrap() for q in q_arr_opt)
     
     return qs
+```
 
+When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size of the array.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
 @guppy
 def main() -> None:
     qb = array(qubit() for _ in range(2))
@@ -137,7 +140,7 @@ def main() -> None:
 main.check()
 ```
 
-The compiler is unable to reason about the size of the array being returned from the function. However, we know the size of the array that should be returned and can provide this information with a type hint
+However, as we know the size of the array that should be returned, we can provide this information with a type hint for the compiler:
 
 ```{code-cell} ipython3
 @guppy
