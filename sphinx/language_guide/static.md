@@ -29,7 +29,7 @@ def bad_function(b: bool) -> int:
 
 bad_function.check() # Check fails!
 ```
-However it also has implications on the information we have to provide in the program, in particular about types. 
+However, it also has implications on the information we have to provide in the program, in particular about types. 
 
 ## Type checking
 
@@ -40,7 +40,7 @@ def python_function(x: float) -> str: # float and str are type annotations
     return f"The value of x is {x}"
 ```
 
-Python type hints are an optional feature and not enforced at runtime, they are for static analysis only. Guppy however is strongly typed - code must type-check at compile-time, and ill-typed programs will be rejected by the compiler. For example, observe the error when trying to compile the program below.
+Python type hints are an optional feature and not enforced at runtime; they are for static analysis only. Guppy however is strongly typed - code must type-check at compile-time, and ill-typed programs will be rejected by the compiler. For example, observe the error when trying to compile the program below.
 
 ```{code-cell} ipython3
 ---
@@ -71,8 +71,38 @@ def bad_function(b: bool) -> int:
 bad_function.check() # Check fails!
 ```
 
-Type annotations are only required for function definitions, otherwise Guppy infers types most of the time. A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
+The Guppy compiler can infer types most of the time, meaning that type annotations are usually only required for function definitions. However, it can be necessary to provide type annotations where the type cannot be determined. An example of this is when initialising `nothing` in the following program:
 
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.option import nothing
+
+@guppy
+def foo() -> None:
+    q = nothing()
+
+    q.unwrap_nothing()
+
+foo.check()
+```
+
+In this example, the Guppy compiler cannot infer what the type of `q` should be. To fix this, we can provide a type hint `Option[qubit]` for the compiler.
+
+```{code-cell} ipython3
+@guppy
+def foo() -> None:
+    q: Option[qubit] = nothing()
+
+    q.unwrap_nothing()
+
+foo.check()
+```
+
+In the next section, we will introduce generic functions where input and output arguments depend on parameters. This is another example of where type annotations can be necessary to provide the Guppy compiler enough information to determine variable types. 
+
+A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
 
 ## Generics
 
@@ -154,4 +184,57 @@ def rep_code(q: array[qubit, n]) -> array[bool, n]:
     return measure_array(a)
 
 rep_code.check()
+```
+
+As we saw in the previous section, it is sometimes not possible for the Guppy compiler to infer types and it is necessary to include additional information through type annotations. This can be the case with functions that have generic return values. Consider the following `append` function which takes an array of qubits and appends a qubit to the end. In this example, the input array of qubits is of generic size `n` while the return is of size `m`. 
+
+```{code-cell} ipython3
+from guppylang.std.builtins import owned
+from guppylang.std.option import some
+
+m = guppy.nat_var("m")
+
+@guppy
+def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
+    q_arr_opt = array(nothing[qubit]() for _ in range(m))
+    
+    idx = 0
+    for q in q_arr:
+        q_arr_opt[idx].swap(some(q)).unwrap_nothing()
+        idx += 1
+    
+    q_arr_opt[m].swap(some(qb)).unwrap_nothing()
+    
+    qs = array(q.unwrap() for q in q_arr_opt)
+    
+    return qs
+```
+
+When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size `m` of the array.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def main() -> None:
+    qb = array(qubit() for _ in range(2))
+    qb_new = append(qb, qubit())
+    
+    measure_array(qb_new)
+
+main.check()
+```
+
+However, as we know the size of the array that should be returned, we can provide this information with a type hint for the compiler:
+
+```{code-cell} ipython3
+@guppy
+def main() -> None:
+    qb = array(qubit() for _ in range(2))
+    qb_new: array[qubit, 2] = append(qb, qubit()) # Type hint added
+    
+    measure_array(qb_new)
+
+main.check()
 ```
