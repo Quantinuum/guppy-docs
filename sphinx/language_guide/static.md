@@ -29,7 +29,7 @@ def bad_function(b: bool) -> int:
 
 bad_function.check() # Check fails!
 ```
-However it also has implications on the information we have to provide in the program, in particular about types. 
+However, it also has implications on the information we have to provide in the program, in particular about types. 
 
 ## Type checking
 
@@ -40,7 +40,7 @@ def python_function(x: float) -> str: # float and str are type annotations
     return f"The value of x is {x}"
 ```
 
-Python type hints are an optional feature and not enforced at runtime, they are for static analysis only. Guppy however is strongly typed - code must type-check at compile-time, and ill-typed programs will be rejected by the compiler. For example, observe the error when trying to compile the program below.
+Python type hints are an optional feature and not enforced at runtime; they are for static analysis only. Guppy however is strongly typed - code must type-check at compile-time, and ill-typed programs will be rejected by the compiler. For example, observe the error when trying to compile the program below.
 
 ```{code-cell} ipython3
 ---
