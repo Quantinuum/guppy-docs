@@ -48,8 +48,8 @@ tags: [raises-exception]
 ---
 @guppy
 def bad_function(x: int) -> int:
-    # Try to add a tuple to an int
-    return x + (x, x)
+    # Return incorrect type
+    return (x, x)
 
 bad_function.check() # Check fails!
 ```
