@@ -77,6 +77,8 @@ The Guppy compiler can infer types most of the time, meaning that type annotatio
 ---
 tags: [raises-exception]
 ---
+from guppylang.std.option import nothing
+
 @guppy
 def foo() -> None:
     q = nothing()
@@ -188,7 +190,7 @@ As we saw in the previous section, it is sometimes not possible for the Guppy co
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import owned
-from guppylang.std.option import nothing, some
+from guppylang.std.option import some
 
 m = guppy.nat_var("m")
 
