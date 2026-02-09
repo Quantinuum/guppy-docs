@@ -98,7 +98,9 @@ def foo() -> None:
 foo.check()
 ```
 
-An example of where type annotations can be required is for generic functions is introduced below. A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
+In the next section, we will introduce generic functions where input and output arguments depend on parameters. This is another example of where type annotations can be necessary to provide the Guppy compiler enough information to determine variable types. 
+
+A particularly useful feature of the Guppy type system when it comes to qubits are linear types, which you can read more about in the [section on linearity](ownership.md#linear-types).
 
 ## Generics
 
@@ -182,14 +184,12 @@ def rep_code(q: array[qubit, n]) -> array[bool, n]:
 rep_code.check()
 ```
 
-As we saw above, it can sometimes be necessary to provide type annotations for the Guppy compiler. Functions that have a generic return value can often require annotation.Consider the following `append` function which takes an array of qubits and appends a qubit to the end.
+As we saw in the previous section, it is sometimes not possible for the Guppy compiler to infer types and it is necessary to include additional information through type annotations. This can be the case with functions that have generic return values. Consider the following `append` function which takes an array of qubits and appends a qubit to the end. In this example, the input array of qubits is of generic size `n` while the return is of size `m`. 
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import discard_array, qubit
-from guppylang.std.builtins import array, owned
+from guppylang.std.builtins import owned
 from guppylang.std.option import nothing, some
 
-n = guppy.nat_var("n")
 m = guppy.nat_var("m")
 
 @guppy
@@ -208,7 +208,7 @@ def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
     return qs
 ```
 
-When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size of the array.
+When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size `m` of the array.
 
 ```{code-cell} ipython3
 ---
@@ -219,7 +219,7 @@ def main() -> None:
     qb = array(qubit() for _ in range(2))
     qb_new = append(qb, qubit())
     
-    discard_array(qb_new)
+    measure_array(qb_new)
 
 main.check()
 ```
@@ -230,9 +230,9 @@ However, as we know the size of the array that should be returned, we can provid
 @guppy
 def main() -> None:
     qb = array(qubit() for _ in range(2))
-    qb_new: array[qubit, 2] = append(qb, qubit())
+    qb_new: array[qubit, 2] = append(qb, qubit()) # Type hint added
     
-    discard_array(qb_new)
+    measure_array(qb_new)
 
 main.check()
 ```
