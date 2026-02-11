@@ -123,7 +123,9 @@ class PauliString:
 
     @guppy
     def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(self.zs, other.xs)
+        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
+            self.zs, other.xs
+        )
 
 PauliString.check()
 ```
@@ -137,6 +139,7 @@ from typing import Generic
 
 n = guppy.nat_var("n")
 
+
 @guppy.struct
 class PauliString(Generic[n]):
     xs: array[bool, n]
@@ -148,7 +151,9 @@ class PauliString(Generic[n]):
 
     @guppy
     def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
-        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(self.zs, other.xs)
+        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
+            self.zs, other.xs
+        )
 
 PauliString.check()
 ```
