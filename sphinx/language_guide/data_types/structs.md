@@ -100,10 +100,10 @@ If the parity is even the two strings commute.
 ```{code-cell} ipython3
 @guppy
 def parity_sum(a: array[bool, n], b: array[bool, n]) -> bool:
-    xor_arr = array(a[i] ^ b[i] for i in range(n))
+    and_arr = array(a[i] & b[i] for i in range(n))
     out = False
     for i in range(n):
-        out ^= xor_arr[i]
+        out ^= and_arr[i]
     return out
 
 parity_sum.check()
@@ -123,7 +123,7 @@ class PauliString:
 
     @guppy
     def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
+        return parity_sum(self.xs, other.zs) & parity_sum(self.zs, other.xs)
 
 PauliString.check()
 ```
@@ -148,7 +148,7 @@ class PauliString(Generic[n]):
 
     @guppy
     def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
-        return parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
+        return parity_sum(self.xs, other.zs) & parity_sum(self.zs, other.xs)
 
 PauliString.check()
 ```
@@ -183,9 +183,11 @@ def main() -> None:
 
     result("XII == ZII?", pauli_X0 == pauli_Z0) # Expect 0 (False)
 
-    # We expect the return value of 0 (False) for all of these checks.
+    # We expect a return value of 0 (False) for these two checks.
     result("[XII, ZII] == 0?", pauli_X0.commutes_with(pauli_Z0))
     result("[ZII, XII] == 0?", pauli_Z0.commutes_with(pauli_X0))
+
+    # We expect that both of these commutation checks return 1 (True).
     result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
     result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
 ```
