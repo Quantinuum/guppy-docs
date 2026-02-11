@@ -99,14 +99,14 @@ If the parity is even the two strings commute.
 
 ```{code-cell} ipython3
 @guppy
-def parity_sum(a: array[bool, n], b: array[bool, n]) -> bool:
+def bitwise_and_parity(a: array[bool, n], b: array[bool, n]) -> bool:
     and_arr = array(a[i] & b[i] for i in range(n))
     out = False
     for i in range(n):
         out ^= and_arr[i]
     return out
 
-parity_sum.check()
+bitwise_and_parity.check()
 ```
 
 Now we can define a `commutes_with` method on the `PauliString` struct as follows
@@ -123,7 +123,7 @@ class PauliString:
 
     @guppy
     def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return parity_sum(self.xs, other.zs) & parity_sum(self.zs, other.xs)
+        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(self.zs, other.xs)
 
 PauliString.check()
 ```
@@ -148,7 +148,7 @@ class PauliString(Generic[n]):
 
     @guppy
     def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
-        return parity_sum(self.xs, other.zs) & parity_sum(self.zs, other.xs)
+        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(self.zs, other.xs)
 
 PauliString.check()
 ```
