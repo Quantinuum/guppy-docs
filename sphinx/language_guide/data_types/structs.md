@@ -159,7 +159,7 @@ Note that we have to specify the generic type in both the struct definition and 
 
 Now that we have defined a struct to represent an $n$ qubit Pauli string with 2 arrays of $n$ bits, let's test that the struct methods perform as expected.
 
-We will define instances of the struct representing the $XII$, $ZII$, $XXZ$ and $XZX$ Pauli strings. We can then use these string to test the equality and commutation methods.
+We will define instances of the struct representing various Pauli strings. We can then use these strings to test the equality and commutation methods.
 
 
 ```{code-cell} ipython3
