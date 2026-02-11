@@ -167,29 +167,34 @@ from guppylang.std.builtins import result
 
 @guppy
 def main() -> None:
-    pauli_X0 = PauliString(
+    pauli_XII = PauliString(
         array(True, False, False), array(False, False, False)
-    )  # Pauli string XII
-    pauli_Z0 = PauliString(
+    )
+    pauli_ZII = PauliString(
         array(False, False, False), array(True, False, False)
-    )  # Pauli string ZII
-
+    )
+    pauli_IZI = PauliString(
+        array(False, False, False), array(False, True, False)
+    ) 
     pauli_XXZ = PauliString(
         array(True, True, False), array(False, False, True)
-    )  # Pauli string XXZ
+    )
     pauli_XZX = PauliString(
         array(True, False, True), array(False, True, False)
-    )  # Pauli string XZX
+    )
 
-    result("XII == ZII?", pauli_X0 == pauli_Z0) # Expect 0 (False)
+    result("XII == ZII?", pauli_XII == pauli_ZII) # Expect 0 (False)
+    result("IZI == XZX?", pauli_IZI == pauli_XZX) # Expect 0 (False)
 
-    # We expect a return value of 0 (False) for these two checks.
-    result("[XII, ZII] == 0?", pauli_X0.commutes_with(pauli_Z0))
-    result("[ZII, XII] == 0?", pauli_Z0.commutes_with(pauli_X0))
-
-    # We expect that both of these commutation checks return 1 (True).
+    # We expect a return value of 0 (False) for these three checks.
+    result("[XII, ZII] == 0?", pauli_XII.commutes_with(pauli_ZII))
+    result("[ZII, XII] == 0?", pauli_ZII.commutes_with(pauli_XII))
+    result("[IZI, XXZ] == 0?", pauli_IZI.commutes_with(pauli_XXZ))
+    
+    # We expect a return value of 1 (True) for these three checks.
     result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
     result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
+    result("[XII, IZI] == 0?", pauli_XII.commutes_with(pauli_IZI))
 ```
 
 We can execute the program with Selene emulator to verify that our methods work as expected.
