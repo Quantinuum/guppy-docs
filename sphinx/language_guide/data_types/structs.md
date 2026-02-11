@@ -99,14 +99,14 @@ If the parity is even the two strings commute.
 
 ```{code-cell} ipython3
 @guppy
-def parity_sum(a: array[bool, n], b: array[bool, n]) -> bool:
-    xor_arr = array(a[i] ^ b[i] for i in range(n))
+def bitwise_and_parity(a: array[bool, n], b: array[bool, n]) -> bool:
+    and_arr = array(a[i] & b[i] for i in range(n))
     out = False
     for i in range(n):
-        out ^= xor_arr[i]
+        out ^= and_arr[i]
     return out
 
-parity_sum.check()
+bitwise_and_parity.check()
 ```
 
 Now we can define a `commutes_with` method on the `PauliString` struct as follows
@@ -123,7 +123,9 @@ class PauliString:
 
     @guppy
     def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return not parity_sum(self.xs, other.zs) ^ parity_sum(self.zs, other.xs)
+        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
+            self.zs, other.xs
+        )
 
 PauliString.check()
 ```
@@ -137,21 +139,81 @@ from typing import Generic
 
 n = guppy.nat_var("n")
 
+
 @guppy.struct
 class PauliString(Generic[n]):
     xs: array[bool, n]
     zs: array[bool, n]
 
     @guppy
-    def __eq__(self: "PauliString", other: "PauliString") -> bool:
+    def __eq__(self: "PauliString[n]", other: "PauliString[n]") -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: "PauliString", other: "PauliString") -> bool:
-        return parity_sum(self.xs, other.zs) == parity_sum(self.zs, other.xs) == 0
+    def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
+        return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
+            self.zs, other.xs
+        )
 
 PauliString.check()
 ```
+
+Note that we have to specify the generic type in both the struct definition and the method signatures.
+
+## Testing our `PauliString` struct
+
+Now that we have defined a struct to represent an $n$ qubit Pauli string with 2 arrays of $n$ bits, let's test that the struct methods perform as expected.
+
+We will define instances of the struct representing various Pauli strings. We can then use these strings to test the equality and commutation methods.
+
+
+```{code-cell} ipython3
+from guppylang.std.builtins import result
+
+@guppy
+def main() -> None:
+    pauli_XII = PauliString(
+        array(True, False, False), array(False, False, False)
+    )
+    pauli_ZII = PauliString(
+        array(False, False, False), array(True, False, False)
+    )
+    pauli_IZI = PauliString(
+        array(False, False, False), array(False, True, False)
+    ) 
+    pauli_XXZ = PauliString(
+        array(True, True, False), array(False, False, True)
+    )
+    pauli_XZX = PauliString(
+        array(True, False, True), array(False, True, False)
+    )
+
+    result("XII == ZII?", pauli_XII == pauli_ZII) # Expect 0 (False)
+    result("IZI == XZX?", pauli_IZI == pauli_XZX) # Expect 0 (False)
+
+    # We expect a return value of 0 (False) for these three checks.
+    result("[XII, ZII] == 0?", pauli_XII.commutes_with(pauli_ZII))
+    result("[ZII, XII] == 0?", pauli_ZII.commutes_with(pauli_XII))
+    result("[IZI, XXZ] == 0?", pauli_IZI.commutes_with(pauli_XXZ))
+    
+    # We expect a return value of 1 (True) for these three checks.
+    result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
+    result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
+    result("[XII, IZI] == 0?", pauli_XII.commutes_with(pauli_IZI))
+```
+
+We can execute the program with Selene emulator to verify that our methods work as expected.
+
+
+```{code-cell} ipython3
+print("Testing PauliString.__eq__() and PauliString.commutes_with()...")
+for shot in main.emulator(1).run().results:
+    for entry in shot:
+        name, res = entry
+        print(f"{name}, {bool(res)}")
+```
+
+
 
 ## Structs with linear fields are linear
 
