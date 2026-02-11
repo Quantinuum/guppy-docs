@@ -190,7 +190,7 @@ def main() -> None:
     result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
 ```
 
-Now that we have defined the `main` with the test cases for our struct, we can execute the program with Selene emulator to verify that our methods work as expected.
+We can execute the program with Selene emulator to verify that our methods work as expected.
 
 
 ```{code-cell} ipython3
