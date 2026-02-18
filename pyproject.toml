@@ -5,7 +5,7 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.10,<4"
 dependencies = [
-    "guppylang[pytket]==0.21.8",
+    "guppylang[pytket]==0.21.9",
     "jupyter>=1.1.0",
     "matplotlib>=3.9.2",
     "networkx>=3.4.2",
