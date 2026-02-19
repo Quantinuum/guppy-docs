@@ -832,7 +832,7 @@ requires-dist = [
 dev = [
     { name = "furo", specifier = ">=2024.8.6" },
     { name = "myst-nb", specifier = ">=1.1.2" },
-    { name = "quantinuum-sphinx", specifier = "~=0.2.0" },
+    { name = "quantinuum-sphinx", specifier = ">=0.6.0" },
     { name = "sphinx-copybutton", specifier = ">=0.5.2" },
     { name = "sphinx-design", specifier = ">=0.6.1" },
     { name = "sphinxcontrib-googleanalytics", specifier = ">=0.4" },
@@ -840,7 +840,7 @@ dev = [
 docs = [
     { name = "furo", specifier = ">=2024.8.6" },
     { name = "myst-nb", specifier = ">=1.1.2" },
-    { name = "quantinuum-sphinx", specifier = "~=0.2.0" },
+    { name = "quantinuum-sphinx", specifier = ">=0.6.0" },
     { name = "sphinx-copybutton", specifier = ">=0.5.2" },
     { name = "sphinx-design", specifier = ">=0.6.1" },
     { name = "sphinxcontrib-googleanalytics", specifier = ">=0.4" },
@@ -2754,14 +2754,14 @@ wheels = [
 
 [[package]]
 name = "quantinuum-sphinx"
-version = "0.2.0"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "furo" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a6/ec/dd51a9dfdf992879520af39ac43ee4c1df7d8deffd3265398935525c1747/quantinuum_sphinx-0.2.0.tar.gz", hash = "sha256:0234fba70673310265a06c5c1adc0fa269a92b2f01686c3e428d46d2837cbf9e", size = 149238, upload-time = "2025-08-19T19:13:32.196Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/f8/454346da426c8b4b46d2666e7321ac48a8ae4a5c6848d13b7ccf7f3615d1/quantinuum_sphinx-0.6.0.tar.gz", hash = "sha256:6e1521cdc7ef56aa69c41765c27d7211f0495ea2ef2483c207446b29b86ad240", size = 147241, upload-time = "2025-11-06T15:30:27.625Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/1c/fea9210e7068c2c3a5464729128f46c759eb4216ae16539646daf9fa6e2e/quantinuum_sphinx-0.2.0-py3-none-any.whl", hash = "sha256:de2c4196ba04faaf4c0329ce6bb1b07c1de69146220820eb7d316f18e296da5e", size = 151500, upload-time = "2025-08-19T19:13:30.962Z" },
+    { url = "https://files.pythonhosted.org/packages/67/25/0d27c62a28858f6a8ef01fed2c07be0b487dd97932fb3c068d7742bca689/quantinuum_sphinx-0.6.0-py3-none-any.whl", hash = "sha256:6e104c009ce39c0a857c4876ac13f4138220be5c7d9d79037b5f8178f3c60456", size = 149672, upload-time = "2025-11-06T15:30:26.376Z" },
 ]
 
 [[package]]
