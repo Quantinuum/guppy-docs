@@ -28,5 +28,5 @@ docs = [
     "sphinx-copybutton>=0.5.2",
     "sphinx-design>=0.6.1",
     "sphinxcontrib-googleanalytics>=0.4",
-    "quantinuum-sphinx~=0.2.0",
+    "quantinuum-sphinx>=0.6.0",
 ]
