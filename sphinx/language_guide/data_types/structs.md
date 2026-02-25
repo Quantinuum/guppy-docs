@@ -146,11 +146,11 @@ class PauliString(Generic[n]):
     zs: array[bool, n]
 
     @guppy
-    def __eq__(self: "PauliString[n]", other: "PauliString[n]") -> bool:
+    def __eq__(self: PauliString[n], other: PauliString[n]) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
+    def commutes_with(self: PauliString[n], other: PauliString[n]) -> bool:
         return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
             self.zs, other.xs
         )
