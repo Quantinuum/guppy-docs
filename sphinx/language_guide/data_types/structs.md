@@ -77,7 +77,7 @@ class PauliString:
     zs: array[bool, 3]
 
     @guppy
-    def __eq__(self: "PauliString", other: "PauliString") -> bool:
+    def __eq__(self: PauliString, other: PauliString) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 ```
 
@@ -118,11 +118,11 @@ class PauliString:
     zs: array[bool, 3]
 
     @guppy
-    def __eq__(self: "PauliString", other: "PauliString") -> bool:
+    def __eq__(self: PauliString, other: PauliString) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: "PauliString", other: "PauliString") -> bool:
+    def commutes_with(self: PauliString, other: PauliString) -> bool:
         return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
             self.zs, other.xs
         )
