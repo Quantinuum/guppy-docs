@@ -49,7 +49,7 @@ const featureConfig = [
 ]
 
 const guppy_code_2 = `from guppylang import guppy
-from guppylang.std.quantum import qubit, toffoli, s, measure
+from guppylang.std.quantum import qubit, toffoli, s, z, measure
 from guppylang.std.quantum.functional import h
 
 @guppy
@@ -64,8 +64,10 @@ def repeat_until_success(q: qubit, attempts: int) -> bool:
         s(q)
         toffoli(a, b, q)
         if not (measure(h(a)) | measure(h(b))):
-            result("rus_attempts", i)
+            result("rus_failed_attempts", i)
             return True
+        z(q)
+    result("rus_failed_attempts", attempts)
     return False
 repeat_until_success.check() # type check`
 
@@ -152,7 +154,7 @@ export default async function Home() {
       </header>
       <Separator />
       <div className="">
-        <section className="container grid grid-cols-1 lg:grid-cols-[4fr_5fr] gap-8 lg:gap-20 py-16 lg:py-24 lg:items-center">
+        <section className="container grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-8 lg:gap-20 py-16 lg:py-24 lg:items-center">
           <div className="flex flex-col gap-12">
             {[
               {
