@@ -79,13 +79,20 @@ Note that as the size of an array has to be statically known we cannot generaliz
 ---
 tags: [raises-exception]
 ---
+from guppylang.std.num import nat
+
 n = guppy.nat_var("n")
 
 @guppy
-def get_first_n_squares(n: int) -> array[int, n]:
+def get_first_n_squares(n: nat) -> array[int, n]:
     return array(x*x for x in range(n))
 
 get_first_n_squares.check()
+```
+
+```{note}
+Note that we can generalize this function provided that the value of `n` is known at compile time. 
+See the section on [comptime arguments](../comptime.md#compile-time-arguments).
 ```
 
 For more background on Guppy's static type checker see the section on [Static Compilation and Typing](../static.md).
