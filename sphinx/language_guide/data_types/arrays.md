@@ -11,7 +11,9 @@ In Guppy, an array is an ordered collection of objects of the same type, with a 
 
 Arrays are mutable: their values can be reassigned at runtime.
 
-An array can be created using the `array` constructor. The type signature is `array[T, n]` where `T` is the type of the data and `n` is the size of the array. 
+An array can be created using the [array](../../api/generated/guppylang.std.array.array.rst) constructor. The type signature is `array[T, n]` where `T` is the type of the data and `n` is the size of the array. 
+
+Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
 
 
 ```{code-cell} ipython3
@@ -35,6 +37,23 @@ def mutate_array() -> array[int, 3]:
     return numbers # Return modified array
 
 mutate_array.check()
+```
+
+On the other hand, if we try to mutate a `frozenarray`,  we get an error.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.array import frozenarray
+
+@guppy
+def mutate_frozenarray() -> frozenarray[int, 3]:
+    numbers = comptime([1, 3, 5, 7, 9])
+    numbers[0] = 17 # Change first element to 17
+    return numbers # Return modified array
+
+mutate_frozenarray.check()
 ```
 
 Arrays can also be nested, meaning that the elements of an array can themselves be arrays.
@@ -242,6 +261,19 @@ def apply_f(xs: array[int, m] @owned) -> array[int, m]:
     return xs
 
 apply_f.check()
+```
+
+A [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) can be copied with the `frozenarray.mutable_copy` method. 
+
+```{code-cell} ipython3
+from guppylang.std.array import frozenarray
+
+@guppy
+def main() -> None:
+    frozen_arr = comptime([1, 11, 21])
+    copy: array[int, 3] = frozen_arr.mutable_copy()
+
+main.check()
 ```
 
 ## Example usage of arrays
