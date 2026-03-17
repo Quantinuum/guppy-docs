@@ -345,6 +345,7 @@ As an illustration, let's define a guppy function which will build an ansatz cir
 ```{code-cell} ipython3
 from guppylang.std.quantum import ry
 from guppylang.std.angles import pi
+from guppylang.std.array import frozenarray
 
 n_qubits = 3
 params = [0.78, 0.23, 0.61]
