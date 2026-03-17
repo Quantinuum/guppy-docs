@@ -67,9 +67,8 @@ get_array_of_arrays.check()
 ## Frozenarray
 
 Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
-Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. 
 
-For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions)
+Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions)
 
 
 As `frozenarray` is immutable we cannot reassign its entries as we can with the `array` type.
@@ -81,11 +80,12 @@ tags: [raises-exception]
 from guppylang.std.array import frozenarray
 
 @guppy
-def mutate_frozenarray() -> frozenarray[int, 3]:
-    numbers = comptime([1, 3, 5, 7, 9])
-    numbers[0] = 17 # Change first element to 17
-    return numbers # Return modified array
+def mutate_frozenarray() -> frozenarray[int, 5]:
+    numbers = comptime([1, 3, 5, 7, 9]) # Create a frozenarray from a Python list
+    numbers[0] = 39 # Try to change first element to 39
+    return numbers
 
+mutate_frozenarray.check()
 ```
 
 ## Indexing into arrays
