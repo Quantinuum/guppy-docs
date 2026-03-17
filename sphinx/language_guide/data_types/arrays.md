@@ -7,6 +7,8 @@ kernelspec:
 
 # Arrays
 
+## Basic properties
+
 In Guppy, an array is an ordered collection of objects of the same type, with a size that is fixed and known at compile time. These two properties distinguish arrays from Python lists.
 
 Arrays are mutable: their values can be reassigned at runtime.

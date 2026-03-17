@@ -6,7 +6,7 @@ kernelspec:
 
 # Tuples
 
-## Basic Properties
+## Basic properties
 
 In Guppy, tuples are immutable sequences of values. The values within a tuple can be of different types. Similarly to arrays, tuples have a length that is fixed when the object is created. 
 The behavior of Guppy tuples mostly aligns with Python [^cite_python_tuple_docs] with some key differences as we shall see.
