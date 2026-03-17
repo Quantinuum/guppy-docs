@@ -278,6 +278,7 @@ from guppylang.std.array import frozenarray
 
 @guppy
 def main() -> None:
+    # Create a frozenarray using a comptime expression
     frozen_arr = comptime([1, 11, 21])
 
     # Copy the frozenarray
