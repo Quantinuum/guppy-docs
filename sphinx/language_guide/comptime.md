@@ -152,6 +152,34 @@ def plus_state() -> array[qubit, comptime(N + 1)]:
 plus_state.compile_function();
 ```
 
+## Compile time arguments
+
+Guppy also supports "comptime arguments". This function arguments can be annotated as known at compile time. This allows us to write Guppy functions and methods which are more expressive provided we do not use any runtime values.
+
+As an example, let us consider a function which allocates an array of `n` qubits using a comprehension. 
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.num import nat
+
+@guppy
+def allocate_qarray1(n: nat) -> array[qubit, n]:
+    return array(qubit() for _ in range(n))
+
+allocate_qarray1.check();
+```
+This fails the type check as the natural number `n` is only assigned a concrete value at runtime. Therefore the size of the array cannot be statically inferred by the Guppy type system.
+
+However, we can fix this issue by using comptime arguments. We can annotate the `n` argument with `@comptime`.  
+
+```{code-cell} ipython3
+@guppy
+def allocate_qarray2(n: nat @comptime) -> array[qubit, n]:
+    return array(qubit() for _ in range(n))
+
+allocate_qarray2.check();
+```
 
 ## Comptime functions
 
