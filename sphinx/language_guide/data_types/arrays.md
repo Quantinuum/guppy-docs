@@ -39,8 +39,6 @@ def mutate_array() -> array[int, 3]:
 mutate_array.check()
 ```
 
-On the other hand, if we try to mutate a `frozenarray`,  we get an error.
-
 Arrays can also be nested, meaning that the elements of an array can themselves be arrays.
 
 ```{code-cell} ipython3
@@ -51,7 +49,7 @@ def get_array_of_arrays() -> array[array[int, 4], 3]:
 get_array_of_arrays.check()
 ```
 
-## Frozenarray
+## Frozenarrays
 
 Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
 
