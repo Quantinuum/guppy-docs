@@ -346,15 +346,16 @@ As an illustration, let's define a guppy function which will build an ansatz cir
 from guppylang.std.quantum import ry
 from guppylang.std.angles import pi
 from guppylang.std.array import frozenarray
+from guppylang.std.num import nat
 
-n_qubits = 3
 params = [0.78, 0.23, 0.61]
 
 @guppy
 def build_ansatz(
     params: frozenarray[float, comptime(len(params))],
-) -> array[qubit, comptime(n_qubits)]:
-    qs = array(qubit() for _ in range(comptime(n_qubits)))
+    n_qubits: nat @comptime,
+) -> array[qubit, n_qubits]:
+    qs = array(qubit() for _ in range(n_qubits))
     n_layers = len(params)
 
     for i in range(n_layers):
@@ -365,6 +366,7 @@ def build_ansatz(
             cx(qs[k], qs[k + 1])
 
     return qs
+
 
 build_ansatz.check()
 
