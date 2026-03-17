@@ -343,41 +343,51 @@ As an illustration, let's define a guppy function which will build an ansatz cir
 
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import ry, discard_array
+from guppylang.std.quantum import discard_array
+from guppylang.std.qsystem import zz_phase
+from guppylang.std.builtins import frozenarray
 from guppylang.std.angles import pi
-from guppylang.std.array import frozenarray
-from guppylang.std.num import nat
 
-N = guppy.nat_var("N")
+
+def build_ansatz_func(n_qubits: int, n_layers: int) -> GuppyFunctionDefinition:
+    @guppy
+    def ansatz(
+        params: frozenarray[float, comptime(n_layers)],
+    ) -> array[qubit, comptime(n_qubits)]:
+        qs = array(qubit() for _ in range(comptime(n_qubits)))
+
+        # Add a layer of parameterized Ry gates
+        for layer in range(comptime(n_layers)):
+            for i in range(len(qs)):
+                ry(qs[i], params[layer] * pi)
+
+        # Add a layer of CX gates after the Ry gates
+        for j in range(len(qs) - 1):
+            cx(qs[j], qs[j + 1])
+
+        return qs
+
+    return ansatz
+
+guppy_func = build_ansatz_func(n_qubits=4, n_layers=3)
+guppy_func.check()
+```
+
+Now that we have constructed an ansatz function for four qubit and three layers we can evaluate it for some parameters.
+
+If we specify our parameters as a Python list, we can load in our parameters with a comptime expression.
+
+```{code-cell} ipython3
+
+params = [0.71, 0.94, 0.11]
 
 @guppy
-def build_ansatz(
-    params: frozenarray[float, N],
-    n_qubits: nat @comptime,
-) -> array[qubit, n_qubits]:
-    qs = array(qubit() for _ in range(n_qubits))
-    n_layers = len(params)
-
-    for i in range(n_layers):
-        for j in range(len(qs)):
-            ry(qs[j], params[i] * pi)
-
-        for k in range(len(qs) - 1):
-            cx(qs[k], qs[k + 1])
-
-    return qs
-
-
-build_ansatz.check()
-
-
 def main() -> None:
-    n_qubits = 4
-    params = [0.78, 0.23, 0.61]
-    ansatz_qubits = build_ansatz(
-        comptime(params), n_qubits
-    )  # comptime(params) is a frozenarray
-    discard_array(ansatz_qubits)
+    farray = comptime(params) # comptime(params) is a frozenarray
+    qubit_arr: array[qubit, 4] = guppy_func(farray)
+    discard_array(qubit_arr)
+
+main.check()
 ```
 
 ### Type checking and safety
