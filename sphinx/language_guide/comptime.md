@@ -374,7 +374,7 @@ build_ansatz.check()
 def get_guppy_ansatz_func(
     params: list[float], n_qubits: int
 ) -> GuppyFunctionDefinition:
-    guppy_ansatz_func = build_ansatz(comptime(params)) # comptime(params) is a frozenarray
+    guppy_ansatz_func = build_ansatz(comptime(params), n_qubits) # comptime(params) is a frozenarray
     return guppy_ansatz_func
 ```
 
