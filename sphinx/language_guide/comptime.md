@@ -169,7 +169,7 @@ def allocate_qarray1(n: nat) -> array[qubit, n]:
 
 allocate_qarray1.check();
 ```
-This fails the type check as the natural number `n` is mutable, it's value can be increased or decreased at runtime. Therefore the size of the array cannot be statically inferred by the Guppy type system.
+This fails the type check as the natural number `n` is only assigned a concrete value at runtime. Therefore the size of the array cannot be statically inferred by the Guppy type system.
 
 However, we can fix this issue by using comptime arguments. We can annotate the `n` argument with `@comptime`.  
 
