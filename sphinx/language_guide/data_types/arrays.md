@@ -11,9 +11,7 @@ In Guppy, an array is an ordered collection of objects of the same type, with a 
 
 Arrays are mutable: their values can be reassigned at runtime.
 
-An array can be created using the [array](../../api/generated/guppylang.std.array.array.rst) constructor. The type signature is `array[T, n]` where `T` is the type of the data and `n` is the size of the array. 
-
-Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
+An array can be created using the [array](../../api/generated/guppylang.std.array.array.rst) constructor. The type signature is `array[T, n]` where `T` is the type of the data and `n` is the size of the array.
 
 
 ```{code-cell} ipython3
@@ -64,6 +62,30 @@ def get_array_of_arrays() -> array[array[int, 4], 3]:
     return array(array(1, 2, 3, 4), array(2, 4, 6, 8), array(3, 6, 9, 12))
 
 get_array_of_arrays.check()
+```
+
+## Frozenarray
+
+Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
+Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. 
+
+For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions)
+
+
+As `frozenarray` is immutable we cannot reassign its entries as we can with the `array` type.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.array import frozenarray
+
+@guppy
+def mutate_frozenarray() -> frozenarray[int, 3]:
+    numbers = comptime([1, 3, 5, 7, 9])
+    numbers[0] = 17 # Change first element to 17
+    return numbers # Return modified array
+
 ```
 
 ## Indexing into arrays
