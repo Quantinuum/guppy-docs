@@ -63,6 +63,7 @@ As `frozenarray` is immutable we cannot reassign its entries as we can with the 
 tags: [raises-exception]
 ---
 from guppylang.std.array import frozenarray
+from guppylang.std.builtins import comptime
 
 @guppy
 def mutate_frozenarray() -> frozenarray[int, 5]:
@@ -275,6 +276,7 @@ A [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) can be 
 
 ```{code-cell} ipython3
 from guppylang.std.array import frozenarray
+from guppylang.std.builtins import comptime
 
 @guppy
 def main() -> None:
