@@ -53,7 +53,7 @@ get_array_of_arrays.check()
 
 Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
 
-Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions)
+Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions).
 
 
 As `frozenarray` is immutable we cannot reassign its entries as we can with the `array` type.
