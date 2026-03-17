@@ -39,21 +39,6 @@ mutate_array.check()
 
 On the other hand, if we try to mutate a `frozenarray`,  we get an error.
 
-```{code-cell} ipython3
----
-tags: [raises-exception]
----
-from guppylang.std.array import frozenarray
-
-@guppy
-def mutate_frozenarray() -> frozenarray[int, 3]:
-    numbers = comptime([1, 3, 5, 7, 9])
-    numbers[0] = 17 # Change first element to 17
-    return numbers # Return modified array
-
-mutate_frozenarray.check()
-```
-
 Arrays can also be nested, meaning that the elements of an array can themselves be arrays.
 
 ```{code-cell} ipython3
