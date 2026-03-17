@@ -270,7 +270,8 @@ def apply_f(xs: array[int, m] @owned) -> array[int, m]:
 apply_f.check()
 ```
 
-A [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) can be copied with the `frozenarray.mutable_copy` method. 
+A [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) can be copied with the `frozenarray.mutable_copy` method.
+
 
 ```{code-cell} ipython3
 from guppylang.std.array import frozenarray
@@ -278,10 +279,18 @@ from guppylang.std.array import frozenarray
 @guppy
 def main() -> None:
     frozen_arr = comptime([1, 11, 21])
-    copy: array[int, 3] = frozen_arr.mutable_copy()
+
+    # Copy the frozenarray
+    arr_copy: array[int, 3] = frozen_arr.mutable_copy()
+
+    # The arr_copy object is mutable
+    arr_copy[0] = 171 
+
 
 main.check()
 ```
+
+Note that the return type of `frozenarray.mutable_copy` is of type `array`.
 
 ## Example usage of arrays
 
