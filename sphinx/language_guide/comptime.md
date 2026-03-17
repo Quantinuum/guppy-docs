@@ -297,7 +297,7 @@ Note how the input to the `ladder` function is of type `array[qubit, comptime(n_
 
 ### Arrays and lists
 
-Arrays and  regular Python lists can be used interchangeably inside ``comptime`` functions since the size of ``comptime`` lists is statically known.
+Arrays and regular Python lists can be used interchangeably inside ``comptime`` functions since the size of ``comptime`` lists is statically known.
 In other words, when calling a function that accepts an array, it's also fine to pass a list with matching size:
 
 ```{code-cell} ipython3
@@ -335,6 +335,44 @@ def array_mismatch(x: int) -> int:
     measure_array(qs)
 
 array_mismatch.compile_function();  # Compilation fails
+```
+
+Note that if we load a Python list inside a `comptime` expression, we get a [frozenarray](../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
+
+As an illustration, let's define a guppy function which will build an ansatz circuit given some parameters. We will pass the parameters as a Python list which will be converted to a `frozenarray` by a `comptime` expression.
+
+
+```{code-cell} ipython3
+from guppylang.std.quantum import ry
+from guppylang.std.angles import pi
+
+n_qubits = 3
+params = [0.78, 0.23, 0.61]
+
+@guppy
+def build_ansatz(
+    params: frozenarray[float, comptime(len(params))],
+) -> array[qubit, comptime(n_qubits)]:
+    qs = array(qubit() for _ in range(comptime(n_qubits)))
+    n_layers = len(params)
+
+    for i in range(n_layers):
+        for j in range(len(qs)):
+            ry(qs[j], params[i] * pi)
+
+        for k in range(len(qs) - 1):
+            cx(qs[k], qs[k + 1])
+
+    return qs
+
+build_ansatz.check()
+
+
+def get_guppy_ansatz_func(
+    params: list[float], n_qubits: int
+) -> GuppyFunctionDefinition:
+    guppy_ansatz_func = build_ansatz(comptime(params)) # comptime(params) is a frozenarray
+    return guppy_ansatz_func
 ```
 
 ### Type checking and safety
