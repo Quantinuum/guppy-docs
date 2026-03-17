@@ -343,16 +343,16 @@ As an illustration, let's define a guppy function which will build an ansatz cir
 
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import ry
+from guppylang.std.quantum import ry, discard_array
 from guppylang.std.angles import pi
 from guppylang.std.array import frozenarray
 from guppylang.std.num import nat
 
-params = [0.78, 0.23, 0.61]
+N = guppy.nat_var("N")
 
 @guppy
 def build_ansatz(
-    params: frozenarray[float, comptime(len(params))],
+    params: frozenarray[float, N],
     n_qubits: nat @comptime,
 ) -> array[qubit, n_qubits]:
     qs = array(qubit() for _ in range(n_qubits))
@@ -371,11 +371,13 @@ def build_ansatz(
 build_ansatz.check()
 
 
-def get_guppy_ansatz_func(
-    params: list[float], n_qubits: int
-) -> GuppyFunctionDefinition:
-    guppy_ansatz_func = build_ansatz(comptime(params), n_qubits) # comptime(params) is a frozenarray
-    return guppy_ansatz_func
+def main() -> None:
+    n_qubits = 4
+    params = [0.78, 0.23, 0.61]
+    ansatz_qubits = build_ansatz(
+        comptime(params), n_qubits
+    )  # comptime(params) is a frozenarray
+    discard_array(ansatz_qubits)
 ```
 
 ### Type checking and safety
