@@ -343,8 +343,7 @@ As an illustration, let's define a guppy function which will build an ansatz cir
 
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import discard_array
-from guppylang.std.qsystem import zz_phase
+from guppylang.std.quantum import ry
 from guppylang.std.builtins import frozenarray
 from guppylang.std.angles import pi
 
@@ -378,6 +377,7 @@ Now that we have constructed an ansatz function for four qubit and three layers 
 If we specify our parameters as a Python list, we can load in our parameters with a comptime expression.
 
 ```{code-cell} ipython3
+from guppylang.std.quantum import discard_array
 
 params = [0.71, 0.94, 0.11]
 
