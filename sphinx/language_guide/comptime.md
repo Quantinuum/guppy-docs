@@ -343,9 +343,9 @@ As an illustration, let's define a guppy function which will build an ansatz cir
 
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import ry
-from guppylang.std.builtins import frozenarray
 from guppylang.std.angles import pi
+from guppylang.std.quantum import ry
+from guppylang.std.array import frozenarray
 
 
 def build_ansatz_func(n_qubits: int, n_layers: int) -> GuppyFunctionDefinition:

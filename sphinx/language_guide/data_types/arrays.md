@@ -287,7 +287,6 @@ def main() -> None:
     # The arr_copy object is mutable
     arr_copy[0] = 171 
 
-
 main.check()
 ```
 
