@@ -70,9 +70,11 @@
 
 
 .. decorator:: guppy.enum
+
    Registers a class as a Guppy enum.
 
         .. code-block:: python
+
          from guppylang import guppy
 
          @guppy.enum
