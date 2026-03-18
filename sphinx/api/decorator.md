@@ -69,6 +69,25 @@
             return self.field2 + self.field2
 
 
+.. decorator:: guppy.enum
+
+   Registers a class as a Guppy enum.
+
+   .. code-block:: python
+
+      from guppylang import guppy
+      
+      @guppy.enum
+      class MyEnum:
+         Variant1 = {"a": int, "b": qubit}
+         Variant2 = {}
+      
+         @guppy
+         def method_on_enum(self: MyEnum) -> int:
+            return 42
+
+     
+
 .. method:: guppy.type_var(name, copyable=True, droppable=True)
 
    :param name: Name of the type variable.
@@ -261,4 +280,4 @@
 .. autodecorator:: guppylang.decorator.custom_guppy_decorator
 
 .. autofunction:: get_calling_frame
-```
+
