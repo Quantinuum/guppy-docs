@@ -73,29 +73,19 @@
 
    Registers a class as a Guppy enum.
 
-        .. code-block:: python
-
-         from guppylang import guppy
-
-         @guppy.enum
-         class MyEnum:
-             Variant1 = {"a": int, "b": qubit}
-             Variant2 = {"a": int}
    .. code-block:: python
 
       from guppylang import guppy
-
+      
       @guppy.enum
       class MyEnum:
           Variant1 = {"a": int, "b": qubit}
-          Variant2 = {"a": int}
+          Variant2 = {}
+      
+       @guppy
+       def method_on_enum(self: MyEnum) -> int:
+           return 42
 
-          @guppy
-          def method_on_enum(e: MyEnum) -> int:
-              return 42
-             @guppy
-             def method_on_enum(e: MyEnum) -> int:
-                 return 42
      
 
 .. method:: guppy.type_var(name, copyable=True, droppable=True)
