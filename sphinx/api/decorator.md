@@ -79,12 +79,12 @@
       
       @guppy.enum
       class MyEnum:
-          Variant1 = {"a": int, "b": qubit}
-          Variant2 = {}
+         Variant1 = {"a": int, "b": qubit}
+         Variant2 = {}
       
-       @guppy
-       def method_on_enum(self: MyEnum) -> int:
-           return 42
+         @guppy
+         def method_on_enum(self: MyEnum) -> int:
+            return 42
 
      
 
