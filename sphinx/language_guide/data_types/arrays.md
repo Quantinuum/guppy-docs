@@ -7,11 +7,13 @@ kernelspec:
 
 # Arrays
 
+## Basic properties
+
 In Guppy, an array is an ordered collection of objects of the same type, with a size that is fixed and known at compile time. These two properties distinguish arrays from Python lists.
 
 Arrays are mutable: their values can be reassigned at runtime.
 
-An array can be created using the `array` constructor. The type signature is `array[T, n]` where `T` is the type of the data and `n` is the size of the array. 
+An array can be created using the [array](../../api/generated/guppylang.std.array.array.rst) constructor. The type signature is `array[T, n]` where `T` is the type of the data and `n` is the size of the array.
 
 
 ```{code-cell} ipython3
@@ -47,9 +49,38 @@ def get_array_of_arrays() -> array[array[int, 4], 3]:
 get_array_of_arrays.check()
 ```
 
+## Frozenarrays
+
+Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
+
+Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions).
+
+
+As `frozenarray` is immutable we cannot reassign its entries as we can with the `array` type.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.array import frozenarray
+from guppylang.std.builtins import comptime
+
+@guppy
+def mutate_frozenarray() -> frozenarray[int, 5]:
+    numbers = comptime([1, 3, 5, 7, 9]) # Create a frozenarray from a Python list
+    numbers[0] = 39 # Try to change first element to 39
+    return numbers
+
+mutate_frozenarray.check()
+```
+
+Note that it is preferable to use `frozenarray` (rather than a mutable `array`) where possible for performance reasons. Being immutable, a `frozenarray` will compile faster and have superior runtime performance when targeting Quantinuum systems hardware and emulators.
+
+An example use case for a `frozenarray` would be for lookup table decoders in quantum error correction. For example, we could precompute a large numpy array of integers which represent syndromes and their corresponding corresponding corrections. This array can then be loaded into a Guppy context as a comptime list. We can then have read only access to our table during the runtime of our quantum program.
+
 ## Indexing into arrays
 
-As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)`  we can access the element `0` with `arr[0]`, `4` with `arr[2]`, and so on.
+As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)` we can access the element `0` with `arr[0]`, `4` with `arr[2]`, and so on.
 
 
 ```{warning}
@@ -281,6 +312,29 @@ def apply_f(xs: array[int, m] @owned) -> array[int, m]:
 
 apply_f.check()
 ```
+
+A [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) can be copied with the `frozenarray.mutable_copy` method.
+
+
+```{code-cell} ipython3
+from guppylang.std.array import frozenarray
+from guppylang.std.builtins import comptime
+
+@guppy
+def main() -> None:
+    # Create a frozenarray using a comptime expression
+    frozen_arr = comptime([1, 11, 21])
+
+    # Copy the frozenarray
+    arr_copy: array[int, 3] = frozen_arr.mutable_copy()
+
+    # The arr_copy object is mutable
+    arr_copy[0] = 171 
+
+main.check()
+```
+
+Note that the return type of `frozenarray.mutable_copy` is of type `array`.
 
 ## Example usage of arrays
 

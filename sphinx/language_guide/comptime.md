@@ -325,7 +325,7 @@ Note how the input to the `ladder` function is of type `array[qubit, comptime(n_
 
 ### Arrays and lists
 
-Arrays and  regular Python lists can be used interchangeably inside ``comptime`` functions since the size of ``comptime`` lists is statically known.
+Arrays and regular Python lists can be used interchangeably inside ``comptime`` functions since the size of ``comptime`` lists is statically known.
 In other words, when calling a function that accepts an array, it's also fine to pass a list with matching size:
 
 ```{code-cell} ipython3
@@ -364,6 +364,9 @@ def array_mismatch(x: int) -> int:
 
 array_mismatch.compile_function();  # Compilation fails
 ```
+
+Note that if we load a Python list inside a `comptime` expression, we get a [frozenarray](../api/generated/guppylang.std.array.frozenarray.rst) which is immutable. For more on `frozenarray` see the [arrays section](../language_guide/data_types/arrays.md#frozenarrays) of the language guide.
+
 
 ### Type checking and safety
 
