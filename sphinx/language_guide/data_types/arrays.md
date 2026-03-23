@@ -65,7 +65,7 @@ tags: [raises-exception]
 from guppylang.std.quantum import h, qubit
 
 @guppy
-def index_h_out_of_bounds() -> array[qubit, 3]:
+def index_out_of_bounds1() -> array[qubit, 3]:
     qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
     h(qs[3]) # Access index 3, only (0, 1, 2) indices are within bounds
     return qs
@@ -77,14 +77,14 @@ Note that there are some limitations to this bounds checking. If we write the in
 
 ```{code-cell} ipython3
 @guppy
-def index_with_assignment() -> array[qubit, 3]:
+def index_out_of_bounds2() -> array[qubit, 3]:
     qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
     x = 3 # Assign 3 to a variable
     h(qs[x]) # Index using the variable x
-    h(qs[1+2]) # Index equals to an arithmetic expression
+    h(qs[1 + 2]) # Index equals an arithmetic expression
     return qs
 
-index_with_assignment.check() # No out of bounds error given
+index_out_of_bounds2.check() # No out of bounds error given
 ```
 
 
