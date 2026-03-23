@@ -70,7 +70,7 @@ def index_out_of_bounds1() -> array[qubit, 3]:
     h(qs[3]) # Access index 3, only (0, 1, 2) indices are within bounds
     return qs
 
-index_h_out_of_bounds.check() # Out of bounds error given
+index_out_of_bounds1.check() # Out of bounds error given
 ```
 
 Note that there are some limitations to this bounds checking. If we write the index as an expression i.e. `qs[2+1]` then the compiler is not able to detect that the index is out of bounds. Also if we assign the value 3 to a variable `x` then `qs[x]` will pass the type check.
