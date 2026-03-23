@@ -81,6 +81,7 @@ def index_with_assignment() -> array[qubit, 3]:
     qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
     x = 3 # Assign 3 to a variable
     h(qs[x]) # Index using the variable x
+    h(qs[1+2]) # Index equals to an arithmetic expression
     return qs
 
 index_with_assignment.check() # No out of bounds error given
