@@ -74,9 +74,11 @@ def mutate_frozenarray() -> frozenarray[int, 5]:
 mutate_frozenarray.check()
 ```
 
+Note that it is preferable to use `frozenarray` (rather than a mutable `array`) where possible for performance reasons. Being immutable, a `frozenarray` will compile faster and have superior runtime performance when targeting Quantinuum systems hardware.
+
 ## Indexing into arrays
 
-As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)`  we can access the element `0` with `arr[0]`, `4` with `arr[2]`, and so on.
+As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)` we can access the element `0` with `arr[0]`, `4` with `arr[2]`, and so on.
 
 
 ```{warning}
