@@ -56,6 +56,36 @@ As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)`
 Although the size of an array is known at compile time, the index may not be. If an index computed at runtime is out of bounds, a runtime error will occur.
 ```
 
+If our index is an integer literal, the Guppy compiler can detect when the index is out of bounds and give an error. 
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.quantum import h
+
+@guppy
+def index_h_out_of_bounds() -> array[qubit, 3]:
+    qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
+    h(qs[3]) # Access index 3, only (0, 1, 2) indices are within bounds
+    return qs
+
+index_h_out_of_bounds.check() # Out of bounds error given
+```
+
+Note that there are some limitations to this bounds checking. If we write the index as an expression i.e. `qs[2+1]` then the compiler is not able to detect that the index is out of bounds. Also if we assign the value 3 to a variable `x` then `qs[x]` will pass the type check.
+
+```{code-cell} ipython3
+@guppy
+def index_with_assignment() -> array[qubit, 3]:
+    qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
+    x = 3 # Assign 3 to a variable
+    h(qs[x]) # Index using the variable x
+    return qs
+
+index_with_assignment.check() # No out of bounds error given
+```
+
 
 ## Array comprehensions
 
