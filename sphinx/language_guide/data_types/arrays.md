@@ -74,7 +74,7 @@ def mutate_frozenarray() -> frozenarray[int, 5]:
 mutate_frozenarray.check()
 ```
 
-Note that it is preferable to use `frozenarray` (rather than a mutable `array`) where possible for performance reasons. Being immutable, a `frozenarray` will compile faster and have superior runtime performance when targeting Quantinuum systems hardware.
+Note that it is preferable to use `frozenarray` (rather than a mutable `array`) where possible for performance reasons. Being immutable, a `frozenarray` will compile faster and have superior runtime performance when targeting Quantinuum systems hardware and emulators.
 
 ## Indexing into arrays
 
