@@ -337,58 +337,8 @@ def array_mismatch(x: int) -> int:
 array_mismatch.compile_function();  # Compilation fails
 ```
 
-Note that if we load a Python list inside a `comptime` expression, we get a [frozenarray](../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
+Note that if we load a Python list inside a `comptime` expression, we get a [frozenarray](../api/generated/guppylang.std.array.frozenarray.rst) which is immutable. For more on `frozenarray` see the [arrays section](../language_guide/data_types/arrays.md#frozenarrays) of the language guide.
 
-As an illustration, let's define a guppy function which will build an ansatz circuit given some parameters. We will pass the parameters as a Python list which will be converted to a `frozenarray` by a `comptime` expression.
-
-
-```{code-cell} ipython3
-from guppylang.std.angles import pi
-from guppylang.std.quantum import ry
-from guppylang.std.array import frozenarray
-
-
-def build_ansatz_func(n_qubits: int, n_layers: int) -> GuppyFunctionDefinition:
-    @guppy
-    def ansatz(
-        params: frozenarray[float, comptime(n_layers)],
-    ) -> array[qubit, comptime(n_qubits)]:
-        qs = array(qubit() for _ in range(comptime(n_qubits)))
-
-        # Add a layer of parameterized Ry gates
-        for layer in range(comptime(n_layers)):
-            for i in range(len(qs)):
-                ry(qs[i], params[layer] * pi)
-
-        # Add a layer of CX gates after the Ry gates
-        for j in range(len(qs) - 1):
-            cx(qs[j], qs[j + 1])
-
-        return qs
-
-    return ansatz
-
-guppy_func = build_ansatz_func(n_qubits=4, n_layers=3)
-guppy_func.check()
-```
-
-Now that we have constructed an ansatz function for four qubit and three layers we can evaluate it for some parameters.
-
-If we specify our parameters as a Python list, we can load in our parameters with a comptime expression.
-
-```{code-cell} ipython3
-from guppylang.std.quantum import discard_array
-
-params = [0.71, 0.94, 0.11]
-
-@guppy
-def main() -> None:
-    farray = comptime(params) # comptime(params) is a frozenarray
-    qubit_arr: array[qubit, 4] = guppy_func(farray)
-    discard_array(qubit_arr)
-
-main.check()
-```
 
 ### Type checking and safety
 
