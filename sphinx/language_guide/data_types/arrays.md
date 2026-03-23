@@ -76,6 +76,8 @@ mutate_frozenarray.check()
 
 Note that it is preferable to use `frozenarray` (rather than a mutable `array`) where possible for performance reasons. Being immutable, a `frozenarray` will compile faster and have superior runtime performance when targeting Quantinuum systems hardware and emulators.
 
+An example use case for a `frozenarray` would be for lookup table decoders in quantum error correction. For example, we could precompute a large numpy array of integers which represent syndromes and their corresponding corresponding corrections. This array can then be loaded into a Guppy context with a comptime expression. We can then have read only access to our syndromes during the runtime of our quantum program.
+
 ## Indexing into arrays
 
 As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)` we can access the element `0` with `arr[0]`, `4` with `arr[2]`, and so on.
