@@ -111,6 +111,8 @@ exclude_patterns = [
     "guppylang/guppylang-internals/CHANGELOG.md",
     "guppylang/quickstart.md",
     "guppylang/DEVELOPMENT.md",
+    # QAOA example excluded until https://github.com/Quantinuum/guppylang/issues/1546 is resolved.
+    "guppylang/examples/qaoa_maxcut_example.ipynb",
 ]
 
 
