@@ -81,7 +81,7 @@ def index_out_of_bounds2() -> array[qubit, 3]:
     qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
     x = 3 # Assign 3 to a variable
     h(qs[x]) # Index using the variable x
-    h(qs[1 + 2]) # Index equals an arithmetic expression
+    h(qs[1 + 2]) # Index is an arithmetic expression
     return qs
 
 index_out_of_bounds2.check() # No out of bounds error given
