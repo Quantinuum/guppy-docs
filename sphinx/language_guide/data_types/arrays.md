@@ -62,7 +62,7 @@ If our index is an integer literal, the Guppy compiler can detect when the index
 ---
 tags: [raises-exception]
 ---
-from guppylang.std.quantum import h
+from guppylang.std.quantum import h, qubit
 
 @guppy
 def index_h_out_of_bounds() -> array[qubit, 3]:
