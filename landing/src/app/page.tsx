@@ -115,17 +115,14 @@ export default async function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="hover:cursor-pointer w-[12rem] py-6  text-lg tracking-tight font-medium"
+                  className="hover:cursor-pointer w-[12rem] py-6  text-lg tracking-tight"
                 >
                   <Link href="https://playpond.guppylang.org" target="_blank">
                     <GuppyLogo className="w-32 h-32 flex-shrink-0" style={{ width: '1.3rem', height: '1.3rem' }} />
                     Playpond
                   </Link>
                 </Button>
-                <Button
-                  asChild
-                  className="hover:cursor-pointer w-[12rem] bg-[#30A08E] py-6 text-lg tracking-tight font-semibold"
-                >
+                <Button asChild className="hover:cursor-pointer w-[12rem] bg-[#30A08E] py-6 text-lg tracking-tight">
                   <Link href="/guppy/getting_started.html">Get Started</Link>
                 </Button>
               </div>
