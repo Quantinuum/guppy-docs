@@ -1,6 +1,6 @@
+import { GuppyLogo } from './_components/GuppyLogo'
 import { CodeSnippet } from './code_snippet'
-import { DocsFooter, DocsNavBar } from '@quantinuum/quantinuum-ui'
-import { Button, Separator } from '@quantinuum/quantinuum-ui'
+import { Button, DocsFooter, DocsNavBar, Separator } from '@quantinuum/quantinuum-ui'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -28,18 +28,15 @@ const featureConfig = [
   },
   {
     title: 'Classical Compute',
-    description:
-      'Perform classical calculations and data manipulation alongside quantum operations seamlessly.',
+    description: 'Perform classical calculations and data manipulation alongside quantum operations seamlessly.',
   },
   {
     title: 'Data Structures',
-    description:
-      'Work with arrays, tuples, and user-defined types in both classical and quantum contexts.',
+    description: 'Work with arrays, tuples, and user-defined types in both classical and quantum contexts.',
   },
   {
     title: 'First-class Functions',
-    description:
-      'Define functions to write structured quantum software, and pass them just like any other value.',
+    description: 'Define functions to write structured quantum software, and pass them just like any other value.',
   },
   {
     title: 'Legacy Support',
@@ -83,8 +80,7 @@ export default async function Home() {
     },
     {
       title: 'Post-selection',
-      description:
-        'Exit a shot when an error is detected without running any more operations.',
+      description: 'Exit a shot when an error is detected without running any more operations.',
       className: 'bg-gradient-to-b from-[#3F8D82] to-[#699B31]',
       image: 'select.svg',
       href: '/guppy/guppylang/examples/postselect.html',
@@ -108,31 +104,31 @@ export default async function Home() {
           <div className="flex flex-col items-center md:flex-row md:gap-16 gap-8">
             <div className="md:w-1/2 pt-16 md:py-24">
               <h1 className="mb-6 flex flex-col items-center md:items-start">
-                <Image
-                  alt="guppy logo"
-                  src="guppy_logo_type.svg"
-                  width={325}
-                  height={75}
-                  className="hidden md:block"
-                />
-                <Image
-                  alt="guppy logo"
-                  src="guppy_logo_type.svg"
-                  width={255}
-                  height={75}
-                  className="block md:hidden"
-                />
+                <Image alt="guppy logo" src="guppy_logo_type.svg" width={325} height={75} className="hidden md:block" />
+                <Image alt="guppy logo" src="guppy_logo_type.svg" width={255} height={75} className="block md:hidden" />
               </h1>
               <h2 className="mb-6 text-xl text-center md:text-left md:text-2xl text-muted-foreground tracking-tight">
                 Quantum-first programming <br />
                 language, embedded in Python.
               </h2>
-              <Button
-                asChild
-                className="hover:cursor-pointer px-20 py-6 bg-[#30A08E] text-lg tracking-tight font-semibold"
-              >
-                <Link href="/guppy/getting_started.html"> Get Started</Link>
-              </Button>
+              <div className="flex gap-3 mt-8">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="hover:cursor-pointer w-[12rem] py-6  text-lg tracking-tight font-medium"
+                >
+                  <Link href="https://playpond.guppylang.org" target="_blank">
+                    <GuppyLogo className="w-32 h-32 flex-shrink-0" style={{ width: '1.3rem', height: '1.3rem' }} />
+                    Playpond
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  className="hover:cursor-pointer w-[12rem] bg-[#30A08E] py-6 text-lg tracking-tight font-semibold"
+                >
+                  <Link href="/guppy/getting_started.html">Get Started</Link>
+                </Button>
+              </div>
             </div>
 
             <Image
@@ -142,13 +138,7 @@ export default async function Home() {
               height={125}
               className="hidden md:block -my-24 -mr-6"
             />
-            <Image
-              alt="guppy logo"
-              src="guppy_ring.svg"
-              width={300}
-              height={100}
-              className="-mb-12 block md:hidden "
-            />
+            <Image alt="guppy logo" src="guppy_ring.svg" width={300} height={100} className="-mb-12 block md:hidden " />
           </div>
         </div>
       </header>
@@ -172,12 +162,8 @@ export default async function Home() {
             ].map(({ title, description }) => {
               return (
                 <div>
-                  <h3 className="tracking-tight text-3xl font-medium mb-3">
-                    {title}
-                  </h3>
-                  <p className="text-muted-foreground leading-6 tracking-tight text-base">
-                    {description}
-                  </p>
+                  <h3 className="tracking-tight text-3xl font-medium mb-3">{title}</h3>
+                  <p className="text-muted-foreground leading-6 tracking-tight text-base">{description}</p>
                 </div>
               )
             })}
@@ -202,9 +188,7 @@ export default async function Home() {
                   key={feature.title}
                   className="bg-background self-stretch lg:w-[calc(33.333%-1.75rem)] shadow-md rounded-2xl border border-border/60  p-6 py-5 pb-6 text-xl"
                 >
-                  <p className="tracking-tighter font-medium mb-1">
-                    {feature.title}
-                  </p>
+                  <p className="tracking-tighter font-medium mb-1">{feature.title}</p>
                   <p className="tracking-tight text-muted-foreground font-medium text-sm leading-5">
                     {feature.description}
                   </p>
@@ -225,9 +209,7 @@ export default async function Home() {
       <section className="bg-muted/30">
         <div className="container flex flex-col items-center py-16 lg:py-24">
           <h2 className="text-5xl tracking-tight mb-3 font-medium">Examples</h2>
-          <p className="tracking-tight font-medium text-muted-foreground">
-            Some novel use cases with guppy.
-          </p>
+          <p className="tracking-tight font-medium text-muted-foreground">Some novel use cases with guppy.</p>
           <div className="grid gap-6 lg:gap-8 grid-cols-1 lg:grid-cols-3 my-12">
             {examples.map((feature) => {
               return (
@@ -235,31 +217,16 @@ export default async function Home() {
                   key={feature.title}
                   className="border border-border/60 shadow-md flex flex-col rounded-xl bg-background p-5"
                 >
-                  <div
-                    className={
-                      'flex items-end p-4 rounded-lg h-[8rem] mb-4 ' +
-                      feature.className
-                    }
-                  >
-                    <Image
-                      alt={`${feature.title} icon`}
-                      src={feature.image}
-                      width={50}
-                      height={50}
-                    />
+                  <div className={'flex items-end p-4 rounded-lg h-[8rem] mb-4 ' + feature.className}>
+                    <Image alt={`${feature.title} icon`} src={feature.image} width={50} height={50} />
                   </div>
-                  <p className="text-2xl font-medium tracking-tight mb-3">
-                    {feature.title}
-                  </p>
-                  <p className="text-sm text-muted-foreground tracking-tight font-medium mb-6">
-                    {feature.description}
-                  </p>
+                  <p className="text-2xl font-medium tracking-tight mb-3">{feature.title}</p>
+                  <p className="text-sm text-muted-foreground tracking-tight font-medium mb-6">{feature.description}</p>
                   <Link
                     className="hover:bg-foreground hover:cursor-pointer transition hover:text-background bg-muted rounded-lg  p-3 text-center tracking-tight font-medium mt-auto flex justify-center gap-2 items-center"
                     href={feature.href}
                   >
-                    <span className="block"> Open Notebook</span>{' '}
-                    <ArrowRight className="w-4 h-4" />
+                    <span className="block"> Open Notebook</span> <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               )
@@ -277,12 +244,10 @@ export default async function Home() {
       <section className="">
         <div className="container pt-16 lg:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           <div>
-            <h2 className="text-5xl tracking-tight mb-5 font-medium">
-              Open Source
-            </h2>
+            <h2 className="text-5xl tracking-tight mb-5 font-medium">Open Source</h2>
             <p className="tracking-tight text-xl text-muted-foreground leading-7">
-              The guppylang compiler and the target HUGR intermediate
-              representation are open source, and welcome contributions!
+              The guppylang compiler and the target HUGR intermediate representation are open source, and welcome
+              contributions!
             </p>
           </div>
           <div className="flex flex-col gap-4">
@@ -297,15 +262,8 @@ export default async function Home() {
                   target="_blank"
                   rel="noreferer"
                 >
-                  <Image
-                    alt={`github icon`}
-                    src="github.svg"
-                    width={35}
-                    height={35}
-                    className="group-hover:invert"
-                  />
-                  <span className="block text-lg"> {item.title}</span>{' '}
-                  <ArrowRight className="w-6 h-6 ml-auto" />
+                  <Image alt={`github icon`} src="github.svg" width={35} height={35} className="group-hover:invert" />
+                  <span className="block text-lg"> {item.title}</span> <ArrowRight className="w-6 h-6 ml-auto" />
                 </Link>
               )
             })}
