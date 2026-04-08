@@ -25,5 +25,10 @@
     .. automethod:: __eq__
     .. automethod:: __getattr__
 
+.. autoclass:: GuppyEnumDefinition
+    :show-inheritance:
+
+    .. automethod:: __getattr__
+
 .. autoexception:: EntrypointArgsError
 ```
