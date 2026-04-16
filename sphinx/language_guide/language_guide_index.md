@@ -22,4 +22,5 @@ static.md
 python_differences.md
 ownership.md
 comptime.md
+libraries.md
 ```
