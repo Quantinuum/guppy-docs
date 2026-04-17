@@ -93,7 +93,25 @@ user_pkg: Package = main.compile()
 ```
 Here, the end-user aims to create an executable package: The compilation product is a HUGR package with a single, argument-less entrypoint.
 However, the ``user_pkg`` is incomplete, as it lacks the function definitions corresponding to the used function declarations.
-This may cause issues when further processing of the package (at last when the contents of the package should be executed using e.g. a simulator), so the library package containing the definitions has to be *linked* in to provide them.
+This may cause issues when further processing of the package (at last when the contents of the package should be executed using e.g. a simulator), so the library package containing the definitions has to be *linked* in to provide them (see [below](#linking-and-visibility) for more information).
+
+When building an emulator for an entrypoint function, the library packages to be linked in can be supplied using the `libs` keyword-argument:
+```python
+from guppylang import guppy
+from hugr.package import Package
+
+# --- SNIP ---
+lib_pkg: Package = ...
+
+@guppy.declare
+def my_func() -> None: ...
+
+@guppy
+def main() -> None:
+    my_func()
+
+main.emulator(n_qubits=1, libs=[lib_pkg]).run()
+```
 
 ## Linking and Visibility
 
