@@ -97,7 +97,6 @@ This may cause issues when further processing of the package (at last when the c
 
 ## Linking and Visibility
 
-Once a library HUGR package is created, it may be distributed to end-users using arbitrary mechanisms.
 As of `hugr-py>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
 ```python3
 from hugr.package import Package
@@ -125,6 +124,63 @@ For the introductory example, assuming the functions reside in a file at `src/my
 - ``mylib.foo.bar.a_third_func``
 
 To be able to link the corresponding declarations and the functions together, they need to have the same name inside the HUGR package.
-This 
+In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``link_name`` keyword-argument:
+```{code-cell} ipython3
+from guppylang import guppy
 
-## Structs and Enums in the Interface
+@guppy(link_name="my.func.in.my.library")
+def my_func() -> None:
+    pass
+
+@guppy.declare(link_name="my.func.in.my.library")
+def my_func_decl() -> None: ...
+```
+In this example, the linking process will be able to associate the declaration with the definition, even though their function names are different.
+
+## Structs and Enums
+
+It is also possible to make a ``@guppy.struct`` or a ``@guppy.enum`` part of the library interface.
+In such cases, all methods of these types will be acting entrypoints of the package:
+```{code-cell} ipython3
+from guppylang import guppy
+
+@guppy.struct
+class MyStruct:
+    field_a: bool
+    field_b: int
+
+    @guppy
+    def my_method(self) -> None: # Will be an entrypoint of the package
+        pass
+        
+lib = guppy.library(MyStruct).compile()
+```
+A stub for such a type should replicate all fields, and contain stubs for the Guppy methods:
+```{code-cell} ipython3
+from guppylang import guppy
+
+@guppy.struct
+class MyStruct:
+    field_a: bool
+    field_b: int
+
+    @guppy.declare
+    def my_method(self) -> None: ...
+```
+Specifying ``link_name`` on these methods will work as with top-level functions, with the default value including the struct name as part of the method name.
+However, the ``@guppy.struct`` and ``@guppy.enum`` decorators also support changing the name prefix up to and including the type name for all members using the default mechanism:
+```{code-cell} ipython3
+from guppylang import guppy
+
+@guppy.struct(link_name="my.struct.path")
+class MyStruct:
+    @guppy
+    def my_method(self) -> None: # will receive "my.struct.path.my_method"
+        pass
+    
+    @guppy(link_name="override.name")
+    def my_other_method(self) -> None: # will receive "override.name"
+        pass
+        
+lib = guppy.library(MyStruct).compile()
+```
