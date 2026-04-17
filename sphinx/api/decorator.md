@@ -4,7 +4,7 @@
 ```{eval-rst}
 .. currentmodule:: guppylang.decorator
 
-.. decorator:: guppy (*, unitary=False, control=False, dagger=False, power=False, max_qubits=None)
+.. decorator:: guppy (*, unitary=False, control=False, dagger=False, power=False, max_qubits=None, link_name=None)
 
    Registers a function for Guppy compilation. This is the main decorator that applies to most use cases / functions
    written in Guppy. 
@@ -20,6 +20,9 @@
    :keyword max_qubits: Hints the maximum number of qubits that this function uses. When used on the entrypoint function,
      allows to omit the `n_qubits` parameter when calling :func:`~guppylang.defs.GuppyFunctionDefinition.emulator`.
    :type max_qubits: python:int | None
+   :keyword link_name: Override the name the function will receive when compiled into a HUGR package. The default
+     name is based on the fully module-qualified name of the function.
+   :type link_name: python:str | None
    :rtype: GuppyFunctionDefinition
 
    .. code-block:: python
