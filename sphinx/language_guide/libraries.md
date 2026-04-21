@@ -6,7 +6,7 @@ kernelspec:
 
 # Libraries
 
-Introduced in ``v0.21.12``.
+Introduced in ``v0.21.13``.
 
 ## Introduction
 
