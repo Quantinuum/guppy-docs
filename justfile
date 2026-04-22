@@ -5,7 +5,7 @@ build-landing:
     cd landing && npm i --frozen-lockfile && npm run build
     mkdir -p build
     cp -R ./sphinx/build/. ./build/.
-    cp -R ./landing/out/. ./build/.
+    cp -R ./landing/dist/. ./build/.
 
 build:
     just build-docs
@@ -31,5 +31,5 @@ cleanup:
     rm -rf sphinx/.jupyter_cache
     rm -rf sphinx/build
     rm -rf sphinx/api/generated
-    rm -rf landing/out
+    rm -rf landing/dist
     rm -rf build
