@@ -19,13 +19,13 @@
 }
 
 .font-sans {
-  font-family: var(--font-inter);
+  font-family: 'Inter', sans-serif;
 }
 
 .font-mono,
 code,
 pre {
-  font-family: var(--font-jetbrains-mono);
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .lucide {
