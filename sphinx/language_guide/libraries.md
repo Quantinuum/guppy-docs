@@ -115,7 +115,7 @@ main.emulator(n_qubits=1, libs=[lib_pkg]).run()
 
 ## Linking and Visibility
 
-As of `hugr-py>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
+As of the HUGR Python package `hugr>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
 ```python3
 from hugr.package import Package
 
