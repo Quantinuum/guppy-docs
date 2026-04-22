@@ -45,7 +45,7 @@ In the resulting ``lib_pkg``, all three functions are included with public visib
 Any additional functions used by these entrypoints are also included in the package (similar to dependees of a single function compilation), but with private visibility.
 The visibility of a function affects whether it is available for linking, explained [below](#linking-and-visibility).
 
-## Using Libraries and Stubs
+## Using libraries and stubs
 
 To allow programming against the interface of the library, the library developer needs to expose a series of stubs, mirroring the entrypoint functions the library was created with.
 In Guppy, a stub can be created as a function declaration with the ``@guppy.declare`` decorator.
@@ -113,7 +113,7 @@ def main() -> None:
 main.emulator(n_qubits=1, libs=[lib_pkg]).run()
 ```
 
-## Linking and Visibility
+## Linking and visibility
 
 As of the HUGR Python package `hugr>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
 ```python3
@@ -155,7 +155,7 @@ def my_func_decl() -> None: ...
 ```
 In this example, the linking process will be able to associate the declaration with the definition, even though their function names are different.
 
-## Structs and Enums
+## Structs and enums
 
 It is also possible to make a ``@guppy.struct`` or a ``@guppy.enum`` part of the library interface.
 In such cases, all methods of these types will be acting entrypoints of the package:
