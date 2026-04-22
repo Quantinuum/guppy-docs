@@ -96,7 +96,10 @@ However, the ``user_pkg`` is incomplete, as it lacks the function definitions co
 This may cause issues when further processing of the package (at last when the contents of the package should be executed using e.g. a simulator), so the library package containing the definitions has to be *linked* in to provide them (see [below](#linking-and-visibility) for more information).
 
 When building an emulator for an entrypoint function, the library packages to be linked in can be supplied using the `libs` keyword-argument:
-```python
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
 from guppylang import guppy
 from hugr.package import Package
 
@@ -116,7 +119,10 @@ main.emulator(n_qubits=1, libs=[lib_pkg]).run()
 ## Linking and visibility
 
 As of the HUGR Python package `hugr>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
-```python3
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
 from hugr.package import Package
 
 # --- SNIP ---
