@@ -9,11 +9,14 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  ssr: {
+    noExternal: ['@quantinuum/quantinuum-ui', 'lucide-react'],
+  },
   plugins: [
     tanstackStart({
       prerender: {
         enabled: true,
-        crawlLinks: true,
+        crawlLinks: false,
       },
     }),
     viteReact(),

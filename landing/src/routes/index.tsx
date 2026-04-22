@@ -1,4 +1,5 @@
 import { Button, DocsFooter, DocsNavBar, Separator } from '@quantinuum/quantinuum-ui'
+import '@quantinuum/quantinuum-ui/tokens.css'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { ArrowRight } from 'lucide-react'
