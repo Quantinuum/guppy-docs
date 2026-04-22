@@ -106,8 +106,10 @@ from hugr.package import Package
 # --- SNIP ---
 lib_pkg: Package = ...
 
+# Imported from somewhere
 @guppy.declare
 def my_func() -> None: ...
+# --- SNIP ---
 
 @guppy
 def main() -> None:
