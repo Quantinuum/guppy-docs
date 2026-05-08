@@ -202,9 +202,9 @@ def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
     for q in q_arr:
         q_arr_opt[idx].swap(some(q)).unwrap_nothing()
         idx += 1
-    
-    q_arr_opt[m].swap(some(qb)).unwrap_nothing()
-    
+
+    q_arr_opt[m-1].swap(some(qb)).unwrap_nothing()
+
     qs = array(q.unwrap() for q in q_arr_opt)
     
     return qs
