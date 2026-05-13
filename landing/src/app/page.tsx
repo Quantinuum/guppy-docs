@@ -1,9 +1,9 @@
-import { GuppyLogo } from './_components/GuppyLogo'
-import { CodeSnippet } from './code_snippet'
 import { Button, DocsFooter, DocsNavBar, Separator } from '@quantinuum/quantinuum-ui'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { GuppyLogo } from './_components/GuppyLogo'
+import { CodeSnippet } from './code_snippet'
 
 const featureConfig = [
   {
@@ -111,19 +111,19 @@ export default async function Home() {
                 Quantum-first programming <br />
                 language, embedded in Python.
               </h2>
-              <div className="flex gap-3 mt-8">
+              <div className="flex flex-col gap-3 mt-8">
                 <Button
                   asChild
                   variant="outline"
-                  className="hover:cursor-pointer w-[12rem] py-6  text-lg tracking-tight"
+                  className="hover:cursor-pointer w-[22rem] py-6  text-lg tracking-tight"
                 >
-                  <Link href="https://playpond.guppylang.org" target="_blank">
+                  <Link href="https://play.guppylang.org" className='font-medium'>
                     <GuppyLogo className="w-32 h-32 flex-shrink-0" style={{ width: '1.3rem', height: '1.3rem' }} />
-                    Playpond
+                    Playpond - <span className='text-muted-foreground'>Try Guppy Online</span>
                   </Link>
                 </Button>
-                <Button asChild className="hover:cursor-pointer w-[12rem] bg-[#30A08E] py-6 text-lg tracking-tight">
-                  <Link href="/guppy/getting_started.html">Get Started</Link>
+                <Button asChild className="hover:cursor-pointer w-[22rem] bg-[#30A08E] py-6 text-lg tracking-tight">
+                  <Link href="/guppy/getting_started.html">Read the Docs</Link>
                 </Button>
               </div>
             </div>
