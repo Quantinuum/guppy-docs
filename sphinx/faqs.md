@@ -63,6 +63,8 @@ When using a Python type checker (such as [mypy](https://www.mypy-lang.org/)) wi
 For example, using `@ owned` annotations in function signatures, 
 
 ```{code-cell} ipython3
+from guppylang.std.builtins import owned
+
 @guppy
 def foo(q: qubit @ owned) -> None: ...
 ```
