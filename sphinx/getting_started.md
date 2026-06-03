@@ -10,7 +10,7 @@ kernelspec:
 
 ## Installation
 
-Guppy is installed as the [guppylang](https://pypi.org/project/guppylang/) Python package from pypi.
+Guppy is installed as the [guppylang](https://pypi.org/project/guppylang/) Python package from PyPi.
 
 ```shell
 pip install guppylang
