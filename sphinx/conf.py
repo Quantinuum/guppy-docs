@@ -36,6 +36,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinxcontrib.googleanalytics",
     "quantinuum_sphinx",
+    "sphinx_tabs.tabs",
 ]
 autosectionlabel_prefix_document = True
 
