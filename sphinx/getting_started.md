@@ -10,13 +10,13 @@ kernelspec:
 
 ## Installation
 
-Guppy is installed as the [guppylang](https://pypi.org/project/guppylang/) Python package.
+Guppy is installed as the [guppylang](https://pypi.org/project/guppylang/) Python package from PyPi.
 
 ```shell
 pip install guppylang
 ```
 
-Guppy can be used with Python versions 3.10, 3.11, 3.12, 3.13 and 3.14. The MacOS, Linux and Windows operating systems are supported.
+Guppy can be used with Python versions 3.10-14. The macOS, Linux and Windows operating systems are supported.
 
 The source code for Guppy can be found in a public repository on [GitHub](https://github.com/quantinuum/guppylang). If you have a feature request or think you have found a bug, feel free to raise a [GitHub issue](https://github.com/quantinuum/guppylang/issues).
 
@@ -24,18 +24,15 @@ Guppy programs can be executed on the [Selene](https://github.com/quantinuum/sel
 
 ## Example: A simple circuit
 
-As a first example, let's write a Guppy program to implement a simple quantum circuit.
-This circuit is deliberately designed to involve some classical control based on measurement outcomes:
+Let's write a Guppy program to implement this circuit, which involves some classical control based on measurement outcomes:
 ![circuit](./_static/getting_started_circuit.png)
 
-You can see the intermediate states of the qubits as the circuit progresses annotated on the dashed lines.
-Try to reason along!
-Using Guppy, the prediction of the resulting state / measurement outcomes can be numerically supported using an emulator.
+The intermediate state of the qubits as the circuit progresses is annotated above the dashed lines. Using Guppy, these resulting states and measurement outcomes can be numerically calculated using an emulator.
 
-To implement this circuit, we define a Python function with the [`@guppy`](https://docs.quantinuum.com/guppy/api/decorator.html) decorator.
-Since our circuit takes no inputs, the function does not have to have any parameters.
-Similarly, as the circuit prepares a single-qubit state, we must annotate the function with the corresponding return type.
-We also record the outcome of the mid-circuit measurement for later evaluation using `result`, as this will make it available later once we run the simulation.
+To implement this circuit in Guppy, we define a Python function with the [`@guppy`](https://docs.quantinuum.com/guppy/api/decorator.html) decorator.
+Since our circuit takes no input, the function does not have to have any parameters.
+Similarly, as the circuit prepares a single-qubit state, we must annotate the function with this as the corresponding return type.
+We can also record the outcome of the mid-circuit measurement for later evaluation using `result`, as this will make it available to the user after we run the simulation.
 
 ```{code-cell} ipython3
 from guppylang import guppy
@@ -60,8 +57,8 @@ def simple_circuit() -> qubit:
 simple_circuit.check()
 ```
 
-For execution, we can write a function that invokes the circuit and consumes the produced qubit via a measurement.
-The outcome is recorded for later evaluation as well.
+We can write a function that invokes this circuit and consumes the produced qubit via a measurement.
+This outcome is also recorded for later evaluation as well.
 
 ```{code-cell} ipython3
 @guppy
@@ -70,8 +67,8 @@ def evaluate() -> None:
     result("q2", measure(q))
 ```
 
-Finally, we can emulate our circuit implementation using the stabilizer simulator. 
-Our program is executed for a single shot using the `run` method.
+Finally, we can emulate our complete implementation using a stabilizer simulator. 
+To execute our program for a single shot we construct an emulator object and invoke the `run` method.
 
 ```{code-cell} ipython3
 emulator = evaluate.emulator(n_qubits=2).stabilizer_sim().with_seed(3)
@@ -79,8 +76,7 @@ sim_result = emulator.run()
 list(sim_result.results)
 ```
 
-However, this is only a single shot.
-We can produce larger numbers of shots using the same API by changing the configuration of the emulator.
+We can produce larger numbers of shots using the same methods by changing the configuration of the emulator.
 Let's do this and plot the results using `matplotlib`:
 ```{code-cell} ipython3
 import matplotlib.pyplot as plt
@@ -103,7 +99,7 @@ ax.set_xticklabels(possible_outcomes)
 ax.set_ylabel("Frequency")
 plt.show()
 ```
-The results roughly match the expected distribution that was predicted in the circuit.
+The results roughly match the expected distribution that was predicted in the circuit, up to finite sampling effects.
 
 That's it, you executed your first Guppy program successfully!
 To see more examples of Guppy programs, take a look at the [Examples Gallery](examples_index.md).
