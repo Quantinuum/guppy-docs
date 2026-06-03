@@ -12,8 +12,18 @@ kernelspec:
 
 Guppy is installed as the [guppylang](https://pypi.org/project/guppylang/) Python package from PyPi.
 
-```shell
-pip install guppylang
+
+
+```{eval-rst}
+.. tabs::
+
+   .. code-tab:: shell pip
+
+      pip install guppylang
+
+   .. code-tab:: shell uv
+
+      uv add guppylang
 ```
 
 Guppy can be used with Python versions 3.10-14. The macOS, Linux and Windows operating systems are supported.
