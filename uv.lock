@@ -798,6 +798,7 @@ dependencies = [
     { name = "matplotlib" },
     { name = "networkx", version = "3.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "networkx", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "roman-numerals-py" },
     { name = "sphinx-tabs" },
     { name = "tket" },
 ]
@@ -822,12 +823,13 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "guppylang", specifier = "==0.21.15" },
+    { name = "guppylang", specifier = "==0.21.16" },
     { name = "jupyter", specifier = ">=1.1.0" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "networkx", specifier = ">=3.4.2" },
+    { name = "roman-numerals-py", specifier = "==4.0" },
     { name = "sphinx-tabs", specifier = ">=3.5.0" },
-    { name = "tket", specifier = "~=0.13.0" },
+    { name = "tket", specifier = "~=0.13.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -850,7 +852,7 @@ docs = [
 
 [[package]]
 name = "guppylang"
-version = "0.21.15"
+version = "0.21.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "guppylang-internals" },
@@ -862,26 +864,26 @@ dependencies = [
     { name = "tqdm" },
     { name = "types-tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/89/c1c5e4b61711ac0b91b3e0613a0b5ae7f580148784413180b2334cf83729/guppylang-0.21.15.tar.gz", hash = "sha256:5fbae0b6ce400efec92a977c3fd9ac6d47073559837fcfa409f5572728676e65", size = 70176, upload-time = "2026-05-18T11:25:36.423Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/45/79/e148d43eebdbd0e670cfe983d2806c1d8199d4b69e45680a352d2a6c6265/guppylang-0.21.16.tar.gz", hash = "sha256:37ecb3267734540104ada3be1e12726f631edfba2b013efa8f8064cc324d7fda", size = 70378, upload-time = "2026-06-04T14:57:10.594Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ce/13/abe6637c898ea798ce0f6686834bf6afeed53fcb1af8f02d66faf4cfa694/guppylang-0.21.15-py3-none-any.whl", hash = "sha256:0cf3ac26db1e5d04ec2f9bc317bd343bdcd41bb5fd9a5108b9db2ca4b9267830", size = 66969, upload-time = "2026-05-18T11:25:34.53Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/6a/7120b688f8543ef39ac1d42d325233aacde677a562fe72e3e51f10e433ee/guppylang-0.21.16-py3-none-any.whl", hash = "sha256:22ada5f013d96574102b89d88c290449b23f9972a8f0e88e92227308b8aa275c", size = 67031, upload-time = "2026-06-04T14:57:09.183Z" },
 ]
 
 [[package]]
 name = "guppylang-internals"
-version = "0.36.0"
+version = "0.36.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hugr" },
     { name = "pytket" },
-    { name = "tket" },
+    { name = "tket", extra = ["pytket"] },
     { name = "tket-exts" },
     { name = "typing-extensions" },
     { name = "wasmtime" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b8/6f/49ccfe331095e26687517603cef7046e3de32a4563f1f4ffc37146c58f11/guppylang_internals-0.36.0.tar.gz", hash = "sha256:abb57302609f2da69367cb5969dee1fda7641d3b4da3783019693b59372b5914", size = 214524, upload-time = "2026-05-18T09:54:30.808Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/df/67/c2ea5658a28d1ea814a64e91cf0433197dd0e99a3eab1dc3538e14499634/guppylang_internals-0.36.1.tar.gz", hash = "sha256:3ee67ffdd7e97cf9273f9a65697c48fb192bb98f110c960931d6ea1f2b7f0934", size = 214605, upload-time = "2026-06-04T14:53:42.617Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bc/d4/6562f17250c2da62b2a99c53458efd36a6e9f0ab9b89c5cbe25f510933bf/guppylang_internals-0.36.0-py3-none-any.whl", hash = "sha256:6c784ad5a7ddc24fc720494b1ecd5e3515c9dfbc8c445d0b8326429c7ec4e62e", size = 267510, upload-time = "2026-05-18T09:54:29Z" },
+    { url = "https://files.pythonhosted.org/packages/31/ac/f66326c93cc7e0c74ec8a195d23c78690cb470c77519e77a4d4876f5d355/guppylang_internals-0.36.1-py3-none-any.whl", hash = "sha256:d70dc644bdfaff46b5b94b308aa90e4aa667c60b85f72a82fbc1ea729d2dfe51", size = 267518, upload-time = "2026-06-04T14:53:40.954Z" },
 ]
 
 [[package]]
@@ -2844,12 +2846,24 @@ wheels = [
 ]
 
 [[package]]
-name = "roman-numerals-py"
-version = "3.1.0"
+name = "roman-numerals"
+version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/30/76/48fd56d17c5bdbdf65609abbc67288728a98ed4c02919428d4f52d23b24b/roman_numerals_py-3.1.0.tar.gz", hash = "sha256:be4bf804f083a4ce001b5eb7e3c0862479d10f94c936f6c4e5f250aa5ff5bd2d", size = 9017, upload-time = "2025-02-22T07:34:54.333Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6b/20/a6b20239f54814de5c34bf3f504e553b11780c2aad3677ad2daf989f1fb3/roman_numerals-4.0.0.tar.gz", hash = "sha256:231287018a8788bf8c0718482a08c15b90458523ea1d840a18a791a86d4583b3", size = 9027, upload-time = "2025-12-16T01:53:36.309Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/97/d2cbbaa10c9b826af0e10fdf836e1bf344d9f0abb873ebc34d1f49642d3f/roman_numerals_py-3.1.0-py3-none-any.whl", hash = "sha256:9da2ad2fb670bcf24e81070ceb3be72f6c11c440d73bd579fbeca1e9f330954c", size = 7742, upload-time = "2025-02-22T07:34:52.422Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/9d/ad950fd3b65cf0974c633862320829f3d461aef125b981504277c8409a93/roman_numerals-4.0.0-py3-none-any.whl", hash = "sha256:4131feb23ba1a542494873e4cee7844ec8d226a750134efc65ceb20939ed33c9", size = 7668, upload-time = "2025-12-16T01:53:34.922Z" },
+]
+
+[[package]]
+name = "roman-numerals-py"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "roman-numerals" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7e/02/6cb667fc1872c5fe814971be2973317f0747d86f1c0aac37d0e1a1df1ecc/roman_numerals_py-4.0.0.tar.gz", hash = "sha256:f7fa8dff5b7b7251d3a7586b97c57a0698e2e28898fa42c23bcc0cf51b02aee9", size = 1119, upload-time = "2025-12-16T01:53:43.097Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/b7/c0aa3b0154e022faa8e8b4eadda0c49f53b09b6b8d55ed3b7cd311abfd92/roman_numerals_py-4.0.0-py3-none-any.whl", hash = "sha256:dfcecf6e0cddbf2ee1112e7e2ebf58ba771984f075cb57a30e1811cee4f06332", size = 1244, upload-time = "2025-12-16T01:53:42.369Z" },
 ]
 
 [[package]]
@@ -3509,21 +3523,25 @@ wheels = [
 
 [[package]]
 name = "tket"
-version = "0.13.0"
+version = "0.13.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hugr" },
-    { name = "pytket" },
     { name = "tket-eccs" },
     { name = "tket-exts" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/94/72/7d1eddd68475a453fba17d010f5b0484061b370c4a669ef241e05f7c1136/tket-0.13.0.tar.gz", hash = "sha256:7ccbcd6379f0bad5e6d701bc38b0e73ae09a89316a948ba79a4dd3d0800374bf", size = 587556, upload-time = "2026-04-07T15:58:47.276Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b9/b0/b6f4659447c521c3b7fe066efa6b3204d2eb1129de8b31fb0ed2218d5596/tket-0.13.1.tar.gz", hash = "sha256:aaf21432939923962362b8783be8190e7f493ae5db3b783fdb93abd352d39ec4", size = 605360, upload-time = "2026-05-19T13:31:30.416Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/34/62/d56c2af222ceaf53e2b2366fd887aa813c9b9a795a5a09db18fda34289e9/tket-0.13.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:e4d6d7e02409c741b3db8d1feedb9ba24962ea09769d177eb18631ec7227cc11", size = 9821143, upload-time = "2026-04-07T15:58:35.375Z" },
-    { url = "https://files.pythonhosted.org/packages/b3/b9/09f1d165a64ffe2885a19bd1942c91cfaf0827df8328999eb5749ac4ed9f/tket-0.13.0-cp310-abi3-macosx_11_0_x86_64.whl", hash = "sha256:d3a3169e232eb3576fd529f1aacb87d5a2cfeffcd1b604f81ff80169c8ef35f9", size = 10709085, upload-time = "2026-04-07T15:58:37.804Z" },
-    { url = "https://files.pythonhosted.org/packages/1f/39/6a3d69429f25dd3c178de76c5e0d40f6526799e632357714c5ed4d55b449/tket-0.13.0-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:fa73f33e83fe59c9669723d105cdc8b4cc9e494b5ca808be4aff8525b3ca3cdc", size = 11900149, upload-time = "2026-04-07T15:58:40.426Z" },
-    { url = "https://files.pythonhosted.org/packages/94/82/df1610831c76007a7146c0fb1ae9af9672c389dff24e727f8e7a498a6fba/tket-0.13.0-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:c044aa8b4a83ddd7362fd139e32c5dd1b5a9c132176cf8e31ccc9691d446463f", size = 12888623, upload-time = "2026-04-07T15:58:42.832Z" },
-    { url = "https://files.pythonhosted.org/packages/7b/d1/0b478d69c744849cf94af21079d8b702c322eed85031c5cb6effb54ffdbf/tket-0.13.0-cp310-abi3-win_amd64.whl", hash = "sha256:2f147c0d378930f7a6f676ce5e880fda9c0258512ebed4f929b1add976a798f5", size = 9450232, upload-time = "2026-04-07T15:58:45.1Z" },
+    { url = "https://files.pythonhosted.org/packages/44/d0/3c9a0d7152d3cf01efd76cf32ae92b79dca7acae14a44b64845ddeb6b6c2/tket-0.13.1-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:2c64dc53ea903350491927260cfdaf8d77dd1400c786be9b83305b4b9dee2e96", size = 10441428, upload-time = "2026-05-19T13:31:18.158Z" },
+    { url = "https://files.pythonhosted.org/packages/96/41/c00db203f438f14fb892a98387cc476e7c506ad7bff26a1756a53a07f173/tket-0.13.1-cp310-abi3-macosx_11_0_x86_64.whl", hash = "sha256:bcfcbc0f646f5f8c16e943819a1010aaaf312c79642ea6e737ad7b9559603f8b", size = 11378534, upload-time = "2026-05-19T13:31:20.779Z" },
+    { url = "https://files.pythonhosted.org/packages/33/b0/90894ebb09b8eeda60da8205e74d892183007c93433e9ffab052a365abb7/tket-0.13.1-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:d53963635634af92670537fa431450a58e36b79ffcc7d8c7b0731150443ed2ea", size = 12555543, upload-time = "2026-05-19T13:31:23.191Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/70/68edcddf60219455933938502377a5e224873ccdfdc9e2ed6381b01fb690/tket-0.13.1-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:172fd7b159129ff46652474e85bcceae2eabcf854a712ba465c25818964dc0ed", size = 13628232, upload-time = "2026-05-19T13:31:25.617Z" },
+    { url = "https://files.pythonhosted.org/packages/3d/f0/416bc9d59675a1330b2d08d2f975e40cf4a3d70de39776b4e7a99506e71c/tket-0.13.1-cp310-abi3-win_amd64.whl", hash = "sha256:7b8c16dbe4af5dbc5a4381c9d17cbba4b103fe60254273f1eec2de08b70736be", size = 10218380, upload-time = "2026-05-19T13:31:28.394Z" },
+]
+
+[package.optional-dependencies]
+pytket = [
+    { name = "pytket" },
 ]
 
 [[package]]
