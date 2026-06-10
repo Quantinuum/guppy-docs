@@ -46,13 +46,13 @@ qft_func = guppy.load_pytket("qft_func", qft2_circ)
 
 We now have a Guppy function called `qft_func` which we can compile or use as a subroutine in other functions.
 
-By default [guppy.load_pytket][load_pytket_docs] will create Guppy functions which use arrays of qubits as inputs. This means that our `qft_func` above will have take an array of two qubits as input. 
+By default [guppy.load_pytket][load_pytket_docs] will create Guppy functions which use arrays of qubits as inputs. This means that our `qft_func` above will take an array of two qubits as input. 
 If we want the function to take two separate qubit arguments, we can specify `use_arrays=False` in [guppy.load_pytket][load_pytket_docs]. Also note that by default, circuits with separate quantum registers become Guppy functions that take multiple arrays of qubits as input. 
 
-Note that using [guppy.load_pytket][load_pytket_docs] works best when the loaded pytket [Circuit](inv:pytket#circuit_class) is contains only unitary quantum gates.This is because Guppy allows
+Using [guppy.load_pytket][load_pytket_docs] works best when the loaded pytket [Circuit](inv:pytket#circuit_class) contains only unitary quantum gates. This is because Guppy allows
  qubits to be explicitly allocated at runtime and deallocated by measurement. By contrast, pytket
-  treats qubits as alive for the entirety of the quantum program with measurements being projective.
-   It is therefore best practice to use [guppy.load_pytket][load_pytket_docs] for unitary subroutines
+  treats qubits as alive for the entirety of the quantum program.
+   It is therefore best practice to use [guppy.load_pytket][load_pytket_docs] for unitary subroutines,
     which map directly to Guppy functions which borrow qubits. Measurement and classical logic should ideally be done directly in Guppy. 
 
 ### How to deal with operations unsupported by Guppy
