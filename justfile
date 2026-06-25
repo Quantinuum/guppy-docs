@@ -5,7 +5,7 @@ build:
     just build-docs
 
 serve: build
-    npm exec serve build
+    npm exec serve sphinx/build
 
 build-debug:
     cd sphinx && uv run --group docs sphinx-build -b html . build -D nb_execution_raise_on_error=0
