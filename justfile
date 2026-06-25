@@ -1,18 +1,11 @@
 build-docs:
     cd sphinx && uv run --group docs sphinx-build -b html . build -W
 
-build-landing:
-    cd landing && npm i --frozen-lockfile && npm run build
-    mkdir -p build
-    cp -R ./sphinx/build/. ./build/.
-    cp -R ./landing/out/. ./build/.
-
 build:
     just build-docs
-    just build-landing
 
 serve: build
-    npm exec serve build
+    npm exec serve sphinx/build
 
 build-debug:
     cd sphinx && uv run --group docs sphinx-build -b html . build -D nb_execution_raise_on_error=0
@@ -31,5 +24,3 @@ cleanup:
     rm -rf sphinx/.jupyter_cache
     rm -rf sphinx/build
     rm -rf sphinx/api/generated
-    rm -rf landing/out
-    rm -rf build
