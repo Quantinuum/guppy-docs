@@ -3,7 +3,6 @@ build-docs:
 
 build:
     just build-docs
-    just build-landing
 
 serve: build
     npm exec serve build
