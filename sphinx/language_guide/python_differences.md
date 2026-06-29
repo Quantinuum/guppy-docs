@@ -192,7 +192,7 @@ output_example.check()
 After running a program, the outputs are reported as tag-value pairs:
 
 ```{code-cell} ipython3
-output_example.emulator(1).run().outputs
+output_example.emulator(1).run().results
 ```
 
 ## Exceptions
