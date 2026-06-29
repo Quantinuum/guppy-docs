@@ -15,10 +15,11 @@ As opposed to compiling a single function and its dependees, compiling a library
 These functions may take arguments, and have non-``None`` return types.
 Libraries can be used for separating compilation of multiple parts of your codebase (thus allowing reuse of unchanged definitions), distributing packages that are highly optimized, and much more.
 
-A library can be created with the ``guppy.library(...)`` function as follows:
+A library can be created with the ``GuppyLibrary.from_members`` method as follows:
 ```{code-cell} ipython3
 from guppylang import guppy
 from hugr.package import Package
+from guppylang.library import GuppyLibrary
 
 @guppy
 def my_func() -> None:
@@ -33,7 +34,7 @@ def a_third_func(x: int) -> int:
     return x + 1
 
 # Creates the library object, but does not compile it
-lib = guppy.library(
+lib = GuppyLibrary.from_members(
     my_func,
     another_func,
     a_third_func,
@@ -179,7 +180,7 @@ class MyStruct:
     def my_method(self) -> None: # Will be an entrypoint of the package
         pass
         
-lib = guppy.library(MyStruct).compile()
+lib = GuppyLibrary.from_members(MyStruct).compile()
 ```
 A stub for such a type should replicate all fields, and contain stubs for the Guppy methods:
 ```{code-cell} ipython3
@@ -208,5 +209,5 @@ class MyStruct:
     def my_other_method(self) -> None: # will receive "override.name"
         pass
         
-lib = guppy.library(MyStruct).compile()
+lib = GuppyLibrary.from_members(MyStruct).compile()
 ```
