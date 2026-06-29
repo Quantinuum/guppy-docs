@@ -46,7 +46,7 @@ We can also record the outcome of the mid-circuit measurement for later evaluati
 
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.builtins import result
+from guppylang.std.builtins import output
 from guppylang.std.quantum import cx, h, measure, qubit, x
 
 
@@ -57,8 +57,8 @@ def simple_circuit() -> qubit:
     h(q1)
     cx(q1, q2)
 
-    outcome = measure(q1)
-    result("q1", outcome)
+    outcome = measure(q1).read()
+    output("q1", outcome)
 
     if outcome:
         x(q2)
@@ -74,7 +74,7 @@ This outcome is also recorded for later evaluation as well.
 @guppy
 def evaluate() -> None:
     q = simple_circuit()
-    result("q2", measure(q))
+    output("q2", measure(q).read())
 ```
 
 Finally, we can emulate our complete implementation using a stabilizer simulator. 
