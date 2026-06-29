@@ -12,6 +12,5 @@ guppylang/examples/adaptive-qpe
 guppylang/examples/random_numbers
 guppylang/examples/postselect
 guppylang/examples/state_results
-guppylang/examples/deferred_measurement
 guppylang/examples/t_factory
 ```
