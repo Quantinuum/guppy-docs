@@ -7,6 +7,7 @@ decorator.md
 emulator.md
 defs.md
 std.md
+experimental.md
 ```
 
 ```{eval-rst}
