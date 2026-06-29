@@ -1,10 +1,10 @@
 r"""Configuration file for the Sphinx documentation builder."""
 
 import os
-# import guppylang
+import guppylang
 
 
-# html_title = f"Guppy v{guppylang.__version__} Documentation"
+html_title = f"Guppy v{guppylang.__version__} Documentation"
 
 html_theme = "quantinuum_sphinx"
 html_theme_options = {
@@ -180,14 +180,14 @@ googleanalytics_id = gaid
 master_doc = "index"
 
 # Exclude unsupported members of guppylang.std
-# from guppylang.std import unsupported  # noqa: E402
-#
-#
-# def skip_member(app, what, name, obj, skip, options):
-#    if name in dir(unsupported):
-#        return True
-#    return None
+from guppylang.std import unsupported  # noqa: E402
 
 
-# def setup(app):
-#    app.connect("autodoc-skip-member", skip_member)
+def skip_member(app, what, name, obj, skip, options):
+    if name in dir(unsupported):
+        return True
+    return None
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip_member)
