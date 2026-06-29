@@ -178,21 +178,21 @@ big_nat.check()
 ## I/O
 
 Guppy doesn't support the `print` function.
-Program outputs must be reported using the `result` function that takes a static string tag along with the value that should be outputted:
+Program outputs must be reported using the `output` function that takes a static string tag along with the value that should be outputted:
 
 ```{code-cell} ipython3
 @guppy
-def result_example() -> None:
-    result("my_computation", 1 + 1)
-    result("other_result", array(1.5, 2.5, 3.5))
+def output_example() -> None:
+    output("my_computation", 1 + 1)
+    output("other_output", array(1.5, 2.5, 3.5))
 
-result_example.check()
+output_example.check()
 ```
 
-After running a program, the results are reported as tag-value pairs:
+After running a program, the outputs are reported as tag-value pairs:
 
 ```{code-cell} ipython3
-result_example.emulator(1).run().results
+output_example.emulator(1).run().outputs
 ```
 
 ## Exceptions

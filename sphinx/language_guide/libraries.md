@@ -69,7 +69,7 @@ Currently, creation of these stubs is a manual process; it is currently not poss
 The end-user may then use these stubs as part of their regular Guppy source, and compile their code independently of the library:
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.builtins import result
+from guppylang.std.builtins import output
 from hugr.package import Package
 
 # --- SNIP ---
@@ -84,7 +84,7 @@ def a_third_func(x: int) -> int: ...
 @guppy
 def consumer_func() -> None:
     my_func()
-    result("library_call", a_third_func(5))
+    output("library_call", a_third_func(5))
 
 @guppy
 def main() -> None:

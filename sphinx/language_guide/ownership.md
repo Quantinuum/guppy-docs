@@ -271,7 +271,7 @@ def main() -> None:
     # Measure ancilla in X-basis
     h(a)
     c0 = measure(a).read()
-    output("c[0]", c0) # Get the result of measuring the ancilla
+    output("c[0]", c0) # Get the output of measuring the ancilla
 
 main.check() # Check fails :(
 ```
@@ -291,7 +291,7 @@ def main() -> None:
     # Measure ancilla in X-basis
     h(a)
     c0 = measure(a).read()
-    result("c[0]", c0) # Get the result of measuring the ancilla
+    output("c[0]", c0) # Get the output of measuring the ancilla
 
     # Discard idling qubit
     discard(q)
