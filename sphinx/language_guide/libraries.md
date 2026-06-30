@@ -151,15 +151,19 @@ For the introductory example, assuming the functions reside in a file at `src/my
 - ``mylib.foo.bar.a_third_func``
 
 To be able to link the corresponding declarations and the functions together, they need to have the same name inside the HUGR package.
-In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``link_name`` keyword-argument:
+In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``link_name`` decorator:
 ```{code-cell} ipython3
 from guppylang import guppy
+from guppylang.library import link_name
 
-@guppy(link_name="my.func.in.my.library")
+
+@guppy
+@link_name("my.func.in.my.library")
 def my_func() -> None:
     pass
 
-@guppy.declare(link_name="my.func.in.my.library")
+@guppy.declare
+@link_name("my.func.in.my.library")
 def my_func_decl() -> None: ...
 ```
 In this example, the linking process will be able to associate the declaration with the definition, even though their function names are different.
@@ -199,13 +203,15 @@ However, the ``@guppy.struct`` and ``@guppy.enum`` decorators also support chang
 ```{code-cell} ipython3
 from guppylang import guppy
 
-@guppy.struct(link_name="my.struct.path")
+@guppy.struct
+@link_name("my.struct.path")
 class MyStruct:
     @guppy
     def my_method(self) -> None: # will receive "my.struct.path.my_method"
         pass
     
-    @guppy(link_name="override.name")
+    @guppy
+    @link_name("override.name")
     def my_other_method(self) -> None: # will receive "override.name"
         pass
         
