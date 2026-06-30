@@ -263,8 +263,17 @@ def bar(arr: array[int, 3], i : int) -> int:
 The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
 for the array of 3 elements, *or* the message `i should have been odd`.
 
-1. a. To document the behaviour of the 1.0 release, but not as a guarantee about future minor (((or even patch))) releases, reordering of panics is limited as follows 
-1.a.1. Array accesses may be reordered with respect to each other if they are to different arrays, for example
+2. However, the following *are* guaranteed for all v1.x:
+* A `panic` (explicit or implicit) and an `output` will happen in the same order they are written in the source code.
+* Multiple `output`s will occur in the order they are present in the source code. (((At least for v1)))
+* `panic` and `exit` will not be reordered: the exit code will be the same as for python
+* `exit` and `output` will not be reordered
+
+### Current state of v1.0 release
+
+To document the behaviour of the 1.0 release, but not as a guarantee about future minor (((or even patch))) releases, reordering of panics is limited as follows 
+
+* Array accesses may be reordered with respect to each other if they are to different arrays, for example
 ```
 def baz[n,m](a1: array[int, n], a2: array[int, m], i) -> int:
    return a1[10] + a2[11]
@@ -273,9 +282,9 @@ If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
 (just as python). However, if both these problems occur in the same call to `baz`
 then it is not guaranteed which array access will be reported as failing.
 
-1.a.2. Array accesses may be reordered with respect to explicit `panic`, `exit` and `output`, as per example of `bar` above
+* Array accesses may be reordered with respect to explicit `panic`, `exit` and `output`, as per example of `bar` above
 
-1.a.3. Accesses on the same array are performed in source code order:
+* Accesses on the same array are performed in source code order:
 ```
 def foo[n](arr: array[int, n]) -> int:
    return arr[10] + arr[-1]
@@ -284,8 +293,3 @@ A call to `foo` with an array of 10 or less elements, will report
 that `10` is out of bounds, not `-1` (again, this is documentation of v1.0 only, not a future guarantee).
 
 
-1.b. However, the following *are* guaranteed for all v1.x:
-* A `panic` (explicit or implicit) and an `output` will happen in the same order they are written in the source code.
-* Multiple `output`s will occur in the order they are present in the source code. (((At least for v1)))
-* `panic` and `exit` will not be reordered: the exit code will be the same as for python
-* `exit` and `output` will not be reordered
