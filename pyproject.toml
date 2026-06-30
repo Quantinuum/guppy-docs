@@ -5,7 +5,7 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.10,<4"
 dependencies = [
-    "guppylang",
+    "guppylang==1.0.0-a8",
     "jupyter>=1.1.0",
     "matplotlib>=3.9.2",
     "networkx>=3.4.2",
@@ -17,7 +17,7 @@ dependencies = [
 prerelease = "allow"
 
 [tool.uv.sources]
-guppylang = { git = "https://github.com/quantinuum/guppylang/", rev = "4561d49", subdirectory = "guppylang"}
+# guppylang = { git = "https://github.com/quantinuum/guppylang/", rev = "4561d49", subdirectory = "guppylang"}
 # hugr = { git = "https://github.com/quantinuum/hugr.git", rev = "fe98ba1", subdirectory = "hugr-py" }
 # tket2 = { git = "https://github.com/quantinuum/tket2", subdirectory = "tket2-py", rev = "309879e" }
 
