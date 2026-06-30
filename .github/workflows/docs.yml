@@ -1,4 +1,4 @@
-name: Test sphinx docs and landing page build
+name: Test sphinx docs build
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
   workflow_dispatch: {}
 jobs:
     test:
-      name: Test sphinx docs and landing page build
+      name: Test sphinx docs build
       runs-on: ubuntu-latest
       env:
           UV_FROZEN: 1
@@ -23,17 +23,13 @@ jobs:
           with:
             just-version: '1.40.0'
 
-        - uses: actions/setup-node@v4
-          with:
-            node-version: '22'
-
         - name: Install uv
           uses: astral-sh/setup-uv@v5
           with:
               enable-cache: true
-              version: "0.6.6"
+              version: "0.11.22"
 
-        - name: Run the docs build (includes landing page)
+        - name: Run the docs build
           run: |
             just build
             # just coverage
