@@ -269,27 +269,33 @@ for the array of 3 elements, *or* the message `i should have been odd`.
 * `panic` and `exit` will not be reordered: the exit code will be the same as for python
 * `exit` and `output` will not be reordered
 
-### Current state of v1.0 release
+### Semantics of v1.0 release
 
-To document the behaviour of the 1.0 release, but not as a guarantee about future minor (((or even patch))) releases, reordering of panics is limited as follows 
+To document the behaviour of the current v1.0 release, but not as a guarantee about future minor (((or even patch))) releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
+* other indexing operations on *different arrays*
+* `result`, `panic`, or `exit` operations
+* (that is, they may be reordered with respect to any operation *not* on the same array)
 
-* Array accesses may be reordered with respect to each other if they are to different arrays, for example
+For example,
 ```
-def baz[n,m](a1: array[int, n], a2: array[int, m], i) -> int:
-   return a1[10] + a2[11]
+@guppy
+def baz[n,m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
+    h(arr1[10])
+    h(arr2[11])
 ```
 If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
 (just as python). However, if both these problems occur in the same call to `baz`
-then it is not guaranteed which array access will be reported as failing.
-
-* Array accesses may be reordered with respect to explicit `panic`, `exit` and `output`, as per example of `bar` above
-
-* Accesses on the same array are performed in source code order:
+then it is not guaranteed which array access will be reported as failing. Similarly:
 ```
-def foo[n](arr: array[int, n]) -> int:
-   return arr[10] + arr[-1]
+@guppy
+def foo(arr1: array[qubit, 3], i: int) -> None:
+  h(arr1[i])
+  if i < 1:
+    panic("Index was not strictly greater than zero)
 ```
-A call to `foo` with an array of 10 or less elements, will report
-that `10` is out of bounds, not `-1` (again, this is documentation of v1.0 only, not a future guarantee).
+seeing the message "Index was...." does not necessarily mean that the array access succeeded and thus that i==0; it could also occur for out-of-range i<0.
+
+<!-- on copyable-element arrays, `take` compiles to `get`,
+and `get` although not ordered itself is always compiled with an `unwrap` that *is* ordered -->
 
 
