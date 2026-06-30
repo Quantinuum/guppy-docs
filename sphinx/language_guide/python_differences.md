@@ -228,3 +228,74 @@ division_checked.check()
 ```
 
 See the [API documentation](guppylang.std.option.Option) as well as our [T state distillation example](../guppylang/examples/t_factory) for further details on how to interact with `Option` values 
+
+## Parallel Execution Semantics
+
+In python, programs behave as if every statement was executed in exactly the
+order the statements were written.
+
+Guppy relaxes this idea in a few ways to fit with the way modern and quantum
+computers may execute parts of a program in parallel, as follows.
+
+(Note: these guarantees are for guppylang v1, they may become more relaxed
+in future major releases. Also just that we *allow* statements to be reordered
+does not mean that this will necessarily happen in practice - but this may
+change, within the bounds of this spec, in future *minor* releases.)
+
+1. Operations that panic (both explicit `panic`s and other ops like array indexing) may be reordered with respect to each other. For example, this program:
+```
+@guppy
+def foo(i: int) -> int:
+  if i < -10:
+    panic("Input was very negative!", i)
+  if i < 0:
+    panic("Input was negative!", i)
+  return i
+```
+A call such as `foo(-20)` will definitely panic, but may panic with either message. As a second example:
+```
+@guppy
+def bar(arr: array[int, 3], i : int) -> int:
+   if i % 2 == 1:
+      panic("i should have been odd!")
+    return arr[i]
+```
+The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
+for the array of 3 elements, *or* the message `i should have been odd`.
+
+2. However, the following *are* guaranteed for all v1.x:
+* A `panic` (explicit or implicit) and an `output` will happen in the same order they are written in the source code.
+* Multiple `output`s will occur in the order they are present in the source code. (((At least for v1)))
+* `panic` and `exit` will not be reordered: the exit code will be the same as for python
+* `exit` and `output` will not be reordered
+
+### Semantics of v1.0 release
+
+To document the behaviour of the current v1.0 release, but not as a guarantee about future minor (((or even patch))) releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
+* other indexing operations on *different arrays*
+* `result`, `panic`, or `exit` operations
+* (that is, they may be reordered with respect to any operation *not* on the same array)
+
+For example,
+```
+@guppy
+def baz[n,m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
+    h(arr1[10])
+    h(arr2[11])
+```
+If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
+(just as python). However, if both these problems occur in the same call to `baz`
+then it is not guaranteed which array access will be reported as failing. Similarly:
+```
+@guppy
+def foo(arr1: array[qubit, 3], i: int) -> None:
+  h(arr1[i])
+  if i < 1:
+    panic("Index was not strictly greater than zero)
+```
+seeing the message "Index was...." does not necessarily mean that the array access succeeded and thus that i==0; it could also occur for out-of-range i<0.
+
+<!-- on copyable-element arrays, `take` compiles to `get`,
+and `get` although not ordered itself is always compiled with an `unwrap` that *is* ordered -->
+
+
