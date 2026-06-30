@@ -7,6 +7,7 @@
 guppylang/examples/ghz_and_graph
 guppylang/examples/swap_test
 guppylang/examples/canonical-qpe
+guppylang/examples/qaoa_maxcut_example
 guppylang/examples/repeat-until-success
 guppylang/examples/adaptive-qpe
 guppylang/examples/random_numbers
