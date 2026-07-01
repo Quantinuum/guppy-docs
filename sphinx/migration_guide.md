@@ -51,9 +51,9 @@ If we want the function to take two separate qubit arguments, we can specify `us
 
 Using [guppy.load_pytket][load_pytket_docs] works best when the loaded pytket [Circuit](inv:pytket#circuit_class) contains only unitary quantum gates. This is because Guppy allows
  qubits to be explicitly allocated at runtime and deallocated by measurement. By contrast, pytket
-  treats qubits as alive for the entirety of the quantum program.
+  treats qubits as alive for the entirety of the quantum program. Functions defined with pytket circuits are also not type checked before compilation.
    It is therefore best practice to use [guppy.load_pytket][load_pytket_docs] for unitary subroutines,
-    which map directly to Guppy functions which borrow qubits. Measurement and classical logic should ideally be done directly in Guppy. 
+    which map directly to Guppy functions which borrow qubits. Measurement and classical logic should ideally be done directly in Guppy. This has the benefit of allowing functions which consume qubits to be type checked according to Guppy's ownership model. 
 
 ### How to deal with operations unsupported by Guppy
 
