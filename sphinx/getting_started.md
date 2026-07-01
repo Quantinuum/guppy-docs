@@ -42,11 +42,11 @@ The intermediate state of the qubits as the circuit progresses is annotated abov
 To implement this circuit in Guppy, we define a Python function with the [`@guppy`](https://docs.quantinuum.com/guppy/api/decorator.html) decorator.
 Since our circuit takes no input, the function does not have to have any parameters.
 Similarly, as the circuit prepares a single-qubit state, we must annotate the function with this as the corresponding return type.
-We can also record the outcome of the mid-circuit measurement for later evaluation using `result`, as this will make it available to the user after we run the simulation.
+We can also record the outcome of the mid-circuit measurement for later evaluation using `output`, as this will make it available to the user after we run the simulation.
 
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.builtins import result
+from guppylang.std.builtins import output
 from guppylang.std.quantum import cx, h, measure, qubit, x
 
 
@@ -57,8 +57,8 @@ def simple_circuit() -> qubit:
     h(q1)
     cx(q1, q2)
 
-    outcome = measure(q1)
-    result("q1", outcome)
+    outcome = measure(q1).read()
+    output("q1", outcome)
 
     if outcome:
         x(q2)
@@ -74,7 +74,7 @@ This outcome is also recorded for later evaluation as well.
 @guppy
 def evaluate() -> None:
     q = simple_circuit()
-    result("q2", measure(q))
+    output("q2", measure(q).read())
 ```
 
 Finally, we can emulate our complete implementation using a stabilizer simulator. 

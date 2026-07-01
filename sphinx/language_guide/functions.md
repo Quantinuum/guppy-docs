@@ -79,13 +79,13 @@ function_is_a_value.check()
 
 Guppy functions can take function(s) as arguments and/or return a function as a result. A functions with one of these two properties is known as a higher-order function.
 
-To define a higher-order function, we can use Python's built-in `Callable` to provide the type annotation.
+To define a higher-order function, we can use the `Function` type from Guppy to provide the type annotation.
 
 ```{code-cell} ipython3
-from collections.abc import Callable
+from guppylang.std.builtins import Function
 
 @guppy
-def my_function(f: Callable[[int], bool]) -> Callable[[int], bool]:
+def my_function(f: Function[[int], bool]) -> Function[[int], bool]:
     # Takes a callable `f` that accepts an integer and returns a boolean.
     return f
 

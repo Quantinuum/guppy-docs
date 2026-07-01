@@ -154,10 +154,10 @@ If we attempt to measure qubits which are not owned we get a compiler error.
 ---
 tags: [raises-exception]
 ---
-from guppylang.std.quantum import discard
+from guppylang.std.quantum import discard, Measurement
 
 @guppy
-def measure_x_basis(q0: qubit) -> bool:
+def measure_x_basis(q0: qubit) -> Measurement:
     h(q0)
     return measure(q0)
 
@@ -174,9 +174,10 @@ As the error message indicates, this can be fixed if the user explicitly takes d
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import owned
+from guppylang.std.quantum import Measurement
 
 @guppy
-def measure_x_basis(q0: qubit @owned) -> bool:
+def measure_x_basis(q0: qubit @owned) -> Measurement:
     h(q0)
     return measure(q0)
 
@@ -259,7 +260,7 @@ Let's see an example with discarding. Its often the case that we are only intere
 tags: [raises-exception]
 ---
 from guppylang.std.quantum import cy
-from guppylang.std.builtins import result
+from guppylang.std.builtins import output
 
 @guppy
 def main() -> None:
@@ -269,8 +270,8 @@ def main() -> None:
 
     # Measure ancilla in X-basis
     h(a)
-    c0 = measure(a)
-    result("c[0]", c0) # Get the result of measuring the ancilla
+    c0 = measure(a).read()
+    output("c[0]", c0) # Get the output of measuring the ancilla
 
 main.check() # Check fails :(
 ```
@@ -289,8 +290,8 @@ def main() -> None:
 
     # Measure ancilla in X-basis
     h(a)
-    c0 = measure(a)
-    result("c[0]", c0) # Get the result of measuring the ancilla
+    c0 = measure(a).read()
+    output("c[0]", c0) # Get the output of measuring the ancilla
 
     # Discard idling qubit
     discard(q)

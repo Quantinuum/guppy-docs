@@ -329,10 +329,10 @@ Arrays and regular Python lists can be used interchangeably inside ``comptime`` 
 In other words, when calling a function that accepts an array, it's also fine to pass a list with matching size:
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import measure_array
+from guppylang.std.quantum import measure_array, Measurement
 
 @guppy.comptime
-def foo() -> array[bool, 10]:
+def foo() -> array[Measurement, 10]:
     qs = [qubit() for _ in range(10)]
     return measure_array(qs)
 
