@@ -55,6 +55,10 @@ Using [guppy.load_pytket][load_pytket_docs] works best when the loaded pytket [C
    It is therefore best practice to use [guppy.load_pytket][load_pytket_docs] for unitary subroutines,
     which map directly to Guppy functions which borrow qubits. Measurement and classical logic should ideally be done directly in Guppy. This has the benefit of allowing functions which consume qubits to be type checked according to Guppy's ownership model. 
 
+```{warning}
+Loading pytket circuits with a very large number of gates can drastically increase the size of the compiled program and potentially lead to performance issues. This is because Guppy functions defined from pytket circuits don't benefit from the asymptotic program compression provided by Guppy loops. Users may wish to consider rewriting large subroutines in Guppy if program size is a concern.
+```
+
 ### How to deal with operations unsupported by Guppy
 
 Loading pytket circuits works by converting the pytket circuit to a HUGR function under
