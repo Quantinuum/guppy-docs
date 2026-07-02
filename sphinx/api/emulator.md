@@ -18,4 +18,5 @@
     PartialState
     TracedState
     exceptions.EmulatorError
+    exceptions.EmulatorBuildError
 ```
