@@ -30,5 +30,11 @@
 
     .. automethod:: __getattr__
 
+
+.. autoclass:: GuppyLibrary
+
+    .. automethod:: compile
+    .. automethod:: check
+
 .. autoexception:: EntrypointArgsError
 ```

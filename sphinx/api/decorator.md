@@ -280,6 +280,75 @@
    discard all qubits you know are measured during the circuit, or avoid measurements
    in the circuit and measure in Guppy afterwards.
 
+
+.. py:class:: GuppyKwargs
+   :canonical: guppylang.decorator.GuppyKwargs
+
+   Bases: :class:`typing.TypedDict`
+
+   Typed dictionary specifying the optional keyword arguments for the
+   ``@guppy`` decorator.
+
+   .. py:attribute:: unitary
+      :type: bool
+
+   .. py:attribute:: control
+      :type: bool
+
+   .. py:attribute:: dagger
+      :type: bool
+
+   .. py:attribute:: power
+      :type: bool
+
+   .. py:attribute:: max_qubits
+      :type: int
+
+   .. py:attribute:: link_name
+      :type: str
+
+
+.. py:class:: GuppyStructKwargs
+   :canonical: guppylang.decorator.GuppyStructKwargs
+
+   Bases: :class:`typing.TypedDict`
+
+   Typed dictionary specifying the optional keyword arguments for the
+   ``@guppy.struct`` decorator.
+
+   .. py:attribute:: link_name
+      :type: str
+
+
+.. py:class:: GuppyEnumKwargs
+   :canonical: guppylang.decorator.GuppyEnumKwargs
+
+   Bases: :class:`typing.TypedDict`
+
+   Typed dictionary specifying the optional keyword arguments for the
+   ``@guppy.enum`` decorator.
+
+   .. py:attribute:: link_name
+      :type: str
+
+
+.. py:class:: ParsedGuppyKwargs
+   :canonical: guppylang.decorator.ParsedGuppyKwargs
+
+   Bases: :class:`typing.NamedTuple`
+
+   Parsed representation of the keyword arguments supplied to the
+   ``@guppy`` decorator.
+
+   .. py:attribute:: flags
+      :type: UnitaryFlags
+
+   .. py:attribute:: metadata
+      :type: FunctionMetadata
+
+   .. py:attribute:: link_name
+      :type: str | None
+
 .. autodecorator:: guppylang.decorator.custom_guppy_decorator
 
 .. autofunction:: get_calling_frame
