@@ -15,10 +15,11 @@ As opposed to compiling a single function and its dependees, compiling a library
 These functions may take arguments, and have non-``None`` return types.
 Libraries can be used for separating compilation of multiple parts of your codebase (thus allowing reuse of unchanged definitions), distributing packages that are highly optimized, and much more.
 
-A library can be created with the ``guppy.library(...)`` function as follows:
+A library can be created with the ``GuppyLibrary.from_members`` method as follows:
 ```{code-cell} ipython3
 from guppylang import guppy
 from hugr.package import Package
+from guppylang.library import GuppyLibrary
 
 @guppy
 def my_func() -> None:
@@ -33,7 +34,7 @@ def a_third_func(x: int) -> int:
     return x + 1
 
 # Creates the library object, but does not compile it
-lib = guppy.library(
+lib = GuppyLibrary.from_members(
     my_func,
     another_func,
     a_third_func,
@@ -68,7 +69,7 @@ Currently, creation of these stubs is a manual process; it is currently not poss
 The end-user may then use these stubs as part of their regular Guppy source, and compile their code independently of the library:
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.builtins import result
+from guppylang.std.builtins import output
 from hugr.package import Package
 
 # --- SNIP ---
@@ -83,7 +84,7 @@ def a_third_func(x: int) -> int: ...
 @guppy
 def consumer_func() -> None:
     my_func()
-    result("library_call", a_third_func(5))
+    output("library_call", a_third_func(5))
 
 @guppy
 def main() -> None:
@@ -150,15 +151,19 @@ For the introductory example, assuming the functions reside in a file at `src/my
 - ``mylib.foo.bar.a_third_func``
 
 To be able to link the corresponding declarations and the functions together, they need to have the same name inside the HUGR package.
-In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``link_name`` keyword-argument:
+In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``link_name`` decorator:
 ```{code-cell} ipython3
 from guppylang import guppy
+from guppylang.library import link_name
 
-@guppy(link_name="my.func.in.my.library")
+
+@guppy
+@link_name("my.func.in.my.library")
 def my_func() -> None:
     pass
 
-@guppy.declare(link_name="my.func.in.my.library")
+@guppy.declare
+@link_name("my.func.in.my.library")
 def my_func_decl() -> None: ...
 ```
 In this example, the linking process will be able to associate the declaration with the definition, even though their function names are different.
@@ -179,7 +184,7 @@ class MyStruct:
     def my_method(self) -> None: # Will be an entrypoint of the package
         pass
         
-lib = guppy.library(MyStruct).compile()
+lib = GuppyLibrary.from_members(MyStruct).compile()
 ```
 A stub for such a type should replicate all fields, and contain stubs for the Guppy methods:
 ```{code-cell} ipython3
@@ -198,15 +203,17 @@ However, the ``@guppy.struct`` and ``@guppy.enum`` decorators also support chang
 ```{code-cell} ipython3
 from guppylang import guppy
 
-@guppy.struct(link_name="my.struct.path")
+@guppy.struct
+@link_name("my.struct.path")
 class MyStruct:
     @guppy
     def my_method(self) -> None: # will receive "my.struct.path.my_method"
         pass
     
-    @guppy(link_name="override.name")
+    @guppy
+    @link_name("override.name")
     def my_other_method(self) -> None: # will receive "override.name"
         pass
         
-lib = guppy.library(MyStruct).compile()
+lib = GuppyLibrary.from_members(MyStruct).compile()
 ```

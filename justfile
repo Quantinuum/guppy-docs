@@ -1,5 +1,5 @@
 build-docs:
-    cd sphinx && uv run --group docs sphinx-build -b html . build -W
+    cd sphinx && uv run --group docs sphinx-build -b html . build
 
 build:
     just build-docs
@@ -14,7 +14,7 @@ serve-debug: build-debug
     npm exec serve sphinx/build
 
 link-check:
-    cd sphinx && uv run sphinx-build -b linkcheck . build -W
+    cd sphinx && uv run sphinx-build -b linkcheck . build
 
 coverage:
     cd sphinx && uv run sphinx-build -W -v -b coverage . build/coverage

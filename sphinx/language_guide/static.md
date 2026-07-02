@@ -173,10 +173,10 @@ main.check()
 Generics can be particularly useful for parameterising quantum programs by an arbitrary number of qubits:
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import qubit, cx, measure_array
+from guppylang.std.quantum import qubit, cx, measure_array, Measurement
 
 @guppy
-def rep_code(q: array[qubit, n]) -> array[bool, n]:
+def rep_code(q: array[qubit, n]) -> array[Measurement, n]:
     a = array(qubit() for _ in range(n))
     for i in range(n - 1):                
         cx(q[i], a[i])

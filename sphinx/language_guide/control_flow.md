@@ -62,7 +62,7 @@ def repeat_until_success_iter() -> None:
         q = qubit()
         x(q)
 
-        if measure(q) == False:
+        if not measure(q).read():
             continue
 
         # Do something with the qubit here.
@@ -79,7 +79,7 @@ def repeat_until_success_rec() -> None:
     q = qubit()
     x(q)
 
-    if measure(q) == False:
+    if not measure(q).read():
         repeat_until_success_rec()
 
     # Do something with the qubit here.
