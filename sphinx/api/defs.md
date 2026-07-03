@@ -32,6 +32,13 @@
 
     .. automethod:: __getattr__
 
+.. autoclass:: GuppyCompilableProgram
+    :show-inheritance:
+
+    .. automethod:: compile
+    .. automethod:: compile_entrypoint
+    .. automethod:: compile_function
+
 .. autoexception:: EntrypointArgsError
 .. autoexception:: UnsupportedEntrypointArgError
 ```
