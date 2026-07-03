@@ -8,6 +8,7 @@
     
     .. automethod:: check
     .. automethod:: compile
+    .. automethod:: from_members
 
 .. autodecorator:: link_name
 ```

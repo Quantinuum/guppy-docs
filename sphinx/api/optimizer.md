@@ -7,5 +7,10 @@
     :members:
 
 .. autoclass:: OptimizerInstance
-    :members:
+
+    .. automethod:: with_optimization
+    .. automethod:: emulator
+    .. automethod:: compile
+    .. automethod:: compile_entrypoint
+    .. automethod:: compile_function
 ```
