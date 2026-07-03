@@ -10,8 +10,7 @@ dependencies = [
     "matplotlib>=3.9.2",
     "networkx>=3.4.2",
     "sphinx-tabs>=3.5.0",
-    "roman-numerals-py==4.0",
-    "enum-tools[sphinx]>=0.13.0",
+    "roman-numerals-py==4.0"
 ]
 
 [tool.uv]
