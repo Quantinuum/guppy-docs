@@ -49,9 +49,11 @@ We now have a Guppy function called `qft_func` which we can compile or use as a 
 By default [guppy.load_pytket][load_pytket_docs] will create Guppy functions which use arrays of qubits as inputs. This means that our `qft_func` above will take an array of two qubits as input. 
 If we want the function to take two separate qubit arguments, we can specify `use_arrays=False` in [guppy.load_pytket][load_pytket_docs]. Also note that by default, circuits with separate quantum registers become Guppy functions that take multiple arrays of qubits as input. 
 
-Using [guppy.load_pytket][load_pytket_docs] works best when the loaded pytket [Circuit](inv:pytket#circuit_class) contains only unitary quantum gates which will map to Guppy functions which borrow qubits. Guppy allows
+Using [guppy.load_pytket][load_pytket_docs] works best when the loaded pytket [Circuit](inv:pytket#circuit_class) contains only unitary quantum gates. This is because Guppy allows
  qubits to be explicitly allocated at runtime and deallocated by measurement. By contrast, pytket
-  treats qubits as alive for the entirety of the quantum program. Measurement and classical logic should ideally be done directly in Guppy. This has the safety benefit of allowing functions which consume qubits to be type checked according to Guppy's ownership model. 
+  treats qubits as alive for the entirety of the quantum program. Functions defined with pytket circuits are also not type checked before compilation.
+   It is therefore best practice to use [guppy.load_pytket][load_pytket_docs] for unitary subroutines,
+    which map directly to Guppy functions which borrow qubits. Measurement and classical logic should ideally be done directly in Guppy. This has the benefit of allowing functions which consume qubits to be type checked according to Guppy's ownership model. 
 
 ```{warning}
 Loading pytket circuits with a very large number of gates can drastically increase the size of the compiled program and potentially lead to performance issues. This is because Guppy functions defined from pytket circuits don't benefit from the asymptotic program compression provided by Guppy loops. Users may wish to consider rewriting large subroutines in Guppy if program size is a concern.
