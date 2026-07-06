@@ -42,7 +42,7 @@ The intermediate state of the qubits as the circuit progresses is annotated abov
 To implement this circuit in Guppy, we define a Python function with the [`@guppy`](https://docs.quantinuum.com/guppy/api/decorator.html) decorator.
 Since our circuit takes no input, the function does not have to have any parameters.
 Similarly, as the circuit prepares a single-qubit state, we must annotate the function with this as the corresponding return type.
-We can also record the outcome of the mid-circuit measurement for later evaluation using `output`, as this will make it available to the user after we run the simulation.
+We can also record the outcome of the mid-circuit measurement for later evaluation using `output`, as this will make it available to the user after we run the simulation. Note that the `measure` function returns a [dedicated `Measurement` type](https://docs.quantinuum.com/guppy/language_guide/measurement).
 
 ```{code-cell} ipython3
 from guppylang import guppy
