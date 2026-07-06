@@ -10,7 +10,7 @@ kernelspec:
 ## Introduction
 
 In Guppy, structures (abbreviated as structs) provide a way for users to group related data.
- Structs are similar to tuples in that the data they store can can have different types. 
+ Structs are similar to tuples in that the data they store can have different types. 
  But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that currently the fields of Guppy structs have to be immutable.
  We can also define methods on structs, just as we can on Python classes.
 
