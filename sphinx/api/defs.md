@@ -38,6 +38,7 @@
     .. automethod:: compile
     .. automethod:: compile_entrypoint
     .. automethod:: compile_function
+    .. automethod:: emulator
 
 .. autoexception:: EntrypointArgsError
 .. autoexception:: UnsupportedEntrypointArgError
