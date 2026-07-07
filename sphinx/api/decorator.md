@@ -281,75 +281,30 @@
    in the circuit and measure in Guppy afterwards.
 
 
-.. py:class:: GuppyKwargs
-   :canonical: guppylang.decorator.GuppyKwargs
+.. autoclass:: GuppyKwargs
+   :show-inheritance:
 
-   Bases: :class:`typing.TypedDict`
+   .. autoattribute:: unitary
+   .. autoattribute:: controllable
+   .. autoattribute:: daggerable
 
-   Typed dictionary specifying the optional keyword arguments for the
-   ``@guppy`` decorator.
+.. autoclass:: GuppyStructKwargs
+   :show-inheritance:
 
-   .. py:attribute:: unitary
-      :type: bool
-
-   .. py:attribute:: control
-      :type: bool
-
-   .. py:attribute:: dagger
-      :type: bool
-
-   .. py:attribute:: power
-      :type: bool
-
-   .. py:attribute:: max_qubits
-      :type: int
-
-   .. py:attribute:: link_name
-      :type: str
+   .. autoattribute:: link_name
 
 
-.. py:class:: GuppyStructKwargs
-   :canonical: guppylang.decorator.GuppyStructKwargs
+.. autoclass:: GuppyEnumKwargs
+   :show-inheritance:
 
-   Bases: :class:`typing.TypedDict`
+   .. autoattribute:: link_name
 
-   Typed dictionary specifying the optional keyword arguments for the
-   ``@guppy.struct`` decorator.
-
-   .. py:attribute:: link_name
-      :type: str
-
-
-.. py:class:: GuppyEnumKwargs
-   :canonical: guppylang.decorator.GuppyEnumKwargs
-
-   Bases: :class:`typing.TypedDict`
-
-   Typed dictionary specifying the optional keyword arguments for the
-   ``@guppy.enum`` decorator.
-
-   .. py:attribute:: link_name
-      :type: str
-
-
-.. py:class:: ParsedGuppyKwargs
-   :canonical: guppylang.decorator.ParsedGuppyKwargs
-
-   Bases: :class:`typing.NamedTuple`
-
-   Parsed representation of the keyword arguments supplied to the
-   ``@guppy`` decorator.
-
-   .. py:attribute:: flags
-      :type: UnitaryFlags
-
-   .. py:attribute:: metadata
-      :type: FunctionMetadata
-
-   .. py:attribute:: link_name
-      :type: str | None
+.. autoclass:: ParsedGuppyKwargs
+   :members:
 
 .. autodecorator:: guppylang.decorator.custom_guppy_decorator
+
+.. autodecorator:: expected_qubits
 
 .. autofunction:: get_calling_frame
 

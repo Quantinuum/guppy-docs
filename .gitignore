@@ -3,6 +3,7 @@
 devenv.local.nix
 *.egg-info
 .venv
+.python-version
 # direnv
 .direnv
 

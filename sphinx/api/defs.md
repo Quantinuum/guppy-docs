@@ -15,6 +15,8 @@
     .. automethod:: compile_function
     .. automethod:: compile_entrypoint
     .. automethod:: check
+    .. automethod:: with_minimal_opt
+    .. automethod:: with_opt_level
     .. automethod:: emulator 
 
 .. autoclass:: GuppyTypeVarDefinition
@@ -30,11 +32,14 @@
 
     .. automethod:: __getattr__
 
-
-.. autoclass:: GuppyLibrary
+.. autoclass:: GuppyCompilableProgram
+    :show-inheritance:
 
     .. automethod:: compile
-    .. automethod:: check
+    .. automethod:: compile_entrypoint
+    .. automethod:: compile_function
+    .. automethod:: emulator
 
 .. autoexception:: EntrypointArgsError
+.. autoexception:: UnsupportedEntrypointArgError
 ```

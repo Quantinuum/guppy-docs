@@ -7,6 +7,8 @@ decorator.md
 emulator.md
 defs.md
 std.md
+library.md
+optimizer.md
 experimental.md
 ```
 
