@@ -91,11 +91,9 @@ weighted_choice.check()
 
 ## RNG state is mutable
 
-RNG values are stateful objects. Sampling mutates state, so later draws depend on earlier draws.
+RNGs are stateful objects; sampling mutates state, and each draw depends on past draws. Therefore, they should be handled like other mutable Guppy state and passed around wherever a shared stream is required.
 
-Treat RNG values like other mutable Guppy state: pass the same RNG through the control flow that should share a stream, and initialize separate RNG values when you want independent streams.
-
-For `guppylang.std.qsystem.random.RNG`, the RNG is also a linear resource and should be explicitly discarded with `rng.discard()` when you are done.
+In the case of `guppylang.std.qsystem.random.RNG`, the RNG is also a linear resource and should be explicitly discarded with `rng.discard()` when you are done.
 
 ## Which implementation to use?
 
