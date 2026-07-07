@@ -61,6 +61,8 @@ autosummary_filename_map = {
     "guppylang.std.builtins.str": "guppylang.std.string.str",
     "guppylang.std.builtins.range": "guppylang.std.iter.range",
     "guppylang.std.iter.Range": "guppylang.std.iter.range",
+    "guppylang.std.builtins.Measurement": "guppylang.std.quantum.Measurement",
+    "guppylang.std.builtins.nat": "guppylang.std.num.nat",
 }
 # ---------------------------------------------------------------------
 
@@ -92,6 +94,7 @@ nb_merge_streams = True  # Accumulates all stdout streams into one, same with st
 # See https://github.com/quantinuum-dev/guppy-docs/pull/51#issuecomment-2757314376
 suppress_warnings = [
     "misc.highlighting_failure",
+    # Suppress warnings about markdown headings in the generated changelog.
     "autosectionlabel.guppylang/guppylang/CHANGELOG",
 ]
 
