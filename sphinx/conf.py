@@ -154,6 +154,8 @@ coverage_ignore_modules = [
     "guppylang.std.unsupported",
     "guppylang.std.array",
     "guppylang.module",
+    "guppylang.std.qsystem._common",
+    "guppylang.emulator._args",
 ]
 
 # These classes and functions are shown in the docs but seem to be
