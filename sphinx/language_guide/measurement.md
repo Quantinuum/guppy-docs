@@ -6,7 +6,7 @@ kernelspec:
 
 # Measurements
 
-When you call measurement functions such as `std.quantum.measure` in Guppy, the value they return has type `Measurement`. This is a copyable type that you can pass around your program until you need the measurement as a boolean, at which point you should call `read` on it. This will block program execution until the value is available.
+When you call measurement functions such as [`std.quantum.measure`](../api/generated/guppylang.std.quantum.measure.rst) in Guppy, the value they return has type [`Measurement`](../api/generated/guppylang.std.quantum.Measurement.rst). This is a copyable type that you can pass around your program until you need the measurement as a boolean, at which point you should call `read` on it. This will block program execution until the value is available.
 
 Separating the point in your program where you request a measurement from the point where you explicitly call `read` can give the underlying runtime more opportunities for parallelism and can therefore improve performance.
 
@@ -41,7 +41,7 @@ def conditional_output(q: qubit @ owned) -> None:
 conditional_output.check()
 ```
 
-For reading an array of measurements, use `collect_measurements`.
+For reading an array of measurements, use [`collect_measurements`](../api/generated/guppylang.std.quantum.collect_measurements.rst).
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import array
