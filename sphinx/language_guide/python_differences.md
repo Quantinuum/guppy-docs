@@ -257,21 +257,23 @@ A call such as `foo(-20)` will definitely panic, but may panic with either messa
 @guppy
 def bar(arr: array[int, 3], i : int) -> int:
    if i % 2 == 1:
-      panic("i should have been odd!")
-    return arr[i]
+      panic("i should have been even!")
+   return arr[i]
 ```
 The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
-for the array of 3 elements, *or* the message `i should have been odd`.
+for the array of 3 elements, *or* the message `i should have been even`.
 
 2. However, the following *are* guaranteed for all v1.x:
 * A `panic` (explicit or implicit) and an `output` will happen in the same order they are written in the source code.
-* Multiple `output`s will occur in the order they are present in the source code. (((At least for v1)))
+* Multiple `output`s will occur in the order they are present in the source code. **[At least for v1]**
 * `panic` and `exit` will not be reordered: the exit code will be the same as for python
 * `exit` and `output` will not be reordered
 
+**We have not specified whether `panic` and `output` can be reordered, and we should.**
+
 ### Semantics of v1.0 release
 
-To document the behaviour of the current v1.0 release, but not as a guarantee about future minor (((or even patch))) releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
+To document the behaviour of the current v1.0 release, but not as a guarantee about future minor **[or even patch]** releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
 * other indexing operations on *different arrays*
 * `result`, `panic`, or `exit` operations
 * (that is, they may be reordered with respect to any operation *not* on the same array)
@@ -285,7 +287,7 @@ def baz[n,m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
 ```
 If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
 (just as python). However, if both these problems occur in the same call to `baz`
-then it is not guaranteed which array access will be reported as failing. Similarly:
+then v1.0 does not guaranteed which array access will be reported as failing. Similarly:
 ```
 @guppy
 def foo(arr1: array[qubit, 3], i: int) -> None:
