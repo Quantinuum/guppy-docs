@@ -1,28 +1,30 @@
 # Migrating to Guppy Version 1.0
 
-The Guppy v1 is a significant stability milestone for the Guppy language that brings with it several major features. In the new release, there are a number of breaking changes and changes to behaviour. Guppy v1 also drops support for Python versions 3.10 and 3.11. 
+Guppy 1.0 is the first stable release of the Guppy quantum programming language. It introduces several major new features alongside a number of breaking changes and new behaviour. Guppy 1.0 also requires Python 3.12 or later; support for Python 3.10 and 3.11 has been removed.
 
-This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
+This guide details the key code changes needed to migrate to Guppy 1.0 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy 1.0, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
 
 
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
 
-A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $|0\rangle$ or $|1\rangle$ but rather returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. A [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) can be resolved to a Boolean by using the [Measurement.read](api/generated/guppylang.std.quantum.Measurement.html#guppylang.std.quantum.Measurement.read) method.
+A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $|0\rangle$ or $|1\rangle$ but rather returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. A [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) can be resolved to a Boolean by using the `Measurement.read` method.
 
-The motivation behind this change is to clarify how measurements impact the performance of a program. In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. Prior to Guppy v1, using the value of a [measure](api/generated/guppylang.std.quantum.measure.rst) call would block the execution of the program until the value was available. Resolving measurements with [Measurement.read](api/generated/guppylang.std.quantum.Measurement.html#guppylang.std.quantum.Measurement.read) makes the behaviour more explicit to the user and means the user is less likely to accidentally force a sequence of quantum gates to be performed earlier than necessary.
+The motivation behind this change is to clarify how measurements impact the performance of a program.
+ In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. 
+ Prior to Guppy 1.0, using the value of a [measure](api/generated/guppylang.std.quantum.measure.rst) call would block the execution of the program until the value was available. Resolving measurements with the `read` method makes the behaviour more explicit to the user and means the user is less likely to accidentally force a sequence of quantum gates to be performed earlier than necessary.
 
 The [project_z](api/generated/guppylang.std.quantum.project_z.rst) function also now returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. 
 
-For more on how measurements work in Guppy v1, consult the [measurements section](language_guide/measurement.md) of the language guide.
+For more on how measurements work in Guppy 1.0, consult the [measurements section](language_guide/measurement.md) of the language guide.
 
 
 
 ## Guppy structs are now mutable by default
 
-In Guppy v1, structs are now mutable and affine by default. Prior to v1, all Guppy structs were immutable meaning that the fields of a struct had fixed values when the struct was initialized.
+In Guppy v1, structs are now mutable and affine by default. Prior to the v1 release, all Guppy structs were immutable meaning that the fields of a struct had fixed values when the struct was initialized.
 
 * Mutable - The values of struct fields can be modified after the struct is initialized.
-* Affine - A mutable struct value can only be used at most once. This is because Guppy's type system only allows a single reference to mutable objects.
+* Affine - A mutable struct value can only be used at most once. Guppy's type system only allows a single reference to mutable objects.
 
 
 Users can now indicate whether a struct should be immutable by specifying the `frozen=True` kwarg in the `@guppy.struct` decorator, exactly the same as [Python dataclasses](https://docs.python.org/3/library/dataclasses.html).
