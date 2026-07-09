@@ -283,44 +283,23 @@ This kind of dynamic branching is only possible in regular Guppy functions, not 
 
 ### Generalizing comptime functions
 
-Note that Guppy comptime functions cannot yet be used in conjunction with [generic type variables](static.md#generics). Consider the following generic version of the `ladder` comptime function above.
-
-
-```{code-cell} ipython3
----
-tags: [raises-exception]
----
-
-N_QB = guppy.nat_var("n_qb")
-
-@guppy.comptime
-def generic_ladder(qs: array[qubit, N_QB]) -> None:
-    for q1, q2 in zip(qs[1:], qs[:-1]):
-        print("Applying CX")
-        cx(q1, q2)
-    return ladder
-
-generic_ladder.compile_function();  # Compilation fails
-```
-
-There is however a workaround for this particular issue. If we want to generalize this comptime `ladder` function with a variable number of qubits we can do this we can do this with metaprogramming. We can define a Python function which takes an integer argument and returns a instance of the comptime function for that integer.
+With Guppy v1.0 and above, we can use generic variables in the type signatures of generic functions. Let's generalize the `ladder` function defined above to apply a chain of `cx` gates to a qubit array of variable size.
 
 ```{code-cell} ipython3
 from guppylang.defs import GuppyFunctionDefinition
 
-def get_comptime_ladder_function(n_qubits: int) -> GuppyFunctionDefinition:
-    @guppy.comptime
-    def ladder(qs: array[qubit, comptime(n_qubits)]) -> None:
-        for q1, q2 in zip(qs[1:], qs[:-1]):
-            print("Applying CX")
-            cx(q1, q2)
-    return ladder
+k = guppy.nat_var("k")
 
-four_qubit_ladder = get_comptime_ladder_function(n_qubits=4)
-four_qubit_ladder.compile_function();
+@guppy.comptime
+def generic_ladder(qs: array[qubit, k]) -> None:
+    for q1, q2 in zip(qs[1:], qs[:-1]):
+        print("Applying CX")
+        cx(q1, q2)
+
+generic_ladder.check();
 ```
 
-Note how the input to the `ladder` function is of type `array[qubit, comptime(n_qubits)]` so we can create this function for any integer number of qubits.
+Note how the input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
 
 
 ### Arrays and lists
