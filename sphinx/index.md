@@ -7,7 +7,7 @@ examples_index.md
 api/api_index.md
 guppylang/guppylang/CHANGELOG.md
 v1_migration.md
-pytket_migration_guide.md
+pytket_migration.md
 faqs.md
 GitHub <https://github.com/quantinuum/guppylang>
 ```
