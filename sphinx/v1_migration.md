@@ -1,6 +1,6 @@
 # Migrating to Guppy Version 1.0
 
-The Guppy v1 is a major stability milestone for the Guppy language. There are a number of breaking changes and changes to behaviour. Guppy v1 also drops support for Python versions 3.10 and 3.11. 
+The Guppy v1 is a significant stability milestone for the Guppy language that brings with it several major features. In the new release, there are a number of breaking changes and changes to behaviour. Guppy v1 also drops support for Python versions 3.10 and 3.11. 
 
 This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
 
