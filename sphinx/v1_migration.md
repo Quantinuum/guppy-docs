@@ -58,11 +58,18 @@ When migrating to Guppy v1, users will need to add this frozen kwarg to ensure t
 
 ## The deprecated `quantum_functional` and `prelude` modules have been removed
 
+The `quantum_functional` module no longer exists in Guppy v1. Functional quantum operations can be found in the [guppylang.std.quantum.functional](api/generated/guppylang.std.quantum.functional.rst) module instead.
+
 
 ## There is now a `Function` type in Guppy replacing `Callable` in annotations
 
 ## The `result` function has been renamed to `output`
 
+In Guppy 0.x the [result](api/generated/guppylang.std.platform.result.rst) function was used for tagging values returned from Selene and QSystem execution. This function has now been renamed to [output](api/generated/guppylang.std.platform.output.rst). 
+
+The reason for this change is that the term "result" was overloaded with other distinct classes such as [EmulatorResult](api/generated/guppylang.emulator.EmulatorResult) and [std.err.Result](api/generated/guppylang.std.err.Result.rst). 
+
+Note that the [result](api/generated/guppylang.std.platform.result.rst) function hasn't been removed and will still work. The use of [output](api/generated/guppylang.std.platform.output.rst) is encouraged for clarity.
 
 
 
