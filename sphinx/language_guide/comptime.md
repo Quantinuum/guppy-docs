@@ -204,6 +204,22 @@ ladder.compile_function();
 As we can see, the ``print`` statement is executed at compile-time.
 We get 9 printed lines, highlighting that the ``for`` loop is compile-time evaluated as well.
 
+With Guppy v1.0 and above, we can use generic variables in the type signatures of generic functions. Let's generalize the `ladder` function defined above to apply a chain of `cx` gates to a qubit array of variable size.
+
+```{code-cell} ipython3
+k = guppy.nat_var("k")
+
+@guppy.comptime
+def generic_ladder(qs: array[qubit, k]) -> None:
+    for q1, q2 in zip(qs[1:], qs[:-1]):
+        print("Applying CX")
+        cx(q1, q2)
+```
+
+Note how the input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
+
+Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time. However we can call `generic_ladder` inside another function with a concrete `k` value. 
+
 ### What can and cannot happen at comptime
 
 Note that not *everything* inside ``comptime`` functions can happen at compile-time.
@@ -281,27 +297,7 @@ dynamic_branch.compile_function();  # Compilation fails
 
 This kind of dynamic branching is only possible in regular Guppy functions, not in a ``comptime`` context.
 
-### Generalizing comptime functions
-
-With Guppy v1.0 and above, we can use generic variables in the type signatures of generic functions. Let's generalize the `ladder` function defined above to apply a chain of `cx` gates to a qubit array of variable size.
-
-```{code-cell} ipython3
-from guppylang.defs import GuppyFunctionDefinition
-
-k = guppy.nat_var("k")
-
-@guppy.comptime
-def generic_ladder(qs: array[qubit, k]) -> None:
-    for q1, q2 in zip(qs[1:], qs[:-1]):
-        print("Applying CX")
-        cx(q1, q2)
-```
-
-Note how the input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
-
-Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time. However we can call `generic_ladder` inside another function with a concrete `k` value.  
-
-
+  
 ### Arrays and lists
 
 Arrays and regular Python lists can be used interchangeably inside ``comptime`` functions since the size of ``comptime`` lists is statically known.
