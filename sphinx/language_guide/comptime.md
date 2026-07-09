@@ -216,7 +216,7 @@ def generic_ladder(qs: array[qubit, k]) -> None:
         cx(q1, q2)
 ```
 
-Note how the input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
+The input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
 
 Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time. However we can call `generic_ladder` inside another function with a concrete `k` value. 
 
