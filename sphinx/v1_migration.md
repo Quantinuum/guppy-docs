@@ -1,6 +1,8 @@
 # Migrating to Guppy Version 1.0
 
-The Guppy v1.0 is a major stability milestone for the Guppy language. There are a number of interface breaks, changes to behavior 
+The Guppy v1 is a major stability milestone for the Guppy language. There are a number of breaking changes and changes to behaviour. Guppy v1 also drops support for Python versions 3.10 and 3.11. 
+
+This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
 
 
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
@@ -76,3 +78,4 @@ Note that the [result](api/generated/guppylang.std.platform.result.rst) function
 ## Guppy libraries are now created with `GuppyLibrary.from_members`
 
 ## `link_name` is now its own decorator
+
