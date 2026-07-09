@@ -6,46 +6,21 @@ kernelspec:
 
 # Random Number Generation
 
-Guppy provides two implementations of the `PCG32` pseudo-random number generator. ``guppylang.std.random.PCG32`` is a native Guppy implementation, while ``guppylang.std.qsystem.random.RNG`` lowers to calls to a platform RNG. 
+Guppy provides two implementations of the `PCG32` pseudo-random number generator. ``guppylang.std.qsystem.random`` lowers to calls to a platform RNG, while ``guppylang.std.random`` is a native Guppy implementation.
 
-Both implement the same `PCG32` algorithm. The main distinction between the two implementations is how the state of the RNG is stored. The native Guppy RNG stores the state locally, while the `qsystem` RNG state is stored globally. This difference has implications in programs with multiple RNGs, as the global nature of the `qsystem` RNG state means that each RNG cannot be treated as completely independent.
-
-## Native Guppy RNG
-
-An instance of the native Guppy RNG can be initialised using ``guppylang.std.random.seeded_pcg32`` by providing a `seed`. The RNG provides the following methods:
-
-- `next_int()` returns a signed 32-bit integer.
-- `next_int_bounded(bound)` returns a value in `[0, bound)`, where `bound` is strictly positive.
-
-The following code snippet demonstrates usage of the RNG:
-
-```{code-cell} ipython3
-from guppylang import guppy
-from guppylang.std.random import seeded_pcg32
-from guppylang.std.num import nat
-
-@guppy
-def native_rng() -> None:
-    rng = seeded_pcg32(nat(123))
-    a = rng.next_int()
-    b = rng.next_int_bounded(nat(10))
-    c = rng.next_int()
-
-native_rng.check()
-```
-
-Note that the native RNG does not need to be discarded at the end of the program.
+The main distinction between the two implementations is how the state of the RNG is stored. The native Guppy RNG stores the state locally, while the `qsystem` RNG state is stored globally. This difference has implications for programs with multiple RNGs, as the global nature of the `qsystem` RNG state means that each RNG cannot be treated as completely independent.
 
 ## qsystem RNG
 
-To instantiate a qsystem RNG, use ``guppylang.std.qsystem.random.RNG`` by providing an initial `seed`.  
+If you are unsure which RNG to use, the qsystem RNG is recommended due to its broader range of available features. To create an instance of the qsystem RNG, use ``guppylang.std.qsystem.random.RNG`` with an initial `seed`. The RNG offers two basic methods for generating random integers:
 
 - `random_int()` returns a signed 32-bit integer.
 - `random_int_bounded(bound)` returns a value in `[0, bound)`.
 
-Use of the qsystem RNG is similar to the native RNG. However, as the RNG is backed by a platform RNG, it must be discarded at the end of the program. 
+The example below demonstrates the qsystem RNG. It is initialised with the seed `123`, then used to draw a random integer and a bounded integer. Finally, the RNG instance must be discarded.
 
 ```{code-cell} ipython3
+from guppylang import guppy
 from guppylang.std.qsystem.random import RNG
 
 @guppy
@@ -58,9 +33,7 @@ def qsystem_rng() -> None:
 qsystem_rng.check()
 ```
 
-Note that the platform RNG must be discarded at the end of the program.
-
-Additional helper functions are also provided by the qsystem RNG:
+Additional helper functions for specific scenarios are also available when using the qsystem RNG:
 
 - `random_angle()`: returns a random angle in the range `[-pi, pi)`.
 - `random_clifford_angle()`: returns a multiple of `pi / 2`.
@@ -68,9 +41,11 @@ Additional helper functions are also provided by the qsystem RNG:
 - `random_advance(delta)`: advances (or backtracks) the RNG state by `delta` steps.
 - `shuffle(array)`: shuffles an array in-place using Fisher-Yates shuffle.
 
+While it is possible to create multiple qsystem RNG instances in a single program, it is not recommended as they cannot be treated as completely independent. For programs that require multiple independent streams of randomness, the [native Guppy RNG](#native-rng) is recommended.
+
 ### Discrete distributions
 
-Guppy also includes functionality to define a weighted distribution over the values `0, 1, ..., N - 1` using ``guppylang.std.qsystem.random.make_discrete_distribution`` from which samples can be drawn using the qsystem RNG.
+Guppy also includes functionality for defining a weighted distribution over the values `0, 1, ..., N - 1` using ``guppylang.std.qsystem.random.make_discrete_distribution``. Samples can then be drawn using the qsystem RNG.
 
 Below is an example of a weighted distribution over `0, 1, 2` with weights `1.0, 2.0, 7.0`:
 
@@ -89,17 +64,42 @@ def weighted_choice() -> None:
 weighted_choice.check()
 ```
 
+## Native RNG
+
+An instance of the native Guppy RNG can be initialised using ``guppylang.std.random.seeded_pcg32`` with a `seed`. The native RNG provides the following methods for generating random numbers:
+
+- `next_int()` returns a signed 32-bit integer.
+- `next_int_bounded(bound)` returns a value in `[0, bound)`.
+
+The following example demonstrates usage of the RNG and mirrors the qsystem RNG example above:
+
+```{code-cell} ipython3
+from guppylang.std.random import seeded_pcg32
+from guppylang.std.num import nat
+
+@guppy
+def native_rng() -> None:
+    rng = seeded_pcg32(nat(123))
+    a = rng.next_int()
+    b = rng.next_int_bounded(nat(10))
+
+native_rng.check()
+```
+
+Note that the native RNG does not need to be discarded at the end of the program. Both the `seed` and `bound` arguments must be `nat` values to ensure they are non-negative.
+
 ## RNG state is mutable
 
-RNGs are stateful objects; sampling mutates state, and each draw depends on past draws. Therefore, they should be handled like other mutable Guppy state and passed around wherever a shared stream is required.
+Pseudo-random number generators are stateful objects; sampling mutates the state, and each draw depends on previous draws. Therefore, RNG instances should be handled like other mutable Guppy state and passed around wherever a shared stream of randomness is required.
 
-In the case of `guppylang.std.qsystem.random.RNG`, the RNG is also a linear resource and should be explicitly discarded with `rng.discard()` when you are done.
+In the case of the qsystem RNG, it is also a linear resource and should be explicitly discarded with `rng.discard()` when you are done.
 
 ## Which implementation to use?
 
-Both the native and qsystem RNGs implement the same `PCG32` algorithm. However, there may be scenarios in which one should be preferred. If you are not sure, the qsystem (``guppylang.std.qsystem.random``) RNG is recommended as it provides a broader range of functionality.
+Both the native and qsystem RNGs use the `PCG32` algorithm. However, there may be scenarios in which one should be preferred. If you are not sure, the [qsystem RNG](#qsystem-rng) is recommended as it provides a broader range of functionality.
 
-The native RNG may be useful if:
+The native RNG may be useful if any of the following apply:
 
 - You require multiple, independent RNG instances.
 - You want access to, or control of, the internal state of the RNG.
+- You want to inspect the RNG implementation.
