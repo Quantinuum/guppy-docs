@@ -1,8 +1,8 @@
 # Migrating to Guppy Version 1.0
 
-Guppy 1.0 is the first stable release of the Guppy quantum programming language. It introduces several major new features alongside a number of breaking changes and new behaviour. Guppy 1.0 also requires Python 3.12 or later; support for Python 3.10 and 3.11 has been removed.
+Guppy v1 is the first stable release of the Guppy quantum programming language. It introduces several major new features alongside a number of breaking changes and new behaviour. Guppy v1 also requires Python 3.12 or later; support for Python 3.10 and 3.11 has been removed.
 
-This guide details the key code changes needed to migrate to Guppy 1.0 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy 1.0, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
+This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
 
 
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
@@ -11,11 +11,11 @@ A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.qua
 
 The motivation behind this change is to clarify how measurements impact the performance of a program.
  In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. 
- Prior to Guppy 1.0, using the value of a [measure](api/generated/guppylang.std.quantum.measure.rst) call would block the execution of the program until the value was available. Resolving measurements with the `read` method makes the behaviour more explicit to the user and means the user is less likely to accidentally force a sequence of quantum gates to be performed earlier than necessary.
+ Prior to Guppy v1, using the value of a [measure](api/generated/guppylang.std.quantum.measure.rst) call would block the execution of the program until the value was available. Resolving measurements with the `read` method makes the behaviour more explicit to the user and means the user is less likely to accidentally force a sequence of quantum gates to be performed earlier than necessary.
 
 The [project_z](api/generated/guppylang.std.quantum.project_z.rst) function also now returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. 
 
-For more on how measurements work in Guppy 1.0, consult the [measurements section](language_guide/measurement.md) of the language guide.
+For more on how measurements work in Guppy v1, consult the [measurements section](language_guide/measurement.md) of the language guide.
 
 
 
@@ -80,4 +80,6 @@ Note that the [result](api/generated/guppylang.std.platform.result.rst) function
 ## Guppy libraries are now created with `GuppyLibrary.from_members`
 
 ## `link_name` is now its own decorator
+
+In previous versions of Guppy
 
