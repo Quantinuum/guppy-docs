@@ -295,11 +295,11 @@ def generic_ladder(qs: array[qubit, k]) -> None:
     for q1, q2 in zip(qs[1:], qs[:-1]):
         print("Applying CX")
         cx(q1, q2)
-
-generic_ladder.check();
 ```
 
 Note how the input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
+
+Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time. However we can call `generic_ladder` inside another function with a concrete `k` value.  
 
 
 ### Arrays and lists
