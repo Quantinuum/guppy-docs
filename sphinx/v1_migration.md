@@ -86,7 +86,7 @@ class Grid:
 
 1. Internal fields of `collections` types are now private
 
-Guppy has a [collections](api/generated/guppylang.std.collections.rst) module with useful `Stack`, `Queue` and `PriorityQueue` containers. These containers are now implemented as mutable Guppy structs with corresponding methods. The struct methods are the idiomatic way to program with these collections so the struct fields are now private 
+Guppy has a [collections](api/generated/guppylang.std.collections.rst) module with useful `Stack`, `Queue` and `PriorityQueue` containers. These containers are now implemented as mutable Guppy structs with corresponding methods. The struct methods are the idiomatic way to program with these collections so the struct fields are now private. 
 
 2. The deprecated `quantum_functional` and `prelude` modules have been removed
 
