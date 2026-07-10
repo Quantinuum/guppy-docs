@@ -25,7 +25,7 @@ The quantinuum hardware primitive gates are also available in the [qsystem modul
 
 To use a pytket op or Box synthesis outside this set you can define a circuit, get
 pytket to synthesise in to a universal gate set which is a subset of the gates known to
-Guppy, then load it in. See more in the [migration guide](migration_guide.md).
+Guppy, then load it in. See more in the [migration guide](pytket_migration.md).
 
 
 ## How do angles work?
