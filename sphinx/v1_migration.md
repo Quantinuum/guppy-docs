@@ -122,7 +122,7 @@ from guppylang.std.builtins import Function
 @guppy
 def prepare_choi_state(
     unitary: Function[[array[qubit, N]], None],
-) -> array[array[qubit, N], 2]::
+) -> array[array[qubit, N], 2]:
     ...
 ```
 `````
