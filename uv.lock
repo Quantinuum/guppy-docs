@@ -590,6 +590,7 @@ dependencies = [
     { name = "matplotlib" },
     { name = "networkx" },
     { name = "roman-numerals-py" },
+    { name = "sphinx-design" },
     { name = "sphinx-tabs" },
 ]
 
@@ -618,6 +619,7 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "networkx", specifier = ">=3.4.2" },
     { name = "roman-numerals-py", specifier = "==4.0" },
+    { name = "sphinx-design", specifier = ">=0.6.1" },
     { name = "sphinx-tabs", specifier = ">=3.5.0" },
 ]
 
