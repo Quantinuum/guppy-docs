@@ -98,7 +98,7 @@ In addition, the old `prelude` module no longer exists. Usage of prelude should 
 ## New `Function` type in Guppy replacing `Callable` in annotations
 
 In Guppy 0.x, the `Callable` type could be used to annotate Guppy functions passed in type signatures. Guppy v1 has its own `Callable` type which is a Guppy protocol.
- The new Guppy `Function` type implements this `Callable` protocol. This is a breaking change as functions with `Callable` in their signatures will no longer compile in Guppy v1. Usage of `Callable` for functions should be replaced with the new `Function` type.
+ The new Guppy `Function` type implements this `Callable` protocol. This is a breaking change as functions with `Callable` in their signatures will no longer compile in Guppy v1. Usage of `Callable` for functions should be replaced with the new `Function` type as shown below.
 
 `````{grid} 2
 
@@ -110,7 +110,7 @@ from typing import Callable
 @guppy
 def prepare_choi_state(
     unitary: Callable[[array[qubit, N]], None],
-) -> tuple[array[qubit, N], array[qubit, N]]:
+) -> array[array[qubit, N], 2]:
     ...
 ```
 ````
@@ -122,7 +122,7 @@ from guppylang.std.builtins import Function
 @guppy
 def prepare_choi_state(
     unitary: Function[[array[qubit, N]], None],
-) -> tuple[array[qubit, N], array[qubit, N]]:
+) -> array[array[qubit, N], 2]::
     ...
 ```
 `````
