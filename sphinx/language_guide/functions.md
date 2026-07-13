@@ -56,9 +56,9 @@ For a full list of these please review the guppylang [Standard Library Reference
 from guppylang.std.quantum import measure, h, qubit
 ```
 
-## Guppy functions are first-class functions
+## Guppy functions are first-class values
 
-Guppy functions are first-class, meaning that we can treat them in our program like a value. For instance, we can bind a function to a value and pass it around in our program.
+Guppy functions are first-class, meaning that we can treat them in our program like a value. For instance, we can bind a function to a variable and pass it around in our program.
 
 ```{code-cell} ipython3
 @guppy
@@ -75,54 +75,149 @@ def function_is_a_value() -> None:
 function_is_a_value.check()
 ```
 
-## Guppy functions can be higher-order functions
-
-Guppy functions can take function(s) as arguments and/or return a function as a result. A functions with one of these two properties is known as a higher-order function.
-
-To define a higher-order function, we can use the `Function` type from Guppy to provide the type annotation.
-
-```{code-cell} ipython3
-from guppylang.std.builtins import Function
-
-@guppy
-def my_function(f: Function[[int], bool]) -> Function[[int], bool]:
-    # Takes a callable `f` that accepts an integer and returns a boolean.
-    return f
-
-@guppy
-def use_my_function() -> None:
-
-    def is_even(n: int) -> bool:
-        return n % 2 == 0
-    
-    # # Apply our higher order function `my_function` to `is_even`
-    my_function_composition = my_function(is_even)
-    
-    my_function_composition(42)
-    
-
-use_my_function.check()
-```
-
-Ill-typed application of higher-order functions will fail at compile time.
+By default, the Guppy compiler will try to track the identity of a function value at compile time through its type.
+Consider the following program:
 
 ```{code-cell} ipython3
 ---
 tags: [raises-exception]
 ---
 @guppy
-def misuse_my_function() -> None:
+def b_function(n: int) -> int:
+    return 2 * n
+    
+@guppy
+def call_a_or_b(flag: bool) -> None:
+    if flag:
+        f = a_function
+    else:
+        f = b_function
+    f(100)
+
+call_a_or_b.check()
+```
+
+Here, we tried to assign either ``a_function`` or ``b_function`` to the variable ``f``, but the compiler tells us that these values have different types.
+This is because the default type assigned to a function value statically tracks the corresponding definition it came from.
+These are the ``def a_function(n: int) -> int`` and ``def b_function(n: int) -> int`` types that showed up in the error message above.
+To fix this, we can follow the compiler's suggestion and annotate ``f`` with a ``Function`` type.
+``Function`` is a built-in type that can be imported from the standard library:
+
+```{code-cell} ipython3
+from guppylang.std.builtins import Function
+```
+
+``Function`` denotes an *opaque* function value that is not known at compile-time.
+Its syntax is similar to the ``Callable`` protocol [available in Python](https://typing.python.org/en/latest/spec/callables.html).
+For example, ``Function[[int], int]`` denotes an opaque function that takes and returns an ``int``.
+The concrete function definition types ``def a_function(n: int) -> int`` and ``def b_function(n: int) -> int`` types that the compiler assigned to our functions above automatically coerce to the same ``Function`` type:
+
+```{code-cell} ipython3
+from guppylang.std.builtins import Function
+
+@guppy
+def call_a_or_b(flag: bool) -> None:
+    if flag:
+        f: Function[[int], int] = a_function
+    else:
+        f: Function[[int], int] = b_function
+    f(100)
+
+call_a_or_b.check()
+```
+
+Now, both branches assign the same type to ``f``, so the function is accepted.
+By adding the ``Function`` annotation, we have effictively told the compiler that we are willing to give up the static knowledge of which function ``f`` corresponds to and are fine with treating it as an opaque function value instead.
+
+
+## Guppy functions can be higher-order functions
+
+Since Guppy treats functions as values, we can also define function that take other functions as arguments or return a function as a result.
+These are known as *higher-order functions*.
+The preferred method to take functions as arguments is via the ``Callable`` protocol already available in Python:
+
+```{code-cell} ipython3
+from collections.abc import Callable
+```
+
+For example, in the Guppy snippet below, we define a higher-order function ``any`` that checks if a given function ``f`` returns ``True`` for any elements in an array:
+
+```{code-cell} ipython3
+from guppylang.std.builtins import array
+
+@guppy
+def any(f: Callable[[int], bool], xs: array[int, 3]) -> bool:
+    for i in range(3):
+        if f(i):
+            return True
+    return False
+```
+
+We can test our ``any`` function by passing in different Guppy functions:
+
+```{code-cell} ipython3
+@guppy
+def is_even(n: int) -> bool:
+    return n % 2 == 0
+
+@guppy
+def is_positive(n: int) -> bool:
+    return n > 0
+    
+@guppy
+def test_any() -> bool:
+    xs = array(1, 2, 3)
+    return any(is_even, xs) and any(is_positive, xs)
+
+test_any.check()
+```
+
+Of course, we are only allowed to pass functions with the correct signature:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def misuse_any() -> int:
 
     def wrong_types(n: int) -> tuple[str, int]:
         return ("Hello", n)
 
-    my_function(wrong_types)(42)
-    
+    return any(wrong_types, array(1, 2, 3))
 
-misuse_my_function.check() # Compilation fails :^(
+misuse_any.check()
 ```
 
-Note that using higher-order function features to implement [closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)) or [partial function application](https://en.wikipedia.org/wiki/Partial_application) is not supported at present.
+The main limintation of ``Callable`` values is that is currently not possible to annotate a function return type as ``Callable``:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def return_callable() -> Callable[[int], bool]:
+    return is_even
+
+return_callable.check()
+```
+
+We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the ``Function`` type introduced in the previous section instead of ``Callable``:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def return_function() -> Function[[int], bool]:
+    return is_even
+
+return_callable.check()
+```
+
+The main downside of using ``Function`` over ``Callable`` is that ``Function`` is only valid for actual function definitions, whereas ``Callable`` is intended to accept any argument that can be called.
+Examples of callable values that are not functions include possible future language features like [closures](https://en.wikipedia.org/wiki/Closure_(computer_programming)) or [partial function applications](https://en.wikipedia.org/wiki/Partial_application).
+
 
 ## Function overloading & static dispatch
 
