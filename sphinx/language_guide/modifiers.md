@@ -196,8 +196,9 @@ loop_in_dagger.check()
 
 
 # Function flags
-
-Use function flags when a function may be called inside a modifier block:
+If we try to call a function inside a modifier block, we need to ensure that the function body meets the corresponding restrictions: a function that allocates or discard qubits cannot be called inside a control block and a function that contains control flow cannot be called inside a dagger block.
+To state that a function is safe to call inside a modifier block and ask the type checker to verify it, we can use function flags.
+There are three flags: `controllable=True` permits controlled calls, `daggerable=True` permits inverse calls, and `unitary=True` permits both.
 
 ```python
 @guppy(controllable=True)
@@ -212,7 +213,7 @@ def invertible_operation(q: qubit) -> None: ...
 def unitary_operation(q: qubit) -> None: ...
 ```
 
-`controllable=True` permits controlled calls, `daggerable=True` permits inverse calls, and `unitary=True` permits both. The function body must meet the corresponding restrictions described above.
+ The function body must meet the corresponding restrictions described above.
 
 ## Conjugation box with functions
 
