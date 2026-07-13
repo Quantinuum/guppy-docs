@@ -179,7 +179,7 @@ This change is motivated by the fact that methods on `guppy` symbol are most oft
 
 2. `link_name` is now its own decorator
 
-Guppy libraries can also be used to link function declarations against function calls. This is by associating a `link_name` with a function definition. In Guppy 0.21, this was accomplished by specifying `link_name` as a keyword argument in the `@guppy` decorator. However in Guppy v1, `link_name` is now its own decorator. 
+Guppy libraries can also be used to link function declarations against function calls, by associating a `link_name` with a function definition. In Guppy 0.21, this was accomplished by specifying `link_name` as a keyword argument in the `@guppy` decorator. In Guppy v1, `link_name` is its own decorator. 
 This was changed to keep the keyword arguments to `@guppy` related to compilation and to provide better error messages to the user.
 
 
