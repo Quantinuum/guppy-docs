@@ -221,7 +221,7 @@ lib = GuppyLibrary.from_members(
 ```
 `````
 
-This change is motivated by the fact that methods on `guppy` symbol are most often used to create a single Guppy definition. A {py:class}`~guppylang.library.GuppyLibrary` refers to a collection of Guppy definitions. 
+This change ensures that the entire API for Guppy libraries is contained within the {py:mod}`guppylang.library` module. 
 
 2. `link_name` is now its own decorator
 
