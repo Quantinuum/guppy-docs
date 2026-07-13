@@ -61,7 +61,7 @@ In Guppy v1, structs are now mutable and affine by default. Prior to the v1 rele
 Users can indicate that a struct should be immutable by specifying the `frozen=True` keyword argument in the `@guppy.struct` decorator (as in [Python dataclasses](https://docs.python.org/3/library/dataclasses.html)).
 
 
-When migrating to Guppy v1, users will need to add this frozen keyword argument to keep the v0.x behaviour of their structs.
+When migrating to Guppy v1, users will need to add this `frozen=True` keyword argument to keep the v0.x behaviour of their structs.
 
 
 `````{grid} 2
