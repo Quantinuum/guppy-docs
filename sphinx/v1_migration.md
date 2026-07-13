@@ -1,3 +1,9 @@
+---
+file_format: mystnb
+kernelspec:
+  name: python3
+---
+
 # Migrating to Guppy Version 1.0
 
 Guppy v1 is the first stable release of the Guppy quantum programming language. It introduces several major new features alongside a number of breaking changes and new behaviours.
@@ -83,6 +89,37 @@ class Grid:
 `````
 
  Allowing mutable structs means that Guppy users can define certain data structures in a much more streamlined fashion. For example, a mutable struct can be used to define a "counter" structure to track the number of gates applied during the runtime of the program.
+
+ Note that because structs are now affine by default, they cannot be implicitly copied. 
+
+ Here is an example of an implicit struct copy which would type check with Guppy 0.x but gives a type error with Guppy v1.
+
+ ```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+
+from guppylang import guppy
+
+@guppy.struct
+class MyStruct:
+    x: int
+    y: float
+
+    @guppy
+    def add(self) -> float:
+        return self.x + self.y
+
+@guppy
+def main() -> None:
+    s0 = MyStruct(7, 1.4)
+    s1 = s0
+    s0.add() # Copy violation as we are using s0 after a move
+
+main.check() # Fails type check in v1, valid in 0.x
+```
+
+This code above gives an error in Guppy v1. However if we specified `@guppy.struct(frozen=True)` then this code would type check as `s1` would be an immutable copy of `s0` instead of a reference to `s0`.
 
 
 ## Standard library breakages
@@ -172,6 +209,7 @@ lib = guppy.library(
 
 ````{grid-item-card} Guppy v1.0
 ```python
+
 # Create a GuppyLibrary from
 # three function definitions
 lib = GuppyLibrary.from_members(
