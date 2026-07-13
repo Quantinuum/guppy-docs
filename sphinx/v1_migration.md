@@ -36,7 +36,7 @@ def f(a: array[qubit, 6] @owned) -> None:
 
 
 The motivation behind this change is to emphasise that the moment when a measurement is forced has a significant effect on a program's performance.
- In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. Resolving measurements with the `read` method makes the behaviour more explicit and allows us to avoid accidentally forcing a sequence of quantum gates to be performed earlier than necessary.
+ In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. Resolving measurements with the {py:meth}`~guppylang.std.quantum.Measurement.read` method makes the behaviour more explicit and allows us to avoid accidentally forcing a sequence of quantum gates to be performed earlier than necessary.
 
 The [project_z](api/generated/guppylang.std.quantum.project_z.rst) function also now returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. 
 
@@ -151,9 +151,9 @@ This change also applies to the [state_result](api/generated/guppylang.std.debug
 
 Introduced in Guppy v0.21.13, Guppy libraries provide a way to group Guppy functions and structs into a single compilable unit. With the new Guppy v1 release, there are two breakages to Guppy libraries. For up-to-date information on how libraries work in Guppy, refer to the [libraries section](language_guide/libraries.md) of the Guppy language guide.
 
-1. Guppy libraries are now created with `GuppyLibrary.from_members`
+1. Guppy libraries are now created with {py:meth}`guppylang.library.GuppyLibrary.from_members`
 
-In Guppy 0.21, a `GuppyLibrary` was created using the `guppy.library` API. In Guppy v1, a `GuppyLibrary` is instead created using the `GuppyLibrary.from_members` method.
+In Guppy 0.21, a {py:class}`~guppylang.library.GuppyLibrary` was created using the `guppy.library` API. In Guppy v1, a {py:class}`~guppylang.library.GuppyLibrary` is instead created using the {py:meth}`~guppylang.library.GuppyLibrary.from_members` method.
 
 `````{grid} 2
 
@@ -182,11 +182,11 @@ lib = GuppyLibrary.from_members(
 ```
 `````
 
-This change is motivated by the fact that methods on `guppy` symbol are most often used to create a single Guppy definition. A `GuppyLibrary` refers to a collection of Guppy definitions. 
+This change is motivated by the fact that methods on `guppy` symbol are most often used to create a single Guppy definition. A {py:class}`~guppylang.library.GuppyLibrary` refers to a collection of Guppy definitions. 
 
 2. `link_name` is now its own decorator
 
-Guppy libraries can also be used to link function declarations against function calls, by associating a `link_name` with a function definition. In Guppy 0.21, this was accomplished by specifying `link_name` as a keyword argument in the `@guppy` decorator. In Guppy v1, `link_name` is its own decorator. 
+Guppy libraries can also be used to link function declarations against function calls, by associating a `link_name` with a function definition. In Guppy 0.21, this was accomplished by specifying `link_name` as a keyword argument in the `@guppy` decorator. In Guppy v1, {py:func}`~guppylang.library.link_name` is its own decorator. 
 This was changed to keep the keyword arguments to `@guppy` related to compilation and to provide better error messages to the user.
 
 
