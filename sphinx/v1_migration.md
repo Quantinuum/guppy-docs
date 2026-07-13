@@ -9,7 +9,7 @@ This guide details the key code changes needed to migrate to Guppy v1 from the 0
 
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
 
-A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $|0\rangle$ or $|1\rangle$. Instead, [measure](api/generated/guppylang.std.quantum.measure.rst) returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. A [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) can be resolved to a Boolean by using the `Measurement.read` method.
+A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $\lvert0\rangle$ or $\rvert1\rangle$. Instead, it returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. This can be resolved to a boolean by using the `Measurement.read` method.
 
 `````{grid} 2
 
