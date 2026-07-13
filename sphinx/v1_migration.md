@@ -1,6 +1,8 @@
 # Migrating to Guppy Version 1.0
 
-Guppy v1 is the first stable release of the Guppy quantum programming language. It introduces several major new features alongside a number of breaking changes and new behaviour. Guppy v1 also requires Python 3.12 or later; support for Python 3.10 and 3.11 has been removed.
+Guppy v1 is the first stable release of the Guppy quantum programming language. It introduces several major new features alongside a number of breaking changes and new behaviours.
+
+Guppy v1 requires Python 3.12 or later: support for Python 3.10 and 3.11 has been removed.
 
 This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [extended changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
 
