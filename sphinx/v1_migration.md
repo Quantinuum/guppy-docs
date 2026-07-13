@@ -81,7 +81,7 @@ class Grid:
 ```
 `````
 
- Allowing mutable structs means that Guppy users can define certain data structures in a much more streamlined fashion. An example of a useful mutable struct include defining a `Counter` collection which could track the number of gates applied during the runtime of the program.
+ Allowing mutable structs means that Guppy users can define certain data structures in a much more streamlined fashion. For example, a mutable struct can be used to define a "counter" structure to track the number of gates applied during the runtime of the program.
 
 
 ## Standard library breakages
