@@ -14,4 +14,5 @@ kernelspec:
 arrays.md
 tuples.md
 structs.md
+aliases.md
 ```
