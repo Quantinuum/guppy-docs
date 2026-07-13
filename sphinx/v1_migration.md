@@ -48,7 +48,7 @@ For more on how measurements work in Guppy v1, consult the [measurements section
 In Guppy v1, structs are now mutable and affine by default. Prior to the v1 release, all Guppy structs were immutable meaning that the fields of a struct had fixed values when the struct was initialized.
 
 * Mutable - The values of struct fields can be modified after the struct is initialized.
-* Affine - A mutable struct value can only be used at most once. Guppy's type system only allows a single reference to mutable objects.
+* Affine - A mutable struct value can be used at most once. Guppy's type system only allows a single reference to mutable objects.
 
 
 Users can now indicate whether a struct should be immutable by specifying the `frozen=True` keyword argument in the `@guppy.struct` decorator, exactly the same as [Python dataclasses](https://docs.python.org/3/library/dataclasses.html).
