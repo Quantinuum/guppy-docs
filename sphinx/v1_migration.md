@@ -90,17 +90,20 @@ class Grid:
 
 Guppy has a [collections](api/generated/guppylang.std.collections.rst) module with useful `Stack`, `Queue` and `PriorityQueue` containers. These containers are now implemented as mutable Guppy structs with corresponding methods. The struct methods are the idiomatic way to program with these collections so the struct fields are now private. 
 
-2. The deprecated `quantum_functional` and `prelude` modules have been removed
+2. The deprecated `quantum_functional` module have been removed
 
 The `quantum_functional` module no longer exists in Guppy v1. Functional quantum operations can be found in the [guppylang.std.quantum.functional](api/generated/guppylang.std.quantum.functional.rst) module instead.
-
-In addition, the old `prelude` module no longer exists. Usage of prelude should be replaced with the `builtins` module.
 
 
 ## New `Function` type in Guppy replacing `Callable` in annotations
 
 In Guppy 0.x, the `Callable` type could be used to annotate Guppy functions passed in type signatures. Guppy v1 has its own `Callable` type which is a Guppy protocol.
- The new Guppy `Function` type implements this `Callable` protocol. This is a breaking change as functions with `Callable` in their signatures will no longer compile in Guppy v1. Usage of `Callable` for functions should be replaced with the new `Function` type as shown below.
+ The new Guppy `Function` type implements this `Callable` protocol.
+ 
+ This means that these functions are now considered generic. Note that generic functions can't be compiled directly in guppy v1. In order to write a non-generic function that takes a function argument, use the new `Function` type
+ 
+This is a breaking change as functions with `Callable` in their signatures will no longer compile in Guppy v1.
+ Usage of `Callable` for functions should be replaced with the new `Function` type as shown below.
 
 `````{grid} 2
 
@@ -133,11 +136,14 @@ def prepare_choi_state(
 
 ## The `result` function has been renamed to `output`
 
-In Guppy 0.x the [result](api/generated/guppylang.std.platform.result.rst) function was used for tagging values returned from Selene and QSystem execution. This function has now been renamed to [output](api/generated/guppylang.std.platform.output.rst). 
+In Guppy 0.x the [result](api/generated/guppylang.std.platform.result.rst) function was used for tagging values returned from Selene and QSystem execution. This function has now been deprecated and [output](api/generated/guppylang.std.platform.output.rst) should be used in its place. 
 
 The reason for this change is that the term "result" was overloaded with other distinct classes such as [EmulatorResult](api/generated/guppylang.emulator.EmulatorResult) and [std.err.Result](api/generated/guppylang.std.err.Result.rst). 
 
 Note that the [result](api/generated/guppylang.std.platform.result.rst) function hasn't been removed and will still work. The use of [output](api/generated/guppylang.std.platform.output.rst) is encouraged for clarity.
+
+This change also applies to the [state_result](api/generated/guppylang.std.debug.state_result.rst) function which is used
+ to get a statevector printout during the simulation of a quantum program. Now [state_result](api/generated/guppylang.std.debug.state_result.rst) is deprecated and [state_output](api/generated/guppylang.std.debug.state_output.rst) should be used instead.
 
 
 ## Changes to Guppy libraries
