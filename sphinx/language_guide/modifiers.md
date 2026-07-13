@@ -25,18 +25,54 @@ def controlled_inverse(c: qubit, q: qubit) -> None:
 controlled_inverse.check()
 ```
 
-The body has access to variables from its enclosing scope, but it cannot take ownership of them. Assignments in a modifier block are local to that block, including assignments that reuse an outer name.
+The body has access to variables from its enclosing scope, but it cannot take ownership of them. For instance, the following programs is rejected:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.builtins import owned
+from guppylang.std.quantum import discard
+
+@guppy.declare(daggerable=True)
+def consume(q: qubit @ owned) -> None: ...
+
+@guppy
+def cannot_take_ownership(q: qubit) -> None:
+    with dagger:
+        consume(q)
+
+cannot_take_ownership.check()
+```
+
+
+Moreover, assignments in a modifier block are local to that block, including assignments that reuse an outer name. In the following examples, `denominator` is not available outside the `with dagger:` block as well as `outer_var`, which is assigned outside the block but it is reassigned inside the block.
 
 ```{code-cell} ipython3
 from guppylang.std.quantum import angle, rx
 
 @guppy
 def local_assignment(q: qubit) -> None:
-    denominator = 1
+    outer_var = 1
     with dagger:
-        denominator = 2
-        rx(q, angle(1 / denominator))
+        denominator = 4
+        outer_var = 2
+        rx(q, angle(outer_var / denominator))
     # `denominator` is not available here.
+    rx(q, angle(1 / denominator))
+
+local_assignment.check()
+```
+```{code-cell} ipython3
+@guppy
+def local_assignment(q: qubit) -> None:
+    outer_var = 1
+    with dagger:
+        denominator = 4
+        outer_var = 2
+        rx(q, angle(outer_var / denominator))
+    # `outer_var` is not available here either
+    rx(q, angle(outer_var / 4))
 
 local_assignment.check()
 ```
@@ -53,21 +89,63 @@ $$
 \end{cases}
 $$
 
-Pass individual qubits, an array of qubits, or both. Array elements may also be controls.
+You can pass individual qubits or an array of qubits. Array elements may also be controls.
+
 
 ```{code-cell} ipython3
 from guppylang import array
 from guppylang.std.quantum import x
 
 @guppy
-def cnx(controls: array[qubit, 2], target: qubit) -> None:
+def c2x(controls0: qubit, controls1: qubit, target: qubit) -> None:
+    with control(controls0, controls1):
+        x(target)
+
+@guppy
+def cnx(controls: array[qubit, n], target: qubit) -> None:
     with control(controls):
         x(target)
+
+@guppy
+def main(c0: qubit, c1: qubit, t: qubit) -> None:
+    
+    c2x(c0, c1, t)
+
+    controls = array([c0, c1])
+    t2 = qubit()
+    cnx(controls, t2)
 
 cnx.check()
 ```
 
 Control blocks cannot allocate, measure, reset, or discard qubits. Every operation called in the block must be controllable.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def allocation_in_control(c: qubit) -> None:
+    with control(c):
+        q = qubit()
+
+allocation_in_control.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.quantum import measure
+
+@guppy
+def measurement_in_control(c: qubit, q: qubit) -> None:
+    with control(c):
+        measure(q)
+
+measurement_in_control.check()
+```
+
 
 # Dagger
 
@@ -78,14 +156,41 @@ from guppylang.std.quantum import s
 
 @guppy
 def undo_phase(q: qubit) -> None:
-    s(q)
     with dagger:
         s(q)
 
 undo_phase.check()
 ```
 
-Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. Every operation called in the block must be daggerable. Two daggers cancel, so `with dagger, dagger:` has no effect.
+Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. Moreover, control flow is not allowed inside a dagger context.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def branch_in_dagger(q: qubit, flag: bool) -> None:
+    with dagger:
+        if flag:
+            h(q)
+
+branch_in_dagger.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def loop_in_dagger(q: qubit) -> None:
+    with dagger:
+        for _ in range(2):
+            h(q)
+
+loop_in_dagger.check()
+```
+
+
 
 ## Conjugation box
 
@@ -98,8 +203,10 @@ Use function flags when a function may be called inside a modifier block:
 @guppy(controllable=True)
 def controlled_operation(q: qubit) -> None: ...
 
+
 @guppy(daggerable=True)
 def invertible_operation(q: qubit) -> None: ...
+
 
 @guppy(unitary=True)
 def unitary_operation(q: qubit) -> None: ...
@@ -108,6 +215,7 @@ def unitary_operation(q: qubit) -> None: ...
 `controllable=True` permits controlled calls, `daggerable=True` permits inverse calls, and `unitary=True` permits both. The function body must meet the corresponding restrictions described above.
 
 ## Conjugation box with functions
+
 
 
 # Complete example: QFT
