@@ -613,7 +613,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "guppylang", specifier = "==1.0.0rc0" },
+    { name = "guppylang", specifier = "==1.0.0rc1" },
     { name = "jupyter", specifier = ">=1.1.0" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "networkx", specifier = ">=3.4.2" },
@@ -641,7 +641,7 @@ docs = [
 
 [[package]]
 name = "guppylang"
-version = "1.0.0rc0"
+version = "1.0.0rc1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "guppylang-internals" },
@@ -652,14 +652,14 @@ dependencies = [
     { name = "tqdm" },
     { name = "types-tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/15/7f/197078759b115933f507c465a676d82330439c4640a8992ae9910729b8d2/guppylang-1.0.0rc0.tar.gz", hash = "sha256:8fbe9f5094219a5382ce3a35d85428be1cb48d0a636049f258e2633adcfec49f", size = 84643, upload-time = "2026-07-02T13:01:27.316Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/a8/9819e9d5a2d2ae5cbe040aae629c32baee73cd0bd50e267f66f24d7ee94a/guppylang-1.0.0rc1.tar.gz", hash = "sha256:91a1d0d98ce196b11789746e6f4167fde939114f32b92d0cc95755cc5182fb5a", size = 84859, upload-time = "2026-07-08T14:31:01.401Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0f/0b/2404f379a481499a29678a045b5f834cc0c0320964755bddba4447695324/guppylang-1.0.0rc0-py3-none-any.whl", hash = "sha256:a2fa701075b2e3b8350daaed98defea0193d9621f7b311d28ae150c3dc5e2dc2", size = 84893, upload-time = "2026-07-02T13:01:25.89Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/3c/4920b96eecb2acf94c11a8d1dd191c69407d35fcb584b0ac8a4e7a5802a1/guppylang-1.0.0rc1-py3-none-any.whl", hash = "sha256:f4f375de6e40933f79cefb0dc759d3dec775ddcba26c98e595bdb1594172995f", size = 84893, upload-time = "2026-07-08T14:30:59.835Z" },
 ]
 
 [[package]]
 name = "guppylang-internals"
-version = "1.0.0rc0"
+version = "1.0.0rc1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hugr" },
@@ -669,9 +669,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "wasmtime" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/66/c02ea416ccbef52e971ba6b150cd18bc1d73c0518f35df45f29dd2fef867/guppylang_internals-1.0.0rc0.tar.gz", hash = "sha256:0ffd9a53667ce69f38a4ff4b26cfe591fc94fbdb5acc195c21b3fd7d704b25e2", size = 236747, upload-time = "2026-07-02T13:01:14.454Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/16/515602e764b35363e84a60aafe343633d2bf12d907f7af22e00a6f25dc14/guppylang_internals-1.0.0rc1.tar.gz", hash = "sha256:61be6b46ab1300c98e946e70738fede55aaf05ed709f8c98dfd52d1fe8b04fff", size = 237543, upload-time = "2026-07-08T14:30:51.062Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/11/89/d334c1d97e3fb5e437c931cf7acaa4e1322e5230408ac644ad1e5d6167df/guppylang_internals-1.0.0rc0-py3-none-any.whl", hash = "sha256:d3b8530ba9c546fd9c4a31e05d27e080f9c4336246985db92e468f25b08373bc", size = 292928, upload-time = "2026-07-02T13:01:12.595Z" },
+    { url = "https://files.pythonhosted.org/packages/16/3a/562a1303b3cd5e7e03ac89930ca55527066c2c480f2093cbf6de80aab7f0/guppylang_internals-1.0.0rc1-py3-none-any.whl", hash = "sha256:812d9973b3348721fcbdb02b74d0f177f80d700a73579d30bbac90e2923b8cf7", size = 293554, upload-time = "2026-07-08T14:30:49.647Z" },
 ]
 
 [[package]]

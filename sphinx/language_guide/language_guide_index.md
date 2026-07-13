@@ -21,6 +21,7 @@ control_flow.md
 static.md
 python_differences.md
 ownership.md
+measurement.md
 comptime.md
 libraries.md
 random.md
