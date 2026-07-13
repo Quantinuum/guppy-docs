@@ -99,12 +99,12 @@ The `quantum_functional` module no longer exists in Guppy v1. Functional quantum
 ## New `Function` type in Guppy replacing `Callable` in annotations
 
 In Guppy 0.x, the `Callable` type could be used to annotate Guppy functions passed in type signatures. Guppy v1 has its own `Callable` type which is a Guppy protocol.
- The new Guppy `Function` type implements this `Callable` protocol.
+ The new Guppy [Function](api/generated/guppylang.std.builtins.Function.rst) type implements this `Callable` protocol.
  
- This means that these functions are now considered generic. Note that generic functions can't be compiled directly in guppy v1. In order to write a non-generic function that takes a function argument, use the new `Function` type
+ This means that these functions are now considered generic. Note that generic functions can't be compiled directly in guppy v1. In order to write a non-generic function that takes a function argument, use the new [Function](api/generated/guppylang.std.builtins.Function.rst) type
  
 This is a breaking change as functions with `Callable` in their signatures will no longer compile in Guppy v1.
- Usage of `Callable` for functions should be replaced with the new `Function` type as shown below.
+ Usage of `Callable` for functions should be replaced with the new [Function](api/generated/guppylang.std.builtins.Function.rst) type as shown below.
 
 `````{grid} 2
 
