@@ -35,7 +35,7 @@ def f(a: array[qubit, 6] @owned) -> None:
 
 
 The motivation behind this change is to clarify how measurements impact the performance of a program.
- In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. Resolving measurements with the `read` method makes the behaviour more explicit to the user and means the user is less likely to accidentally force a sequence of quantum gates to be performed earlier than necessary.
+ In Selene and Quantinuum systems it is recommended to use the value of measurements as late as possible to allow more opportunities for parallelism during the runtime of the program. Resolving measurements with the `read` method makes the behaviour more explicit and allows us avoid accidentally forcing a sequence of quantum gates to be performed earlier than necessary.
 
 The [project_z](api/generated/guppylang.std.quantum.project_z.rst) function also now returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. 
 
