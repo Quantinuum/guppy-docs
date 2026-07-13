@@ -9,7 +9,8 @@ This guide details the key code changes needed to migrate to Guppy v1 from the 0
 
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
 
-A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $\lvert0\rangle$ or $\rvert1\rangle$. Instead, it returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. This can be resolved to a boolean by using the `Measurement.read` method.
+A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $\lvert0\rangle$ or $\rvert1\rangle$. Instead, it returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. This can be resolved to a boolean
+ by using the {py:meth}`~guppylang.std.quantum.Measurement.read` method.
 
 `````{grid} 2
 
@@ -90,7 +91,7 @@ class Grid:
 
 Guppy has a [collections](api/generated/guppylang.std.collections.rst) module with useful `Stack`, `Queue` and `PriorityQueue` containers. These containers are now implemented as mutable Guppy structs with corresponding methods. The struct methods are the idiomatic way to program with these collections so the struct fields are now private. 
 
-2. The deprecated `quantum_functional` module have been removed
+2. The deprecated `quantum_functional` module has been removed
 
 The `quantum_functional` module no longer exists in Guppy v1. Functional quantum operations can be found in the [guppylang.std.quantum.functional](api/generated/guppylang.std.quantum.functional.rst) module instead.
 
