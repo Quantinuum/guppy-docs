@@ -221,7 +221,7 @@ lib = GuppyLibrary.from_members(
 ```
 `````
 
-This change ensures that the entire API for Guppy libraries is contained within the {py:mod}`guppylang.library` module. 
+This change means that the entire API for Guppy libraries is self-contained within the {py:mod}`guppylang.library` module. 
 
 2. `link_name` is now its own decorator
 
