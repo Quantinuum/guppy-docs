@@ -207,10 +207,8 @@ We get 9 printed lines, highlighting that the ``for`` loop is compile-time evalu
 With Guppy v1.0 and above, we can use generic variables in the type signatures of generic functions. Let's generalize the `ladder` function defined above to apply a chain of `cx` gates to a qubit array of variable size.
 
 ```{code-cell} ipython3
-k = guppy.nat_var("k")
-
 @guppy.comptime
-def generic_ladder(qs: array[qubit, k]) -> None:
+def generic_ladder[k: nat](qs: array[qubit, k]) -> None:
     for q1, q2 in zip(qs[1:], qs[:-1]):
         print("Applying CX")
         cx(q1, q2)
