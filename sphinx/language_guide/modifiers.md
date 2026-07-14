@@ -519,7 +519,7 @@ def allocating_comptime_function() -> None:
     h(q)
     measure(q)
 
-allocating_comptime_function.check()
+allocating_comptime_function.compile()
 ```
 
 
