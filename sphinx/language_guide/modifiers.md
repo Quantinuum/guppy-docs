@@ -379,6 +379,43 @@ def controlled_conjugation(c: qubit, q: qubit) -> None:
 controlled_conjugation.check()
 ```
 
+### Conjugation box with Pauli gadget
+
+A Pauli gadget for $P = Z \otimes Z \otimes Y \otimes X$ has this form: basis changes and a CNOT parity network compute $V$, a single `rz` is the action, and the dagger block uncomputes $V^\dagger$. The control is needed only for the central rotation.
+
+```{code-cell} ipython3
+from guppylang.std.quantum import angle, cx, rx
+
+@guppy
+def controlled_pauli_zzyx(
+    c: qubit,
+    qz0: qubit,
+    qz1: qubit,
+    qy: qubit,
+    qx: qubit,
+    theta: angle,
+) -> None:
+    # Compute the ZZYX parity onto qx.
+    rx(qy, angle(1 / 2))
+    h(qx)
+    cx(qz0, qx)
+    cx(qz1, qx)
+    cx(qy, qx)
+
+    with control(c):
+        rz(qx, theta)
+
+    # Uncompute the parity and basis changes.
+    with dagger:
+        rx(qy, angle(1 / 2))
+        h(qx)
+        cx(qz0, qx)
+        cx(qz1, qx)
+        cx(qy, qx)
+
+controlled_pauli_zzyx.check()
+```
+
 
 
 # Function flags
