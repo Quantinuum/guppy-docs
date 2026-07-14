@@ -120,7 +120,7 @@ def main() -> None:
 main.check() # Fails type check in v1, valid in 0.x
 ```
 
-This code above gives an error in Guppy v1. However if we specified `@guppy.struct(frozen=True)` then this code would type check as `s1` would be an immutable copy of `s0` instead of a reference to `s0`.
+This code above gives an error in Guppy v1. However if we specified `@guppy.struct(frozen=True)` then this code would type-check as `s1` would be an immutable copy of `s0` instead of a reference to `s0`.
 
 
 ## Standard library breakages
