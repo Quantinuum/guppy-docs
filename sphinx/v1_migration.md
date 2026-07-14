@@ -93,7 +93,7 @@ class Grid:
 
  Note that because structs are now affine by default, they cannot be implicitly copied. 
 
- Here is an example of an implicit struct copy which would type check with Guppy 0.x but gives a type error with Guppy v1.
+ Here is an example of an implicit struct copy which would type-check with Guppy 0.x but gives a type error with Guppy v1.
 
  ```{code-cell} ipython3
 ---
