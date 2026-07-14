@@ -572,7 +572,7 @@ from pytket import Circuit
 
 circuit = Circuit(1)
 circuit.H(0)
- circuit.measure_all()
+circuit.measure_all()
 measured_circuit = guppy.load_pytket("measured_circuit", circuit, use_arrays=False)
 
 @guppy
