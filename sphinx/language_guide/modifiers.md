@@ -500,6 +500,38 @@ flagged_loop.check()
 
 ## Conjugation box with functions
 
+Now we can recall the [previous example](#conjugation-box-with-pauli-gadget) using functions. 
+
+```{code-cell} ipython3
+@guppy(unitary=True)
+def compute_zzyx_parity(qz0: qubit, qz1: qubit, qy: qubit, qx: qubit) -> None:
+    rx(qy, angle(1 / 2))
+    h(qx)
+    cx(qz0, qx)
+    cx(qz1, qx)
+    cx(qy, qx)
+
+@guppy(unitary=True)
+def pauli_action(qx: qubit, theta: angle) -> None:
+    rz(qx, theta)
+
+@guppy
+def controlled_pauli_zzyx_with_functions(
+    c: qubit,
+    qz0: qubit,
+    qz1: qubit,
+    qy: qubit,
+    qx: qubit,
+    theta: angle,
+) -> None:
+    compute_zzyx_parity(qz0, qz1, qy, qx)
+    with control(c):
+        pauli_action(qx, theta)
+    with dagger:
+        compute_zzyx_parity(qz0, qz1, qy, qx)
+
+controlled_pauli_zzyx_with_functions.check()
+```
 
 
 # Complete example: QFT
@@ -513,7 +545,7 @@ with control(control_qubit), dagger:
 
 # Loading from pytket
 
-Loaded pytket circuits infer their modifier capabilities from their operations. A circuit containing only unitary gates is unitary, so it can be controlled and daggered. Measurements, resets, qubit creation, and qubit discard prevent the relevant capability from being inferred.
+Loaded pytket circuits infer their modifier capabilities from their operations. A circuit containing only unitary gates is unitary, so it can be controlled and daggered. 
 
 ```{code-cell} ipython3
 from pytket import Circuit
@@ -528,4 +560,25 @@ def controlled_inverse_circuit(c: qubit, q: qubit) -> None:
         hadamard(q)
 
 controlled_inverse_circuit.check()
+```
+
+If the circuit contains measurements, resets, or discards, it is not unitary and cannot be controlled or daggered.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from pytket import Circuit
+
+circuit = Circuit(1)
+circuit.H(0)
+ circuit.measure_all()
+measured_circuit = guppy.load_pytket("measured_circuit", circuit, use_arrays=False)
+
+@guppy
+def modify_measured_circuit(c: qubit, q: qubit) -> None:
+    with control(c), dagger:
+        measured_circuit(q)
+
+modify_measured_circuit.check()
 ```
