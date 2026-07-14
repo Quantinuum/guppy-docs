@@ -49,6 +49,9 @@ cannot_take_ownership.check()
 Moreover, assignments in a modifier block are local to that block, including assignments that reuse an outer name. In the following examples, `denominator` is not available outside the `with dagger:` block as well as `outer_var`, which is assigned outside the block but it is reassigned inside the block.
 
 ```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
 from guppylang.std.quantum import angle, rx
 
 @guppy
@@ -64,6 +67,9 @@ def local_assignment(q: qubit) -> None:
 local_assignment.check()
 ```
 ```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
 @guppy
 def local_assignment(q: qubit) -> None:
     outer_var = 1
@@ -95,6 +101,8 @@ You can pass individual qubits or an array of qubits. Array elements may also be
 ```{code-cell} ipython3
 from guppylang import array
 from guppylang.std.quantum import x
+from guppylang.std.builtins import nat
+
 
 @guppy
 def c2x(controls0: qubit, controls1: qubit, target: qubit) -> None:
@@ -102,7 +110,7 @@ def c2x(controls0: qubit, controls1: qubit, target: qubit) -> None:
         x(target)
 
 @guppy
-def cnx(controls: array[qubit, n], target: qubit) -> None:
+def cnx[n: nat](controls: array[qubit, n], target: qubit) -> None:
     with control(controls):
         x(target)
 
