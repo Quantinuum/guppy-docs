@@ -211,20 +211,6 @@ def allocation_in_control(c: qubit) -> None:
 allocation_in_control.check()
 ```
 
-```{code-cell} ipython3
----
-tags: [raises-exception]
----
-from guppylang.std.quantum import measure
-
-@guppy
-def measurement_in_control(c: qubit, q: qubit) -> None:
-    with control(c):
-        measure(q)
-
-measurement_in_control.check()
-```
-
 
 # Dagger
 
@@ -234,11 +220,11 @@ measurement_in_control.check()
 from guppylang.std.quantum import s
 
 @guppy
-def undo_phase(q: qubit) -> None:
+def sdg(q: qubit) -> None:
     with dagger:
         s(q)
 
-undo_phase.check()
+sdg.check()
 ```
 
 
@@ -264,7 +250,7 @@ sdag q;
 h q;
 ```
 
-With assignments, the assignments remain in order even though the rotations are reversed:
+Classical operations remain in order even though the quantum operations are reversed:
 
 ```{code-cell} ipython3
 from guppylang.std.quantum import rz
@@ -272,17 +258,21 @@ from guppylang.std.quantum import rz
 @guppy
 def invert_rotations(q: qubit) -> None:
     with dagger:
-        theta = angle(1 / 4)
+        a = 4
+        theta = angle(1 / a)
         rx(q, theta)
-        phi = angle(1 / 8)
+        a /= 2
+        phi = angle(1 / a)
         rz(q, phi)
 
 invert_rotations.check()
 ```
 
 ```qasm
-theta = 1 / 4;
-phi = 1 / 8;
+a = 4;
+theta = 1 / a;
+a /= 2;
+phi = 1 / a;
 rz(-phi) q;
 rx(-theta) q;
 ```
@@ -423,6 +413,8 @@ When using a function inside a modifier block we need to distinguish between fun
 
 
 ```{code-cell} ipython3
+from guppylang.std.quantum import measure
+
 @guppy
 def classical_step(n: int) -> int:
     q = qubit()
@@ -440,8 +432,7 @@ def modified_call(c: qubit, q: qubit) -> None:
 modified_call.check()
 ```
 
-A classical function containing quantum operations cannot be called inside a modifier block, even if the current body of the function contains measurements or qubit allocations. In fact the modifier will not enter the function body and no restrictions will be enforced. 
-
+A classical function containing quantum operations can be called inside a modifier block, even if the current body of the function contains measurements or qubit allocations. In fact the modifier will not enter the function body and no restrictions will be enforced. 
 Instead, If we try to call a function that operate on qubits inside a modifier block, we need to ensure that the function body meets the corresponding restrictions: a function that allocates or discard qubits cannot be called inside a control block and a function that contains control flow cannot be called inside a dagger block.
 To state that a function is safe to call inside a modifier block and ask the type checker to verify it, we can use function flags.
 There are three flags: `controllable=True` permits controlled calls, `daggerable=True` permits inverse calls, and `unitary=True` permits both.
@@ -480,6 +471,7 @@ tags: [raises-exception]
 @guppy(controllable=True)
 def flagged_allocation() -> None:
     q = qubit()
+    measure(q)
 
 flagged_allocation.check()
 ```
