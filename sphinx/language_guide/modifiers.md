@@ -559,13 +559,76 @@ controlled_pauli_zzyx_with_functions.check()
 ```
 
 
-# Complete example: QFT
+# A complete example: Grover search
 
-The modifiers compose naturally: a controlled inverse QFT is written as a single modifier block around the QFT call.
+This Grover search marks $\ket{101}$ in a three-qubit register. The loop-containing helpers are compile-time unitary functions, so they can be used inside dagger blocks.
 
-```python
-with control(control_qubit), dagger:
-    qft(register)
+```{code-cell} ipython3
+import math
+
+from guppylang.std.builtins import array, control, dagger, nat, output
+from guppylang.std.quantum import h, measure, qubit, x, z
+
+@guppy.comptime(unitary=True)
+def apply_hadamards[n: nat](register: array[qubit, n]) -> None:
+    for q in register:
+        h(q)
+
+@guppy.comptime(unitary=True)
+def apply_bit_flips[n: nat](register: array[qubit, n]) -> None:
+    for q in register:
+        x(q)
+
+@guppy.comptime(unitary=True)
+def flip_nonleading_controllers[n: nat](controllers: array[qubit, n]) -> None:
+    for i in range(1, n):
+        x(controllers[i])
+
+@guppy(unitary=True)
+def phase_flip_all_ones[n: nat](controllers: array[qubit, n], target: qubit) -> None:
+    with control(controllers):
+        z(target)
+
+@guppy(unitary=True)
+def mark_10_01[n: nat](controllers: array[qubit, n], target: qubit) -> None:
+    flip_nonleading_controllers(controllers)
+    phase_flip_all_ones(controllers, target)
+    with dagger:
+        flip_nonleading_controllers(controllers)
+
+@guppy(unitary=True)
+def diffuse[n: nat](controllers: array[qubit, n], target: qubit) -> None:
+    apply_hadamards(controllers)
+    h(target)
+    apply_bit_flips(controllers)
+    x(target)
+    phase_flip_all_ones(controllers, target)
+    with dagger:
+        apply_hadamards(controllers)
+        h(target)
+        apply_bit_flips(controllers)
+        x(target)
+
+@guppy(unitary=True)
+def grover_step[n: nat](controllers: array[qubit, n], target: qubit) -> None:
+    mark_10_01(controllers, target)
+    diffuse(controllers, target)
+
+@guppy.comptime
+def grover_101() -> None:
+    controllers = array(qubit(), qubit())
+    target = qubit()
+    apply_hadamards(controllers)
+    h(target)
+
+    iterations = round(math.pi * math.sqrt(2 ** (len(controllers) + 1)) / 4)
+    for _ in range(iterations):
+        grover_step(controllers, target)
+
+    q0, q1 = controllers
+    output("result", array(measure(q0).read(), measure(q1).read(), measure(target).read()))
+
+grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
 ```
 
 # Loading from pytket
