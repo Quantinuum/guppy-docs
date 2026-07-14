@@ -24,4 +24,5 @@ ownership.md
 measurement.md
 comptime.md
 libraries.md
+modifiers.md
 ```
