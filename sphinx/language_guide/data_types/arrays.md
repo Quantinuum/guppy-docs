@@ -336,6 +336,61 @@ main.check()
 
 Note that the return type of `frozenarray.mutable_copy` is of type `array`.
 
+
+## Extracting individual elements
+
+There are cases where you may want to work with individual array elements in a way that requires ownership, without consuming the entire array. One approach is to use arrays of options, see the [T Factory and `Option` type example](../../guppylang/examples/t_factory.ipynb).
+
+Another approach is to use the `take` and `put` operations. Regular array indexing only allows borrowing an element, while `take` extracts an element and transfers ownership to the caller. The complementary operation, `put`, inserts an element back into the array. These operations are inherently unsafe and may panic at runtime if you try to access an element that was previously taken, or if you try to put an element at an index that already contains one. They also panic if the provided index is negative or out of bounds.
+
+```{code-cell} ipython3
+from guppylang.std.quantum import measure
+
+@guppy
+def main(qs: array[qubit, 5]) -> None:
+    q = qs.take(3)
+    measure(q)
+    qs.put(qubit(), 3)
+    h(qs[3])
+
+main.check()
+```
+
+To reduce the risk of panics, you can use `try_take` and `try_put`. The `try_take` function returns an [Option](../../api/generated/guppylang.std.option.Option.rst): instead of panicking when an element has already been taken out, it returns `nothing` (`some` on success). The `try_put` function returns a [Result](../../api/generated/guppylang.std.err.Result.rst): you get an `err` value if there is already an element at the given index (`ok` on success). The `is_borrowed` function is useful for checking whether an element has been taken out of an array, either through `take` / `try_take` or because a non-copyable element is currently borrowed.
+
+
+```{code-cell} ipython3
+from guppylang.std.quantum import discard, discard_array
+
+@guppy
+def main() -> None:
+    qs = array(qubit() for _ in range(10))
+    result("init", qs.is_borrowed(3))  # False
+
+    # We can't put anything at an index that hasn't been borrowed
+    q = qubit()
+    # So `try_put` returns `q` unchanged inside an error result value
+    q = qs.try_put(q, 3).unwrap_err()
+    discard(q)
+
+    # We can't take out stuff that's already been borrowed
+    q = qs.take(3)
+    result("after_take", qs.is_borrowed(3))  # True
+    # So `try_take` returns nothing because of the `take` above
+    qs.try_take(3).unwrap_nothing()
+    measure(q)
+
+    # But we can put something back at a borrowed index
+    qs.put(qubit(), 3)
+    result("after_put", qs.is_borrowed(3))  # False
+    h(qs[3])
+
+    discard_array(qs)
+
+
+main.emulator(11).coinflip_sim().run().results[0].entries
+```
+
 ## Example usage of arrays
 
 To see some uses of arrays in practice, refer to the following examples:
