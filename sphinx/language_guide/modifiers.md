@@ -126,7 +126,78 @@ def main(c0: qubit, c1: qubit, t: qubit) -> None:
 cnx.check()
 ```
 
-Control blocks cannot allocate, measure, reset, or discard qubits. Every operation called in the block must be controllable.
+## Control flow
+
+When a controlled block contains control flow, the control is pushed to every quantum operation produced by the branch or loop. Evaluating the classical condition and loop bounds is not controlled. For instance, the following two programs are equivalent:
+
+```{code-cell} ipython3
+@guppy
+def control_if(c: qubit, q: qubit, flag: bool) -> None:
+    with control(c):
+        if flag:
+            h(q)
+        else:
+            x(q)
+control_if.check()
+```
+```{code-cell} ipython3
+@guppy
+def pushed_control_if(c: qubit, q: qubit, flag: bool) -> None:
+    if flag:
+        with control(c):
+            h(q)
+    else:
+        with control(c):
+            x(q)
+
+pushed_control_if.check()
+```
+
+The same applies to loops:
+
+```{code-cell} ipython3
+@guppy
+def control_loop(c: qubit, q: qubit) -> None:
+    with control(c):
+        for _ in range(2):
+            h(q)
+
+@guppy
+def pushed_control_loop(c: qubit, q: qubit) -> None:
+    for _ in range(2):
+        with control(c):
+            h(q)
+
+control_loop.check()
+pushed_control_loop.check()
+```
+
+## Classical assignments in control blocks
+
+Classical assignments are ignored by the control modifier: no controlled operation is generated for them. Thus the following programs are equivalent.
+
+```{code-cell} ipython3
+from guppylang.std.quantum import angle, rx
+
+@guppy
+def control_assignment(c: qubit, q: qubit) -> None:
+    with control(c):
+        theta = angle(1 / 4)
+        rx(q, theta)
+
+@guppy
+def pushed_control_assignment(c: qubit, q: qubit) -> None:
+    theta = angle(1 / 4)
+    with control(c):
+        rx(q, theta)
+
+control_assignment.check()
+pushed_control_assignment.check()
+```
+
+## Forbidden operations
+
+Control blocks allows classical operations since they can be evaluated without affecting the quantum state. However, they cannot allocate, measure, reset, or discard qubits, since these operations have quantum effects, but they are not controllable.
 
 ```{code-cell} ipython3
 ---
@@ -170,7 +241,55 @@ def undo_phase(q: qubit) -> None:
 undo_phase.check()
 ```
 
-Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. Moreover, control flow is not allowed inside a dagger context.
+
+
+## Classical assignments in dagger blocks
+
+Similar to the control modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
+
+```{code-cell} ipython3
+@guppy
+def invert_two_gates(q: qubit) -> None:
+    with dagger:
+        h(q)
+        s(q)
+
+invert_two_gates.check()
+```
+
+The resulting quantum operations are equivalent to:
+
+```qasm
+sdag q;
+h q;
+```
+
+With assignments, the assignments remain in order even though the rotations are reversed:
+
+```{code-cell} ipython3
+from guppylang.std.quantum import rz
+
+@guppy
+def invert_rotations(q: qubit) -> None:
+    with dagger:
+        theta = angle(1 / 4)
+        rx(q, theta)
+        phi = angle(1 / 8)
+        rz(q, phi)
+
+invert_rotations.check()
+```
+
+```qasm
+theta = 1 / 4;
+phi = 1 / 8;
+rz(-phi) q;
+rx(-theta) q;
+```
+
+## Forbidden operations in dagger blocks
+
+Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. Moreover, control flow is not allowed inside a dagger context, since reverting control flow is not trivial and not always possible.
 
 ```{code-cell} ipython3
 ---
@@ -197,14 +316,96 @@ def loop_in_dagger(q: qubit) -> None:
 
 loop_in_dagger.check()
 ```
+## Combining dagger and controls
+
+Modifiers compose. This example is a doubly controlled inverse of `h` followed by `s`:
+
+```{code-cell} ipython3
+@guppy
+def doubly_controlled_inverse(c0: qubit, c1: qubit, q: qubit) -> None:
+    with control(c0):
+        with dagger:
+            with control(c1):
+                h(q)
+                s(q)
+
+doubly_controlled_inverse.check()
+```
+
+Resolving one modifier at a time gives this sequence:
+
+```text
+Source:              h q;                    s q;
+Push control c1:     ctrl @ h c1, q;         ctrl @ s c1, q;
+Resolve dagger:      ctrl @ sdag c1, q;      ctrl @ h c1, q;
+Push control c0:     ctrl(2) @ sdag c0, c1, q;
+                     ctrl(2) @ h c0, c1, q;
+```
 
 
 
 ## Conjugation box
 
+Many unitaries have a compute--action--uncompute form:
+
+$$
+U = V A V^\dagger.
+$$
+
+The first part computes a basis change, `A` performs the action, and the final part uncomputes the basis change. This is a conjugation box.
+
+For a controlled conjugation box, only the central action needs to be controlled:
+
+$$
+C[U] = (I \otimes V)\, C[A]\, (I \otimes V^\dagger).
+$$
+
+This avoids controlling every operation in `V` and can substantially reduce the number of controlled, entangling gates.
+
+```{code-cell} ipython3
+from guppylang.std.quantum import rz
+
+@guppy
+def controlled_conjugation(c: qubit, q: qubit) -> None:
+    # Compute V
+    h(q)
+    # Controlled action A
+    with control(c):
+        rz(q, angle(1 / 4))
+    # Uncompute V†
+    with dagger:
+        h(q)
+
+controlled_conjugation.check()
+```
+
+
 
 # Function flags
-If we try to call a function inside a modifier block, we need to ensure that the function body meets the corresponding restrictions: a function that allocates or discard qubits cannot be called inside a control block and a function that contains control flow cannot be called inside a dagger block.
+When using a function inside a modifier block we need to distinguish between functions with quantum effects and functions that, from the modifier point of view, are equivalent to a block of classical computation. The former are subject to the same restrictions as a modifier block, while the latter are not.
+
+
+```{code-cell} ipython3
+@guppy
+def classical_step(n: int) -> int:
+    q = qubit()
+    h(q)
+    if measure(q):
+        n = n + 1
+    return n
+
+@guppy
+def modified_call(c: qubit, q: qubit) -> None:
+    with control(c), dagger:
+        denominator = classical_step(2)
+        rx(q, angle(1 / denominator))
+
+modified_call.check()
+```
+
+A classical function containing quantum operations cannot be called inside a modifier block, even if the current body of the function contains measurements or qubit allocations. In fact the modifier will not enter the function body and no restrictions will be enforced. 
+
+Instead, If we try to call a function that operate on qubits inside a modifier block, we need to ensure that the function body meets the corresponding restrictions: a function that allocates or discard qubits cannot be called inside a control block and a function that contains control flow cannot be called inside a dagger block.
 To state that a function is safe to call inside a modifier block and ask the type checker to verify it, we can use function flags.
 There are three flags: `controllable=True` permits controlled calls, `daggerable=True` permits inverse calls, and `unitary=True` permits both.
 
@@ -221,7 +422,44 @@ def invertible_operation(q: qubit) -> None: ...
 def unitary_operation(q: qubit) -> None: ...
 ```
 
- The function body must meet the corresponding restrictions described above.
+When a flag is declared on top of a function, Guppy verifies the function body, and checks that a call inside a modifier has the required flag. Flags are not inferred for Guppy functions.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy(daggerable=True)
+def flagged_branch(q: qubit, flag: bool) -> None:
+    if flag:
+        h(q)
+
+flagged_branch.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy(controllable=True)
+def flagged_allocation() -> None:
+    q = qubit()
+
+flagged_allocation.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy(unitary=True)
+def flagged_loop(q: qubit) -> None:
+    for _ in range(2):
+        h(q)
+
+flagged_loop.check()
+```
+
+
 
 ## Conjugation box with functions
 
