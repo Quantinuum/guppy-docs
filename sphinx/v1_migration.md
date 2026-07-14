@@ -39,7 +39,7 @@ def f(a: array[qubit, 6] @owned) -> None:
 ```
 `````
 
-Note that in this snippet `result` has been changed to `output` inline with the [deprecation](#the-result-function-has-been-renamed-to-output) mentioned later.
+Note that in this snippet `result` has been changed to `output` in line with the [deprecation](#the-result-function-has-been-renamed-to-output) mentioned later.
 
 
 This change is to emphasize that forcing measurements can have a significant effect on a program's performance.
