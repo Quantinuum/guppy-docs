@@ -487,7 +487,40 @@ def flagged_loop(q: qubit) -> None:
 
 flagged_loop.check()
 ```
+## Function flags with compile-time functions
 
+Function flags can be used also with [`guppy.comptime` functions](comptime.md). Here since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
+
+```{code-cell} ipython3
+@guppy.comptime(unitary=True)
+def choose_gate(q: qubit, flag: bool) -> None:
+    if flag:
+        h(q)
+    else:
+        x(q)
+
+@guppy
+def modified_comptime_call(c: qubit, q: qubit) -> None:
+    with control(c), dagger:
+        choose_gate(q, True)
+
+modified_comptime_call.check()
+```
+
+Qubit allocation or measurement remains forbidden in a flagged compile-time function:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy.comptime(daggerable=True)
+def allocating_comptime_function() -> None:
+    q = qubit()
+    h(q)
+    measure(q)
+
+allocating_comptime_function.check()
+```
 
 
 ## Conjugation box with functions
