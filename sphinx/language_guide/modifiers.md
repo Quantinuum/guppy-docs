@@ -279,7 +279,7 @@ rx(-theta) q;
 
 ## Forbidden operations in dagger blocks
 
-Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. Moreover, control flow is not allowed inside a dagger context, since reverting control flow is not trivial and not always possible.
+Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. They also cannot perform observable classical effects such as `output`, `panic`, or `exit`: reversing the quantum operations must not change when those effects occur.
 
 ```{code-cell} ipython3
 ---
@@ -305,6 +305,20 @@ def loop_in_dagger(q: qubit) -> None:
             h(q)
 
 loop_in_dagger.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.builtins import output
+
+@guppy
+def output_in_dagger(q: qubit) -> None:
+    with dagger:
+        output("value", True)
+
+output_in_dagger.check()
 ```
 ## Combining dagger and controls
 
@@ -409,7 +423,8 @@ controlled_pauli_zzyx.check()
 
 
 # Function flags
-When using a function inside a modifier block we need to distinguish between functions with quantum effects and functions that, from the modifier point of view, are equivalent to a block of classical computation. The former are subject to the same restrictions as a modifier block, while the latter are not.
+
+For a control block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
 
 
 ```{code-cell} ipython3
@@ -424,33 +439,77 @@ def classical_step(n: int) -> int:
     return n
 
 @guppy
-def modified_call(c: qubit, q: qubit) -> None:
-    with control(c), dagger:
+def controlled_classical_call(c: qubit, q: qubit) -> None:
+    with control(c):
         denominator = classical_step(2)
         rx(q, angle(1 / denominator))
 
-modified_call.check()
+controlled_classical_call.check()
 ```
 
-A classical function containing quantum operations can be called inside a modifier block, even if the current body of the function contains measurements or qubit allocations. In fact the modifier will not enter the function body and no restrictions will be enforced. 
-Instead, If we try to call a function that operate on qubits inside a modifier block, we need to ensure that the function body meets the corresponding restrictions: a function that allocates or discard qubits cannot be called inside a control block and a function that contains control flow cannot be called inside a dagger block.
-To state that a function is safe to call inside a modifier block and ask the type checker to verify it, we can use function flags.
-There are three flags: `controllable=True` permits controlled calls, `daggerable=True` permits inverse calls, and `unitary=True` permits both.
-
-```python
-@guppy(controllable=True)
-def controlled_operation(q: qubit) -> None: ...
 
 
+This is different for dagger blocks: since they change the order of quantum operations every called function, including a classical one, must be `daggerable=True`; this prevents a function from silently allocating or measuring a qubit. 
+
+For example, an unflagged classical call is rejected in a dagger block:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def classical_helper(n: int) -> int:
+    return n * 2
+
+@guppy
+def unflagged_call_in_dagger(q: qubit) -> None:
+    with dagger:
+        rx(q, angle(1 / classical_helper(2)))
+
+unflagged_call_in_dagger.check()
+```
+
+Marking it `daggerable=True` makes the call valid:
+
+```{code-cell} ipython3
 @guppy(daggerable=True)
-def invertible_operation(q: qubit) -> None: ...
+def daggerable_classical_helper(n: int) -> int:
+    return n * 2
 
+@guppy
+def flagged_call_in_dagger(q: qubit) -> None:
+    with dagger:
+        rx(q, angle(1 / daggerable_classical_helper(2)))
 
-@guppy(unitary=True)
-def unitary_operation(q: qubit) -> None: ...
+flagged_call_in_dagger.check()
 ```
 
-When a flag is declared on top of a function, Guppy verifies the function body, and checks that a call inside a modifier has the required flag. Flags are not inferred for Guppy functions.
+A call valid inside both `control` and `dagger` must be `unitary=True`.
+Declaring a function with `@guppy(unitary=True)` or with `@guppy(daggerable=True, controllable=True)` is equivalent.
+
+
+```{code-cell} ipython3
+@guppy(unitary=True)
+def unitary_gate(q: qubit) -> None:
+    h(q)
+
+@guppy(daggerable=True, controllable=True)
+def dagger_and_controllable_gate(q: qubit) -> None:
+    h(q)
+
+@guppy
+def explicit_controlled_dagger_call(c: qubit, q: qubit) -> None:
+    with control(c), dagger:
+        unitary_gate(q)
+        dagger_and_controllable_gate(q)
+
+explicit_controlled_dagger_call.check()
+```
+
+
+
+When a flag is declared on top of a function, Guppy verifies the function body ensuring that it adheres to the constraints imposed by the flag.
+
 
 ```{code-cell} ipython3
 ---
@@ -487,6 +546,24 @@ def flagged_loop(q: qubit) -> None:
 
 flagged_loop.check()
 ```
+
+
+
+The `unitary` flag also requires dagger constraints, so every classical function called inside a `unitary` function must be at least `daggerable=True`.
+
+
+```{code-cell} ipython3
+@guppy(daggerable=True)
+def rotation_denominator(n: int) -> int:
+    return n * 2
+
+@guppy(unitary=True)
+def rotation_with_helper(q: qubit) -> None:
+    rx(q, angle(1 / rotation_denominator(2)))
+
+rotation_with_helper.check()
+```
+
 ## Function flags with compile-time functions
 
 Function flags can be used also with [`guppy.comptime` functions](comptime.md). Here since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
