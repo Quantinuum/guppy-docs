@@ -48,6 +48,8 @@ def rotate(q: qubit) -> None:
     rz(q, pi_2)
 ```
 
+See more in the [language guide section on angles](language_guide/data_types/angles.md).
+
 ## Why am I getting "unsupported" errors?
 
 This Guppy function doesn't currently have compilation to HUGR. Please find/raise an issue or find a different way of writing your program.
