@@ -4,7 +4,7 @@ kernelspec:
   name: python3
 ---
 
-# Modifiers
+# Controlling and Daggering quantum operations
 
 Modifiers transform a block of quantum operations. They make it possible to express controlled and inverse operations without defining a separate function for each variant.
 
@@ -15,12 +15,12 @@ Use modifiers in a `with` statement. Multiple modifiers may be combined or neste
 ```{code-cell} ipython3
 from guppylang import guppy
 from guppylang.std.builtins import control, dagger
-from guppylang.std.quantum import h, qubit
+from guppylang.std.quantum import s, qubit
 
 @guppy
 def controlled_inverse(c: qubit, q: qubit) -> None:
     with control(c), dagger:
-        h(q)
+        s(q)
 
 controlled_inverse.check()
 ```
@@ -83,15 +83,15 @@ def local_assignment(q: qubit) -> None:
 local_assignment.check()
 ```
 
-# Control
+## Control
 
 `with control(c):` applies the operations in its body only when the control qubit `c` is in $\ket{1}$. With controls $c_1, \ldots, c_n$, it applies the operation when all controls are in $\ket{1}$:
 
 $$
-\operatorname{C}^n(U)\ket{c_1\ldots c_n}\ket{\psi} =
+\operatorname{C}^n(U)\ket{c_0\ldots c_{n-1}}\ket{\psi} =
 \begin{cases}
-\ket{c_1\ldots c_n}U\ket{\psi} & \text{if } c_1 = \cdots = c_n = 1, \\
-\ket{c_1\ldots c_n}\ket{\psi} & \text{otherwise.}
+\ket{c_0\ldots c_{n-1}}U\ket{\psi} & \text{if } c_0 = \cdots = c_{n-1} = 1, \\
+\ket{c_0\ldots c_{n-1}}\ket{\psi} & \text{otherwise.}
 \end{cases}
 $$
 
@@ -126,7 +126,7 @@ def main(c0: qubit, c1: qubit, t: qubit) -> None:
 cnx.check()
 ```
 
-## Control flow
+### Control flow
 
 When a controlled block contains control flow, the control is pushed to every quantum operation produced by the branch or loop. Evaluating the classical condition and loop bounds is not controlled. For instance, the following two programs are equivalent:
 
@@ -172,7 +172,7 @@ control_loop.check()
 pushed_control_loop.check()
 ```
 
-## Classical assignments in control blocks
+### Classical assignments in control blocks
 
 Classical assignments are ignored by the control modifier: no controlled operation is generated for them. Thus the following programs are equivalent.
 
@@ -195,7 +195,7 @@ control_assignment.check()
 pushed_control_assignment.check()
 ```
 
-## Forbidden operations
+### Forbidden operations
 
 Control blocks allows classical operations since they can be evaluated without affecting the quantum state. However, they cannot allocate, measure, reset, or discard qubits, since these operations have quantum effects, but they are not controllable.
 
@@ -212,7 +212,7 @@ allocation_in_control.check()
 ```
 
 
-# Dagger
+## Dagger
 
 `with dagger:` applies the inverse of its body. If the body performs $U_1$ followed by $U_2$, the dagger block performs $U_2^\dagger$ followed by $U_1^\dagger$.
 
@@ -220,16 +220,17 @@ allocation_in_control.check()
 from guppylang.std.quantum import s
 
 @guppy
-def sdg(q: qubit) -> None:
+def sx_dg(q: qubit) -> None:
     with dagger:
         s(q)
+        x(q)
 
-sdg.check()
+sx_dg.check()
 ```
 
 
 
-## Classical assignments in dagger blocks
+### Classical assignments in dagger blocks
 
 Similar to the control modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
 
@@ -246,7 +247,7 @@ invert_two_gates.check()
 The resulting quantum operations are equivalent to:
 
 ```qasm
-sdag q;
+sdg q;
 h q;
 ```
 
@@ -277,7 +278,7 @@ rz(-phi) q;
 rx(-theta) q;
 ```
 
-## Forbidden operations in dagger blocks
+### Forbidden operations in dagger blocks
 
 Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. They also cannot perform observable classical effects such as `output`, `panic`, or `exit`: reversing the quantum operations must not change when those effects occur.
 
@@ -320,7 +321,7 @@ def output_in_dagger(q: qubit) -> None:
 
 output_in_dagger.check()
 ```
-## Combining dagger and controls
+### Combining dagger and controls
 
 Modifiers compose. This example is a doubly controlled inverse of `h` followed by `s`:
 
@@ -341,14 +342,14 @@ Resolving one modifier at a time gives this sequence:
 ```text
 Source:              h q;                    s q;
 Push control c1:     ctrl @ h c1, q;         ctrl @ s c1, q;
-Resolve dagger:      ctrl @ sdag c1, q;      ctrl @ h c1, q;
-Push control c0:     ctrl(2) @ sdag c0, c1, q;
+Resolve dagger:      ctrl @ sdg c1, q;      ctrl @ h c1, q;
+Push control c0:     ctrl(2) @ sdg c0, c1, q;
                      ctrl(2) @ h c0, c1, q;
 ```
 
 
 
-## Conjugation box
+### Conjugation pattern
 
 Many unitaries have a compute--action--uncompute form:
 
@@ -383,7 +384,7 @@ def controlled_conjugation(c: qubit, q: qubit) -> None:
 controlled_conjugation.check()
 ```
 
-### Conjugation box with Pauli gadget
+#### Conjugation box with Pauli gadget
 
 A Pauli gadget for $P = Z \otimes Z \otimes Y \otimes X$ has this form: basis changes and a CNOT parity network compute $V$, a single `rz` is the action, and the dagger block uncomputes $V^\dagger$. The control is needed only for the central rotation.
 
@@ -422,7 +423,7 @@ controlled_pauli_zzyx.check()
 
 
 
-# Function flags
+## Function flags
 
 For a control block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
 
@@ -564,7 +565,7 @@ def rotation_with_helper(q: qubit) -> None:
 rotation_with_helper.check()
 ```
 
-## Function flags with compile-time functions
+### Function flags with compile-time functions
 
 Function flags can be used also with [`guppy.comptime` functions](comptime.md). Here since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
 
@@ -600,7 +601,7 @@ allocating_comptime_function.compile()
 ```
 
 
-## Conjugation box with functions
+### Conjugation pattern with functions
 
 Now we can recall the [previous example](#conjugation-box-with-pauli-gadget) using functions. 
 
@@ -636,7 +637,7 @@ controlled_pauli_zzyx_with_functions.check()
 ```
 
 
-# A complete example: Grover search
+## A complete example: Grover search
 
 This Grover search marks $\ket{101}$ in a three-qubit register. The loop-containing helpers are compile-time unitary functions, so they can be used inside dagger blocks.
 
@@ -708,7 +709,7 @@ def grover_101() -> None:
 grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
 ```
 
-# Loading from pytket
+## Loading from pytket
 
 Loaded pytket circuits infer their modifier capabilities from their operations. A circuit containing only unitary gates is unitary, so it can be controlled and daggered. 
 
