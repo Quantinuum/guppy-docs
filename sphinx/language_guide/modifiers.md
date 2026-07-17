@@ -10,11 +10,52 @@ Modifiers transform a block of quantum operations. They make it possible to expr
 
 ## Syntax
 
-Use modifiers in a `with` statement. Multiple modifiers may be combined or nested.
+Use modifiers in a `with` statement.
+
+Start with the simplest form: a single modifier on a single operation.
 
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.builtins import control, dagger
+from guppylang.std.builtins import control, output
+from guppylang.std.quantum import qubit, x, h, measure
+
+@guppy
+def controlled_x() -> None:
+    c = qubit()
+    q = qubit()
+    h(q)
+    with control(c):
+        x(q)
+    bit_c =measure(c)
+    bit_q = measure(q)
+    output("result", array(bit_c.read(), bit_q.read()))
+
+controlled_x.emulator(n_qubits=2).with_shots(100).run().collated_counts()
+```
+Here we can observe that the `x` operation is applied only when the control qubit `c` is in the $\ket{1}$ state.
+
+```{code-cell} ipython3
+from guppylang.std.builtins import output
+from guppylang.std.quantum import angle, h, measure, qubit, rx
+
+@guppy
+def rotate_then_dagger() -> None:
+    q = qubit()
+    a = angle(1 / 4)
+    rx(q, a)
+    with dagger:
+        rx(q, a)
+    bit = measure(q)
+    output("result", bit.read())
+    
+
+rotate_then_dagger.emulator(n_qubits=2).with_shots(100).run().collated_counts()
+```
+Since we are applying a rotation followed by its inverse, the qubit is always measured in the $\ket{0}$ state.
+
+Multiple modifiers may also be combined or nested.
+
+```{code-cell} ipython3
 from guppylang.std.quantum import s, qubit
 
 @guppy
@@ -22,10 +63,15 @@ def controlled_inverse(c: qubit, q: qubit) -> None:
     with control(c), dagger:
         s(q)
 
+
 controlled_inverse.check()
 ```
 
-The body has access to variables from its enclosing scope, but it cannot take ownership of them. For instance, the following programs is rejected:
+Here we take the S gate and modify it with control and dagger. This gate has a known form of control and daggering, and the operations are compatible. Therefore, when we check the program (compile), the code passes. When applied, this function acts as a C-S^\dag gate
+
+### Modifiers and variable scope
+
+The body has access to variables from its enclosing scope, but it cannot take ownership of them. For instance, the following program is rejected:
 
 ```{code-cell} ipython3
 ---
@@ -44,9 +90,10 @@ def cannot_take_ownership(q: qubit) -> None:
 
 cannot_take_ownership.check()
 ```
+This restriction prevents a modifier from discarding a qubit: daggering or controlling a discard operation in fact can lead to unexpected results.
 
-
-Moreover, assignments in a modifier block are local to that block, including assignments that reuse an outer name. In the following examples, `denominator` is not available outside the `with dagger:` block as well as `outer_var`, which is assigned outside the block but it is reassigned inside the block.
+Moreover, assignments in a modifier block are local to that block, including assignments that reuse an outer name. 
+In the following example, `denominator` is not available outside the `with dagger:` block.
 
 ```{code-cell} ipython3
 ---
@@ -66,6 +113,10 @@ def local_assignment(q: qubit) -> None:
 
 local_assignment.check()
 ```
+The reason for this restriction is that the assignment inside a controlled block is not controlled, so the denominator variable is always defined. Thus having such a variable available outside the block would lead to unexpected results, since it would be defined even if the control qubit is in the $\ket{0}$ state.
+
+For a similar reason, in the next example, `outer_var` is not available outside the `with dagger:` block, even though it was assigned in the outer scope. The assignment inside the block in fact overwrites the scope of the outer variable.
+
 ```{code-cell} ipython3
 ---
 tags: [raises-exception]
@@ -126,9 +177,9 @@ def main(c0: qubit, c1: qubit, t: qubit) -> None:
 cnx.check()
 ```
 
-### Control flow
+### Classical control
 
-When a controlled block contains control flow, the control is pushed to every quantum operation produced by the branch or loop. Evaluating the classical condition and loop bounds is not controlled. For instance, the following two programs are equivalent:
+When a controlled block contains classical control flow, the control is pushed to every quantum operation produced by the branch or loop. Evaluating the classical condition and loop bounds is not controlled. For instance, the following two programs are equivalent:
 
 ```{code-cell} ipython3
 @guppy
@@ -197,7 +248,7 @@ pushed_control_assignment.check()
 
 ### Forbidden operations
 
-Control blocks allows classical operations since they can be evaluated without affecting the quantum state. However, they cannot allocate, measure, reset, or discard qubits, since these operations have quantum effects, but they are not controllable.
+Control blocks allow classical operations since they can be evaluated without affecting the quantum state. However, they cannot allocate, measure, reset, or discard qubits, since these operations have quantum effects, but they are not controllable.
 
 ```{code-cell} ipython3
 ---
@@ -450,7 +501,7 @@ controlled_classical_call.check()
 
 
 
-This is different for dagger blocks: since they change the order of quantum operations every called function, including a classical one, must be `daggerable=True`; this prevents a function from silently allocating or measuring a qubit. 
+This is different for dagger blocks: since they change the order of quantum operations, every called function, including a classical one, must be `daggerable=True`; this prevents a function from silently allocating or measuring a qubit. 
 
 For example, an unflagged classical call is rejected in a dagger block:
 
@@ -509,7 +560,7 @@ explicit_controlled_dagger_call.check()
 
 
 
-When a flag is declared on top of a function, Guppy verifies the function body ensuring that it adheres to the constraints imposed by the flag.
+When a flag is declared on a function, Guppy verifies the function body, ensuring that it adheres to the constraints imposed by the flag.
 
 
 ```{code-cell} ipython3
@@ -567,7 +618,7 @@ rotation_with_helper.check()
 
 ### Function flags with compile-time functions
 
-Function flags can be used also with [`guppy.comptime` functions](comptime.md). Here since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
+Function flags can also be used with [`guppy.comptime` functions](comptime.md). Here, since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
 
 ```{code-cell} ipython3
 @guppy.comptime(unitary=True)
@@ -603,7 +654,7 @@ allocating_comptime_function.compile()
 
 ### Conjugation pattern with functions
 
-Now we can recall the [previous example](#conjugation-box-with-pauli-gadget) using functions. 
+Now we can revisit the [previous example](#conjugation-box-with-pauli-gadget) using functions. 
 
 ```{code-cell} ipython3
 @guppy(unitary=True)
