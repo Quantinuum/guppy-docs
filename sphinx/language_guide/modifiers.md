@@ -358,7 +358,7 @@ $$
 
 The first part computes a basis change, `A` performs the action, and the final part uncomputes the basis change. This is a conjugation box.
 
-For a controlled conjugation box, only the central action needs to be controlled:
+For a controlled conjugation, only the central action $A$ needs to be controlled:
 
 $$
 C[U] = (I \otimes V)\, C[A]\, (I \otimes V^\dagger).
