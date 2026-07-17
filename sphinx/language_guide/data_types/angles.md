@@ -6,7 +6,9 @@ kernelspec:
 
 # Angles
 
-Guppy has a dedicated [`angle`](../../api/generated/guppylang.std.angles.html) type. This represents a rotation by a number of half-turns, where a half-turn is equivalent to $\pi$ radians. For example, `angle(1/2)` is equivalent to $\pi/2$. The built-in constant `pi` equals `angle(1)`, so it is useful for converting between angles and radians, as performing arithmetic on it also results in an angle.
+Guppy has a dedicated [`angle`](../../api/generated/guppylang.std.angles.html) type. It allows exact representation of angles for gates in the Clifford hierarchy, which can be useful for optimization.
+
+An angle represents a rotation by a number of half-turns, where a half-turn is equivalent to $\pi$ radians. For example, `angle(1/2)` is equivalent to $\pi/2$. The built-in constant `pi` equals `angle(1)`, so it is useful for converting between angles and radians, as performing arithmetic on it also results in an angle.
 
 ```{code-cell} ipython3
 from guppylang import guppy
