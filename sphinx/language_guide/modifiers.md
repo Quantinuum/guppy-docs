@@ -690,7 +690,6 @@ def controlled_pauli_zzyx_with_functions(
 controlled_pauli_zzyx_with_functions.check()
 ```
 
-
 ## A complete example: Grover search
 
 This Grover search marks $\ket{101}$ in a three-qubit register. The loop-containing helpers are compile-time unitary functions, so they can be used inside dagger blocks.
@@ -761,6 +760,154 @@ def grover_101() -> None:
     output("result", array(measure(q0).read(), measure(q1).read(), measure(target).read()))
 
 grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
+```
+
+
+## Higher-order functions
+
+We can use modifiers also with higher-order functions. Higher-order functions are functions that take other functions as arguments. The modifier applies to the body of the higher-order function, so it can be used to control or dagger the function argument.
+To be able to modify the function argument, we need special function types that ensure that the function argument can be modified. These types are `Controllable`, `Daggerable`, and `Unitary`. They describe functions that can be called in a control block, a dagger block, or both, respectively.
+This lets the type checker verify the required capability when the function is passed.
+
+
+```{code-cell} ipython3
+from guppylang.std.builtins import Controllable, Daggerable, Unitary
+
+@guppy
+def apply_controlled(op: Controllable[[qubit], None], c: qubit, q: qubit) -> None:
+    with control(c):
+        op(q)
+
+@guppy
+def apply_dagger(op: Daggerable[[qubit], None], q: qubit) -> None:
+    with dagger:
+        op(q)
+
+@guppy
+def apply_controlled_dagger(op: Unitary[[qubit], None], c: qubit, q: qubit) -> None:
+    with control(c), dagger:
+        op(q)
+
+@guppy(controllable=True)
+def controllable_x(q: qubit) -> None:
+    x(q)
+
+@guppy(daggerable=True)
+def daggerable_s(q: qubit) -> None:
+    s(q)
+
+@guppy(unitary=True)
+def unitary_h(q: qubit) -> None:
+    h(q)
+
+@guppy
+def use_modifiable_functions(c: qubit, q: qubit) -> None:
+    apply_controlled(controllable_x, c, q)
+    apply_dagger(daggerable_s, q)
+    apply_controlled_dagger(unitary_h, c, q)
+
+use_modifiable_functions.check()
+```
+
+The higher-order function itself can be called inside a modifier block. It must declare the capability required by that block; its function argument then carries the same requirement.
+
+```{code-cell} ipython3
+@guppy(unitary=True)
+def apply_unitary(op: Unitary[[qubit], None], q: qubit) -> None:
+    op(q)
+
+@guppy
+def modify_higher_order_call(c: qubit, q: qubit) -> None:
+    with control(c), dagger:
+        apply_unitary(unitary_h, q)
+
+modify_higher_order_call.check()
+```
+
+The annotation is checked at the call site. A function with insufficient capabilities is rejected:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy(daggerable=True)
+def only_daggerable(q: qubit) -> None:
+    s(q)
+
+@guppy
+def need_controllable(c: qubit, q: qubit) -> None:
+    apply_controlled(only_daggerable, c, q)
+
+need_controllable.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy(controllable=True)
+def only_controllable(q: qubit) -> None:
+    x(q)
+
+@guppy
+def need_daggerable(q: qubit) -> None:
+    apply_dagger(only_controllable, q)
+
+need_daggerable.check()
+```
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy(daggerable=True)
+def not_unitary(q: qubit) -> None:
+    s(q)
+
+@guppy
+def need_unitary(c: qubit, q: qubit) -> None:
+    apply_controlled_dagger(not_unitary, c, q)
+
+need_unitary.check()
+```
+
+
+
+### Grover search with higher-order functions
+
+The oracle can be supplied as a higher-order argument. Declaring it as `Unitary` ensures that every oracle used by the search has the capabilities needed by a Grover iteration.
+
+```{code-cell} ipython3
+@guppy(unitary=True)
+def grover_step_with_oracle[n: nat](
+    oracle: Unitary[[array[qubit, n], qubit], None],
+    controllers: array[qubit, n],
+    target: qubit,
+) -> None:
+    oracle(controllers, target)
+    diffuse(controllers, target)
+
+@guppy.comptime
+def grover_with_oracle(
+    oracle: Unitary[[array[qubit, 2], qubit], None],
+) -> None:
+    controllers = array(qubit(), qubit())
+    target = qubit()
+    apply_hadamards(controllers)
+    h(target)
+
+    iterations = round(math.pi * math.sqrt(2 ** (len(controllers) + 1)) / 4)
+    for _ in range(iterations):
+        grover_step_with_oracle(oracle, controllers, target)
+
+    q0, q1 = controllers
+    output("result", array(measure(q0).read(), measure(q1).read(), measure(target).read()))
+
+@guppy
+def run_grover_101() -> None:
+    grover_with_oracle(mark_10_01)
+
+run_grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
 ```
 
 ## Loading from pytket
