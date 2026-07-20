@@ -216,7 +216,31 @@ def generic_ladder[k: nat](qs: array[qubit, k]) -> None:
 
 The input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
 
-Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time. However we can call `generic_ladder` inside another function with a concrete `k` value. 
+Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+generic_ladder.compile_function()
+```
+
+ However we can call `generic_ladder` inside another function with a concrete `k` value. 
+
+
+```{code-cell} ipython3
+from guppylang.std.quantum import discard_array
+
+@guppy
+def main() -> None:
+    qs = array(qubit() for _ in range(7))
+    # Invoke generic_ladder on an array of seven qubits (k=7).
+    generic_ladder(qs)
+    discard_array(qs)
+
+main.compile();
+```
+
 
 ### What can and cannot happen at comptime
 
