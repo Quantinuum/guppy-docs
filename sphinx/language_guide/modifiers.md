@@ -13,29 +13,29 @@ The modifier changes the underlying gates. For example, controlling a block adds
 
 ## Syntax
 
-Use modifiers in a `with` statement.
+We can make use of modifiers inside a context manager using the `with` keyword.
 
-Start with the simplest form: a single modifier on a single operation.
+Let’s start with a simple example of a controlled single-qubit operation. We will realize this with the `control` modifier. 
 
 ```{code-cell} ipython3
-from guppylang import guppy
+from guppylang import guppy, array
 from guppylang.std.builtins import control, output
-from guppylang.std.quantum import qubit, x, h, measure
+from guppylang.std.quantum import qubit, h, measure
 
 @guppy
-def controlled_x() -> None:
+def controlled_h() -> None:
     c = qubit()
     q = qubit()
     h(q)
     with control(c):
-        x(q)
-    bit_c =measure(c)
+        h(q)
+    bit_c = measure(c)
     bit_q = measure(q)
     output("result", array(bit_c.read(), bit_q.read()))
 
-controlled_x.emulator(n_qubits=2).with_shots(100).run().collated_counts()
+controlled_h.emulator(n_qubits=2).with_shots(100).run().collated_counts()
 ```
-Here we can observe that the `x` operation is applied only when the control qubit `c` is in the $\ket{1}$ state.
+Here we can observe that the `h` operation is applied only when the control qubit `c` is in the $\ket{1}$ state.
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import output
@@ -70,7 +70,8 @@ def controlled_inverse(c: qubit, q: qubit) -> None:
 controlled_inverse.check()
 ```
 
-Here we take the S gate and modify it with control and dagger. This gate has a known form of control and daggering, and the operations are compatible. Therefore, when we check the program (compile), the code passes. When applied, this function acts as a C-S^\dag gate
+Here we take the $S$ gate and modify it with control and dagger. The controlled and daggered version of the gate is synthetised by the compiler at compilation time, in fact since the gate is a unitary operation we can always produced its controlled-daggered version.
+When applied, this function acts as a $CS^\dagger$ gate
 
 ### Modifiers and variable scope
 
@@ -300,10 +301,16 @@ invert_two_gates.check()
 
 The resulting quantum operations are equivalent to:
 
-```qasm
+```
 sdg q;
 h q;
 ```
+
+<!-- 
+TODO: till more classical op are allowed inside dagger blocks, we 
+do not need this in docs
+
+see (https://github.com/Quantinuum/guppy-docs/issues/194)
 
 Classical operations remain in order even though the quantum operations are reversed:
 
@@ -322,15 +329,16 @@ def invert_rotations(q: qubit) -> None:
 
 invert_rotations.check()
 ```
+<!--  ADD A comment here -->
 
-```qasm
+<!-- ```
 a = 4;
 theta = 1 / a;
 a /= 2;
 phi = 1 / a;
 rz(-phi) q;
 rx(-theta) q;
-```
+``` -->
 
 ### Forbidden operations in dagger blocks
 
@@ -403,7 +411,7 @@ Push control c0:     ctrl(2) @ sdg c0, c1, q;
 
 
 
-### Conjugation pattern
+<!--  Separate page -->
 
 Many unitaries have a compute--action--uncompute form:
 
@@ -411,9 +419,11 @@ $$
 U = V A V^\dagger.
 $$
 
-The first part computes a basis change, `A` performs the action, and the final part uncomputes the basis change. This is a conjugation box.
+The first part computes a basis change, `A` performs the action, and the final part uncomputes the basis change. This is a conjugation pattern.
+
 
 For a controlled conjugation, only the central action $A$ needs to be controlled:
+This avoids controlling every operation in $V$ and can substantially reduce the number of controlled, entangling gates.  
 
 $$
 C[U] = (I \otimes V)\, C[A]\, (I \otimes V^\dagger).
@@ -438,7 +448,7 @@ def controlled_conjugation(c: qubit, q: qubit) -> None:
 controlled_conjugation.check()
 ```
 
-#### Conjugation box with Pauli gadget
+#### Conjugation pattern with Pauli exponential  
 
 A Pauli gadget for $P = Z \otimes Z \otimes Y \otimes X$ has this form: basis changes and a CNOT parity network compute $V$, a single `rz` is the action, and the dagger block uncomputes $V^\dagger$. The control is needed only for the central rotation.
 
@@ -480,7 +490,6 @@ controlled_pauli_zzyx.check()
 ## Function flags
 
 For a control block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
-
 
 ```{code-cell} ipython3
 from guppylang.std.quantum import measure
@@ -623,6 +632,7 @@ rotation_with_helper.check()
 
 Function flags can also be used with [`guppy.comptime` functions](comptime.md). Here, since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
 
+<!--  Say that this is possible only thank to comptime -->
 ```{code-cell} ipython3
 @guppy.comptime(unitary=True)
 def choose_gate(q: qubit, flag: bool) -> None:
@@ -657,7 +667,7 @@ allocating_comptime_function.compile()
 
 ### Conjugation pattern with functions
 
-Now we can revisit the [previous example](#conjugation-box-with-pauli-gadget) using functions. 
+Now we can revisit the [previous example](#conjugation-pattern-with-pauli-exponential) using functions. 
 
 ```{code-cell} ipython3
 @guppy(unitary=True)
