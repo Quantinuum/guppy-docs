@@ -204,6 +204,44 @@ ladder.compile_function();
 As we can see, the ``print`` statement is executed at compile-time.
 We get 9 printed lines, highlighting that the ``for`` loop is compile-time evaluated as well.
 
+With Guppy v1.0 and above, we can use generic variables in the type signatures of generic functions. Let's generalize the `ladder` function defined above to apply a chain of `cx` gates to a qubit array of variable size.
+
+```{code-cell} ipython3
+@guppy.comptime
+def generic_ladder[k: nat](qs: array[qubit, k]) -> None:
+    for q1, q2 in zip(qs[1:], qs[:-1]):
+        print("Applying CX")
+        cx(q1, q2)
+```
+
+The input to the `ladder` function is of type `array[qubit, k]` so this comptime function is generic over the number of qubits.
+
+Note that we cannot compile the `generic_ladder` function directly as the value of `k` is unknown at compile time.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+generic_ladder.compile_function()
+```
+
+ However we can call `generic_ladder` inside another function with a concrete `k` value. 
+
+
+```{code-cell} ipython3
+from guppylang.std.quantum import discard_array
+
+@guppy
+def main() -> None:
+    qs = array(qubit() for _ in range(7))
+    # Invoke generic_ladder on an array of seven qubits (k=7).
+    generic_ladder(qs)
+    discard_array(qs)
+
+main.compile();
+```
+
+
 ### What can and cannot happen at comptime
 
 Note that not *everything* inside ``comptime`` functions can happen at compile-time.
@@ -281,48 +319,7 @@ dynamic_branch.compile_function();  # Compilation fails
 
 This kind of dynamic branching is only possible in regular Guppy functions, not in a ``comptime`` context.
 
-### Generalizing comptime functions
-
-Note that Guppy comptime functions cannot yet be used in conjunction with [generic type variables](static.md#generics). Consider the following generic version of the `ladder` comptime function above.
-
-
-```{code-cell} ipython3
----
-tags: [raises-exception]
----
-
-N_QB = guppy.nat_var("n_qb")
-
-@guppy.comptime
-def generic_ladder(qs: array[qubit, N_QB]) -> None:
-    for q1, q2 in zip(qs[1:], qs[:-1]):
-        print("Applying CX")
-        cx(q1, q2)
-    return ladder
-
-generic_ladder.compile_function();  # Compilation fails
-```
-
-There is however a workaround for this particular issue. If we want to generalize this comptime `ladder` function with a variable number of qubits we can do this we can do this with metaprogramming. We can define a Python function which takes an integer argument and returns a instance of the comptime function for that integer.
-
-```{code-cell} ipython3
-from guppylang.defs import GuppyFunctionDefinition
-
-def get_comptime_ladder_function(n_qubits: int) -> GuppyFunctionDefinition:
-    @guppy.comptime
-    def ladder(qs: array[qubit, comptime(n_qubits)]) -> None:
-        for q1, q2 in zip(qs[1:], qs[:-1]):
-            print("Applying CX")
-            cx(q1, q2)
-    return ladder
-
-four_qubit_ladder = get_comptime_ladder_function(n_qubits=4)
-four_qubit_ladder.compile_function();
-```
-
-Note how the input to the `ladder` function is of type `array[qubit, comptime(n_qubits)]` so we can create this function for any integer number of qubits.
-
-
+  
 ### Arrays and lists
 
 Arrays and regular Python lists can be used interchangeably inside ``comptime`` functions since the size of ``comptime`` lists is statically known.
