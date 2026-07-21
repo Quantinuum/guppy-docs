@@ -111,8 +111,6 @@ loop_in_dagger.check()
 
 They also cannot perform observable classical effects such as `output`, `panic`, or `exit`: reversing the quantum operations must not change when those effects occur.
 
-<!-- This is not raising an error even if it should -->
-
 ```{code-cell} ipython3
 ---
 tags: [raises-exception]
@@ -120,9 +118,9 @@ tags: [raises-exception]
 from guppylang.std.builtins import output
 
 @guppy
-def output_in_dagger(q: qubit) -> None:
+def output_in_dagger(value: bool) -> None:
     with dagger:
-        output("value", True)
+        output("value", value)
 
 output_in_dagger.check()
 ```
@@ -158,4 +156,3 @@ Push control c0:     ctrl(2) @ sdg c0, c1, q;
 - [Control](control.md) — add a control qubit to a block of operations.
 - [Function flags](functions.md) — apply modifiers to whole functions and use them as higher-order arguments.
 - [Examples](example.md) — worked examples including conjugation patterns and Grover search.
-

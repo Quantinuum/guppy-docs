@@ -58,8 +58,8 @@ A Pauli gadget for $P = Z \otimes Z \otimes Y \otimes X$ has this form: basis ch
 
 ```{code-cell} ipython3
 @guppy(unitary=True)
-def compute_zzyx_parity(qz0: qubit, qz1: qubit, qy: qubit, qx: qubit) -> None:
-    rx(qy, angle(1 / 2))
+def compute_zzyx_parity(qz0: qubit, qz1: qubit, qy: qubit, qx: qubit, a: angle) -> None:
+    rx(qy, a)
     h(qx)
     cx(qz0, qx)
     cx(qz1, qx)
@@ -78,11 +78,12 @@ def controlled_pauli_zzyx_with_functions(
     qx: qubit,
     theta: angle,
 ) -> None:
-    compute_zzyx_parity(qz0, qz1, qy, qx)
+    a = angle(1 / 2)
+    compute_zzyx_parity(qz0, qz1, qy, qx, a)
     with control(c):
         pauli_action(qx, theta)
     with dagger:
-        compute_zzyx_parity(qz0, qz1, qy, qx)
+        compute_zzyx_parity(qz0, qz1, qy, qx, a)
 
 controlled_pauli_zzyx_with_functions.check()
 ```
