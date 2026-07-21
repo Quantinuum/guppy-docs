@@ -299,6 +299,149 @@ def main() -> None:
 main.check() # Check succeeds :) 
 ```
 
+
+## Advanced Topics
+
+### Borrowing from arrays
+
+Given an array of non-copyable values, Guppy allows us to index into the array to temporarily borrow elements:
+
+```{code-cell} ipython3
+from guppylang.std.builtins import array
+
+@guppy
+def apply_subscript(qs: array[qubit, 10], i: int) -> None:
+    cx(qs[0], qs[i])
+
+apply_subscript.check()
+```
+
+The Guppy compiler accepts this function, however, the ``cx`` call is only valid if the value of ``i`` is not equal to zero.
+Otherwise, the call would borrow the same qubit twice which would violate the rule that borrows must be unique.
+Since this cannot be checked at compile-time, Guppy inserts a *runtime* check that will panic if we attempt to borrow the same element multiple times:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.quantum import discard_array
+from guppylang.emulator import EmulatorError
+
+@guppy
+def main() -> None:
+    qs = array(qubit() for _ in range(10))
+    apply_subscript(qs, 0)
+    discard_array(qs)
+
+try:
+    main.emulator(n_qubits=10).stabilizer_sim().run()
+except EmulatorError as err:
+    print(err)
+```
+
+Furthermore, Guppy only allows the subscript notation for borrowing, but not to move or consume values.
+For example, we are not allowed to measure a qubit that was subscripted out of an array:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def measure_subscript(qs: array[qubit, 10]) -> None:
+    measure(qs[0])
+
+measure_subscript.check()
+```
+
+To obtain ownership of an array element, we should use the [``array.take``](guppylang.std.builtins.array.take) or [``array.try_take``](guppylang.std.builtins.array.try_take) methods instead of the subscript syntax.
+See TODO for how to manipulate arrays using ``take``.
+
+
+### Swapping of borrowed values via ``mem_swap``
+
+Since subscripting only borrows a given element, we also cannot use it to swap elements of an array:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def swap(qs: array[qubit, 10]) -> None:
+    qs[0], qs[1] = qs[1], qs[0]
+
+swap.check()
+```
+
+We could get around this by using [``array.take``](guppylang.std.builtins.array.take) and [``array.put``](guppylang.std.builtins.array.put), but Guppy provides a dedicated [``mem_swap``](guppylang.std.mem.mem_swap) function that can be used for this purpose.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.mem import mem_swap
+
+@guppy
+def swap(qs: array[qubit, 10]) -> None:
+    mem_swap(qs[0], qs[1])
+
+swap.check()
+```
+
+``mem_swap`` is very powerful since it can be used to swap *any* two borrowed values, even function arguments.
+For example, we can use it to implement our own version of the [``measure_and_reset``](guppylang.std.qsystem.helios.measure_and_reset) function by swapping a borrowed qubit with a fresh one:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+from guppylang.std.quantum import Measurement
+
+@guppy
+def my_measure_and_reset(q: qubit) -> Measurement:
+    # Allocate a fresh qubit that we have ownership of
+    new = qubit()
+    # Swap `q` with the fresh qubit
+    mem_swap(q, new)
+    # Now, `new` holds the qubit that was previously in `q`,
+    # but we still have ownership so we are allowed to measure it
+    return measure(new)
+
+my_measure_and_reset.check()
+```
+
+The downside of this implementation is that it requires allocating an additional qubit, which could potential fail if none are available.
+The next section shows an alternative method to achieve the same goal without this downside.
+
+
+### Temporary ownership through ``with_owned``
+
+In some cases, we might find ourselves in situations where we would like to obtain temporary ownership of a value that we have only borrowed.
+This can be achieved vie the [``with_owned``](guppylang.std.mem.with_owned) function in the standard library.
+A call ``with_owned(val, f)`` runs the function ``f`` where the borrowed argument ``val`` is temporarily promoted to an owned one.
+The function ``f`` should return two values:
+1. A value of arbitrary type that will be returned from ``with_owned``.
+2. A value of type same type as ``val`` that is written back into ``val``.
+   This can either be the original passed value, or a new value of the same type that was created inside ``f``.
+
+For example, using ``with_owned``, we can rewrite the ``my_measure_and_reset`` function to be infallible:
+
+```{code-cell} ipython3
+from guppylang.std.mem import with_owned
+
+@guppy
+def f(q: qubit @owned) -> tuple[Measurement, qubit]:
+    m = measure(q)
+    q = qubit()  # Allocation after measurement is safe
+    return m, q
+
+@guppy
+def my_measure_and_reset(q: qubit) -> Measurement:
+    return with_owned(q, f)
+
+my_measure_and_reset.check()
+``` 
+
+
 ## Summary of ownership rules
 
 In summary, Guppy enforces the following ownership rules at compile time.
