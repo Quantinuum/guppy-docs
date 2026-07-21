@@ -13,7 +13,7 @@ If you're brand new to Guppy, check out our [getting started guide](../getting_s
 
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
 data_types/types_index.md
 functions.md
