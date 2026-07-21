@@ -39,7 +39,7 @@ controlled_h.emulator(n_qubits=2).with_shots(100).run().collated_counts()
 Here we can observe that the `h` operation is applied only when the control qubit `c` is in the $\ket{1}$ state.
 
 ```{code-cell} ipython3
-from guppylang.std.builtins import output
+from guppylang.std.builtins import dagger, output
 from guppylang.std.quantum import angle, h, measure, qubit, rx
 
 @guppy
@@ -61,6 +61,7 @@ Multiple modifiers may also be combined or nested.
 
 ```{code-cell} ipython3
 from guppylang.std.quantum import s, qubit
+from guppylang.std.builtins import control, dagger
 
 @guppy
 def controlled_inverse(c: qubit, q: qubit) -> None:
@@ -71,8 +72,8 @@ def controlled_inverse(c: qubit, q: qubit) -> None:
 controlled_inverse.check()
 ```
 
-Here we take the $S$ gate and modify it with [control](control.md) and [dagger](dagger.md). The controlled and daggered version of the gate is synthetised by the compiler at compilation time, in fact since the gate is a unitary operation we can always produced its controlled-daggered version.
-When applied, this function acts as a $CS^\dagger$ gate
+Here we take the $S$ gate and modify it with [control](control.md) and [dagger](dagger.md). The controlled and daggered version of the gate is synthetised by the compiler at compilation time, in fact since the gate is a unitary operation we can always produce its controlled-daggered version.
+When applied, this function acts as a $CS^\dagger$ gate.
 
 ### Modifiers and variable scope
 
@@ -120,7 +121,7 @@ local_assignment.check()
 ```
 The reason for this restriction is that the assignment inside a controlled block is not controlled, so the denominator variable is always defined. Thus having such a variable available outside the block would lead to unexpected results, since it would be defined even if the control qubit is in the $\ket{0}$ state.
 
-For a similar reason, in the next example, `outer_var` is not available outside the `with dagger:` block, even though it was assigned in the outer scope. The assignment inside the block in fact overwrites the scope of the outer variable.
+For a similar reason, in the next example, `outer_var` is not available outside the `with control:` block, even though it was assigned in the outer scope. The assignment inside the block in fact overwrites the scope of the outer variable.
 
 ```{code-cell} ipython3
 ---
