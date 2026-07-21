@@ -131,3 +131,11 @@ def allocation_in_control(c: qubit) -> None:
 
 allocation_in_control.check()
 ```
+
+## Next steps
+
+- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
+- [Dagger](dagger.md) — reverse a block of operations and replace each gate with its inverse.
+- [Function flags](functions.md) — apply modifiers to whole functions and use them as higher-order arguments.
+- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
+

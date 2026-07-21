@@ -26,7 +26,7 @@ sx_dg.check()
 
 ### Classical assignments in dagger blocks
 
-Similar to the control modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
+Similar to the [control](control.md) modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
 
 ```{code-cell} ipython3
 @guppy
@@ -81,7 +81,7 @@ rx(-theta) q;
 
 ### Forbidden operations in dagger blocks
 
-Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. They also cannot perform observable classical effects such as `output`, `panic`, or `exit`: reversing the quantum operations must not change when those effects occur.
+Dagger blocks have the same qubit-operation restrictions as [control](control.md#forbidden-operations) blocks and cannot contain control flow.
 
 ```{code-cell} ipython3
 ---
@@ -108,6 +108,10 @@ def loop_in_dagger(q: qubit) -> None:
 
 loop_in_dagger.check()
 ```
+
+They also cannot perform observable classical effects such as `output`, `panic`, or `exit`: reversing the quantum operations must not change when those effects occur.
+
+<!-- This is not raising an error even if it should -->
 
 ```{code-cell} ipython3
 ---
@@ -147,4 +151,11 @@ Resolve dagger:      ctrl @ sdg c1, q;      ctrl @ h c1, q;
 Push control c0:     ctrl(2) @ sdg c0, c1, q;
                      ctrl(2) @ h c0, c1, q;
 ```
+
+## Next steps
+
+- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
+- [Control](control.md) — add a control qubit to a block of operations.
+- [Function flags](functions.md) — apply modifiers to whole functions and use them as higher-order arguments.
+- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
 

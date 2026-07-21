@@ -6,7 +6,7 @@ kernelspec:
 
 ## Function flags
 
-For a control block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
+For a [control](control.md) block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
 
 ```{code-cell} ipython3
 import math
@@ -34,7 +34,7 @@ controlled_classical_call.check()
 
 
 
-This is different for dagger blocks: since they change the order of quantum operations, every called function, including a classical one, must be `daggerable=True`; this prevents a function from silently allocating or measuring a qubit. 
+This is different for [dagger](dagger.md) blocks: since they change the order of quantum operations, every called function, including a classical one, must be `daggerable=True`; this prevents a function from silently allocating or measuring a qubit. 
 
 For example, an unflagged classical call is rejected in a dagger block:
 
@@ -43,13 +43,15 @@ For example, an unflagged classical call is rejected in a dagger block:
 tags: [raises-exception]
 ---
 @guppy
-def classical_helper(n: int) -> int:
-    return n * 2
+def classical_helper() -> int:
+    return 0
 
 @guppy
-def unflagged_call_in_dagger(q: qubit) -> None:
+def unflagged_call_in_dagger(qs: array[qubit, 2]) -> None:
+    a = angle(1 / 4)
     with dagger:
-        rx(q, angle(1 / classical_helper(2)))
+        i = classical_helper()
+        rx(qs[i], a)
 
 unflagged_call_in_dagger.check()
 ```
@@ -58,13 +60,15 @@ Marking it `daggerable=True` makes the call valid:
 
 ```{code-cell} ipython3
 @guppy(daggerable=True)
-def daggerable_classical_helper(n: int) -> int:
-    return n * 2
+def daggerable_classical_helper() -> int:
+    return 0
 
 @guppy
-def flagged_call_in_dagger(q: qubit) -> None:
+def flagged_call_in_dagger(qs: array[qubit, 2]) -> None:
+    a = angle(1 / 4)
     with dagger:
-        rx(q, angle(1 / daggerable_classical_helper(2)))
+        i = daggerable_classical_helper()
+        rx(qs[i], a)
 
 flagged_call_in_dagger.check()
 ```
@@ -133,20 +137,20 @@ flagged_loop.check()
 ```
 
 
-
 The `unitary` flag also requires dagger constraints, so every classical function called inside a `unitary` function must be at least `daggerable=True`.
 
 
 ```{code-cell} ipython3
 @guppy(daggerable=True)
-def rotation_denominator(n: int) -> int:
-    return n * 2
+def get_index() -> int:
+    return 0
 
 @guppy(unitary=True)
-def rotation_with_helper(q: qubit) -> None:
-    rx(q, angle(1 / rotation_denominator(2)))
+def unitary_fun(qs: array[qubit, 2], a: angle) -> None:
+    i = get_index()
+    rx(qs[i], a)
 
-rotation_with_helper.check()
+unitary_fun.check()
 ```
 
 ### Function flags with compile-time functions
@@ -189,7 +193,7 @@ allocating_comptime_function.compile()
 ## Higher-order functions
 
 We can use modifiers also with higher-order functions. Higher-order functions are functions that take other functions as arguments. The modifier applies to the body of the higher-order function, so it can be used to control or dagger the function argument.
-To be able to modify the function argument, we need special function types that ensure that the function argument can be modified. These types are `Controllable`, `Daggerable`, and `Unitary`. They describe functions that can be called in a control block, a dagger block, or both, respectively.
+To be able to modify the function argument, we need special function types that ensure that the function argument can be modified. These types are `Controllable`, `Daggerable`, and `Unitary`. They describe functions that can be called in a [control](control.md) block, a [dagger](dagger.md) block, or both, respectively.
 This lets the type checker verify the required capability when the function is passed.
 
 
@@ -296,9 +300,10 @@ need_unitary.check()
 
 
 
-### Grover search with higher-order functions
+<!-- ### Grover search with higher-order functions
 
-The oracle can be supplied as a higher-order argument. Declaring it as `Unitary` ensures that every oracle used by the search has the capabilities needed by a Grover iteration.
+<!-- todo: recall here the  -->
+<!-- The oracle can be supplied as a higher-order argument. Declaring it as `Unitary` ensures that every oracle used by the search has the capabilities needed by a Grover iteration.
 
 ```{code-cell} ipython3
 ---
@@ -376,7 +381,7 @@ def run_grover_101() -> None:
     grover_with_oracle(mark_10_01)
 
 run_grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
-```
+``` -->
 
 ## Loading from pytket
 
@@ -417,3 +422,11 @@ def modify_measured_circuit(c: qubit, q: qubit) -> None:
 
 modify_measured_circuit.check()
 ```
+
+## Next steps
+
+- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
+- [Control](control.md) — add a control qubit to a block of operations.
+- [Dagger](dagger.md) — reverse a block of operations and replace each gate with its inverse.
+- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
+

@@ -17,7 +17,7 @@ We can make use of modifiers inside a context manager using the `with` keyword.
 
 Let’s start with a simple example of a controlled single-qubit operation. We will realize this with the `control` modifier. 
 
-```{code-cell} ipython3
+```
 from guppylang import guppy, array
 from guppylang.std.builtins import control, output
 from guppylang.std.quantum import qubit, h, measure
@@ -37,7 +37,7 @@ controlled_h.emulator(n_qubits=2).with_shots(100).run().collated_counts()
 ```
 Here we can observe that the `h` operation is applied only when the control qubit `c` is in the $\ket{1}$ state.
 
-```{code-cell} ipython3
+```
 from guppylang.std.builtins import output
 from guppylang.std.quantum import angle, h, measure, qubit, rx
 
@@ -58,7 +58,7 @@ Since we are applying a rotation followed by its inverse, the qubit is always me
 
 Multiple modifiers may also be combined or nested.
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import s, qubit
 
 @guppy
@@ -77,19 +77,19 @@ When applied, this function acts as a $CS^\dagger$ gate
 
 The body has access to variables from its enclosing scope, but it cannot take ownership of them. For instance, the following program is rejected:
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
 from guppylang.std.builtins import owned
 from guppylang.std.quantum import discard
 
-@guppy.declare(daggerable=True)
+@guppy.declare(controllable=True)
 def consume(q: qubit @ owned) -> None: ...
 
 @guppy
-def cannot_take_ownership(q: qubit) -> None:
-    with dagger:
+def cannot_take_ownership(c: qubit, q: qubit) -> None:
+    with control(c):
         consume(q)
 
 cannot_take_ownership.check()
@@ -99,7 +99,7 @@ This restriction prevents a modifier from discarding a qubit: daggering or contr
 Moreover, assignments in a modifier block are local to that block, including assignments that reuse an outer name. 
 In the following example, `denominator` is not available outside the `with dagger:` block.
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -121,7 +121,7 @@ The reason for this restriction is that the assignment inside a controlled block
 
 For a similar reason, in the next example, `outer_var` is not available outside the `with dagger:` block, even though it was assigned in the outer scope. The assignment inside the block in fact overwrites the scope of the outer variable.
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -153,7 +153,7 @@ $$
 You can pass individual qubits or an array of qubits. Array elements may also be controls.
 
 
-```{code-cell} ipython3
+```
 from guppylang import array
 from guppylang.std.quantum import x
 from guppylang.std.builtins import nat
@@ -185,7 +185,7 @@ cnx.check()
 
 When a controlled block contains classical control flow, the control is pushed to every quantum operation produced by the branch or loop. Evaluating the classical condition and loop bounds is not controlled. For instance, the following two programs are equivalent:
 
-```{code-cell} ipython3
+```
 @guppy
 def control_if(c: qubit, q: qubit, flag: bool) -> None:
     with control(c):
@@ -195,7 +195,7 @@ def control_if(c: qubit, q: qubit, flag: bool) -> None:
             x(q)
 control_if.check()
 ```
-```{code-cell} ipython3
+```
 @guppy
 def pushed_control_if(c: qubit, q: qubit, flag: bool) -> None:
     if flag:
@@ -210,7 +210,7 @@ pushed_control_if.check()
 
 The same applies to loops:
 
-```{code-cell} ipython3
+```
 @guppy
 def control_loop(c: qubit, q: qubit) -> None:
     with control(c):
@@ -231,7 +231,7 @@ pushed_control_loop.check()
 
 Classical assignments are ignored by the control modifier: no controlled operation is generated for them. Thus the following programs are equivalent.
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import angle, rx
 
 @guppy
@@ -254,7 +254,7 @@ pushed_control_assignment.check()
 
 Control blocks allow classical operations since they can be evaluated without affecting the quantum state. However, they cannot allocate, measure, reset, or discard qubits, since these operations have quantum effects, but they are not controllable.
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -271,7 +271,7 @@ allocation_in_control.check()
 
 `with dagger:` applies the inverse of its body. If the body performs $U_1$ followed by $U_2$, the dagger block performs $U_2^\dagger$ followed by $U_1^\dagger$.
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import s
 
 @guppy
@@ -289,7 +289,7 @@ sx_dg.check()
 
 Similar to the control modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
 
-```{code-cell} ipython3
+```
 @guppy
 def invert_two_gates(q: qubit) -> None:
     with dagger:
@@ -314,7 +314,7 @@ see (https://github.com/Quantinuum/guppy-docs/issues/194)
 
 Classical operations remain in order even though the quantum operations are reversed:
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import rz
 
 @guppy
@@ -344,7 +344,7 @@ rx(-theta) q;
 
 Dagger blocks have the same qubit-operation restrictions as control blocks and cannot contain control flow. They also cannot perform observable classical effects such as `output`, `panic`, or `exit`: reversing the quantum operations must not change when those effects occur.
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -357,7 +357,7 @@ def branch_in_dagger(q: qubit, flag: bool) -> None:
 branch_in_dagger.check()
 ```
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -370,7 +370,7 @@ def loop_in_dagger(q: qubit) -> None:
 loop_in_dagger.check()
 ```
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -387,7 +387,7 @@ output_in_dagger.check()
 
 Modifiers compose. This example is a doubly controlled inverse of `h` followed by `s`:
 
-```{code-cell} ipython3
+```
 @guppy
 def doubly_controlled_inverse(c0: qubit, c1: qubit, q: qubit) -> None:
     with control(c0):
@@ -431,7 +431,7 @@ $$
 
 This avoids controlling every operation in `V` and can substantially reduce the number of controlled, entangling gates.
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import rz
 
 @guppy
@@ -452,7 +452,7 @@ controlled_conjugation.check()
 
 A Pauli gadget for $P = Z \otimes Z \otimes Y \otimes X$ has this form: basis changes and a CNOT parity network compute $V$, a single `rz` is the action, and the dagger block uncomputes $V^\dagger$. The control is needed only for the central rotation.
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import angle, cx, rx
 
 @guppy
@@ -491,7 +491,7 @@ controlled_pauli_zzyx.check()
 
 For a control block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
 
-```{code-cell} ipython3
+```
 from guppylang.std.quantum import measure
 
 @guppy
@@ -517,7 +517,7 @@ This is different for dagger blocks: since they change the order of quantum oper
 
 For example, an unflagged classical call is rejected in a dagger block:
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -535,7 +535,7 @@ unflagged_call_in_dagger.check()
 
 Marking it `daggerable=True` makes the call valid:
 
-```{code-cell} ipython3
+```
 @guppy(daggerable=True)
 def daggerable_classical_helper(n: int) -> int:
     return n * 2
@@ -552,7 +552,7 @@ A call valid inside both `control` and `dagger` must be `unitary=True`.
 Declaring a function with `@guppy(unitary=True)` or with `@guppy(daggerable=True, controllable=True)` is equivalent.
 
 
-```{code-cell} ipython3
+```
 @guppy(unitary=True)
 def unitary_gate(q: qubit) -> None:
     h(q)
@@ -575,7 +575,7 @@ explicit_controlled_dagger_call.check()
 When a flag is declared on a function, Guppy verifies the function body, ensuring that it adheres to the constraints imposed by the flag.
 
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -587,7 +587,7 @@ def flagged_branch(q: qubit, flag: bool) -> None:
 flagged_branch.check()
 ```
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -599,7 +599,7 @@ def flagged_allocation() -> None:
 flagged_allocation.check()
 ```
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -616,7 +616,7 @@ flagged_loop.check()
 The `unitary` flag also requires dagger constraints, so every classical function called inside a `unitary` function must be at least `daggerable=True`.
 
 
-```{code-cell} ipython3
+```
 @guppy(daggerable=True)
 def rotation_denominator(n: int) -> int:
     return n * 2
@@ -633,7 +633,7 @@ rotation_with_helper.check()
 Function flags can also be used with [`guppy.comptime` functions](comptime.md). Here, since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
 
 <!--  Say that this is possible only thank to comptime -->
-```{code-cell} ipython3
+```
 @guppy.comptime(unitary=True)
 def choose_gate(q: qubit, flag: bool) -> None:
     if flag:
@@ -651,7 +651,7 @@ modified_comptime_call.check()
 
 Qubit allocation or measurement remains forbidden in a flagged compile-time function:
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -669,7 +669,7 @@ allocating_comptime_function.compile()
 
 Now we can revisit the [previous example](#conjugation-pattern-with-pauli-exponential) using functions. 
 
-```{code-cell} ipython3
+```
 @guppy(unitary=True)
 def compute_zzyx_parity(qz0: qubit, qz1: qubit, qy: qubit, qx: qubit) -> None:
     rx(qy, angle(1 / 2))
@@ -704,7 +704,7 @@ controlled_pauli_zzyx_with_functions.check()
 
 This Grover search marks $\ket{101}$ in a three-qubit register. The loop-containing helpers are compile-time unitary functions, so they can be used inside dagger blocks.
 
-```{code-cell} ipython3
+```
 import math
 
 from guppylang.std.builtins import array, control, dagger, nat, output
@@ -780,7 +780,7 @@ To be able to modify the function argument, we need special function types that 
 This lets the type checker verify the required capability when the function is passed.
 
 
-```{code-cell} ipython3
+```
 from guppylang.std.builtins import Controllable, Daggerable, Unitary
 
 @guppy
@@ -821,7 +821,7 @@ use_modifiable_functions.check()
 
 The higher-order function itself can be called inside a modifier block. It must declare the capability required by that block; its function argument then carries the same requirement.
 
-```{code-cell} ipython3
+```
 @guppy(unitary=True)
 def apply_unitary(op: Unitary[[qubit], None], q: qubit) -> None:
     op(q)
@@ -836,7 +836,7 @@ modify_higher_order_call.check()
 
 The annotation is checked at the call site. A function with insufficient capabilities is rejected:
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -851,7 +851,7 @@ def need_controllable(c: qubit, q: qubit) -> None:
 need_controllable.check()
 ```
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -866,7 +866,7 @@ def need_daggerable(q: qubit) -> None:
 need_daggerable.check()
 ```
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---
@@ -887,7 +887,7 @@ need_unitary.check()
 
 The oracle can be supplied as a higher-order argument. Declaring it as `Unitary` ensures that every oracle used by the search has the capabilities needed by a Grover iteration.
 
-```{code-cell} ipython3
+```
 @guppy(unitary=True)
 def grover_step_with_oracle[n: nat](
     oracle: Unitary[[array[qubit, n], qubit], None],
@@ -924,7 +924,7 @@ run_grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
 
 Loaded pytket circuits infer their modifier capabilities from their operations. A circuit containing only unitary gates is unitary, so it can be controlled and daggered. 
 
-```{code-cell} ipython3
+```
 from pytket import Circuit
 
 circuit = Circuit(1)
@@ -941,7 +941,7 @@ controlled_inverse_circuit.check()
 
 If the circuit contains measurements, resets, or discards, it is not unitary and cannot be controlled or daggered.
 
-```{code-cell} ipython3
+```
 ---
 tags: [raises-exception]
 ---

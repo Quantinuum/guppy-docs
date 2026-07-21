@@ -10,7 +10,7 @@ kernelspec:
 Modifiers transform a block of quantum operations.
 They automatically produce controlled and inverse versions of quantum operations. They apply to a single gate, a block containing many gates, or a function, so you can write an operation once and reuse its controlled or daggered form. Guppy generates the transformed operations, freeing you from defining and maintaining each variant by hand.
 
-The modifier changes the underlying gates. For example, controlling a block adds the control to every gate it produces; effectively, a function `f(q)` becomes a controlled operation `ctrl-f(c, q)` with an additional control-qubit input. A dagger block reverses the gate order and replaces each gate with its inverse.
+The modifier changes the underlying gates. For example, controlling a block adds the control to every gate it produces; effectively, a function `f(q)` becomes a controlled operation `ctrl-f(c, q)` with an additional control-qubit input. A [dagger](dagger.md) block reverses the gate order and replaces each gate with its inverse.
 
 ## Syntax
 
@@ -71,7 +71,7 @@ def controlled_inverse(c: qubit, q: qubit) -> None:
 controlled_inverse.check()
 ```
 
-Here we take the $S$ gate and modify it with control and dagger. The controlled and daggered version of the gate is synthetised by the compiler at compilation time, in fact since the gate is a unitary operation we can always produced its controlled-daggered version.
+Here we take the $S$ gate and modify it with [control](control.md) and [dagger](dagger.md). The controlled and daggered version of the gate is synthetised by the compiler at compilation time, in fact since the gate is a unitary operation we can always produced its controlled-daggered version.
 When applied, this function acts as a $CS^\dagger$ gate
 
 ### Modifiers and variable scope
@@ -85,7 +85,7 @@ tags: [raises-exception]
 from guppylang.std.builtins import owned
 from guppylang.std.quantum import discard
 
-@guppy.declare(daggerable=True)
+@guppy.declare(unitary=True)
 def consume(q: qubit @ owned) -> None: ...
 
 @guppy
@@ -98,7 +98,7 @@ cannot_take_ownership.check()
 This restriction prevents a modifier from discarding a qubit: daggering or controlling a discard operation in fact can lead to unexpected results.
 
 Moreover, assignments in a modifier block are local to that block, including assignments that reuse an outer name. 
-In the following example, `denominator` is not available outside the `with dagger:` block.
+In the following example, `denominator` is not available outside the `with control:` block.
 
 ```{code-cell} ipython3
 ---
@@ -107,9 +107,9 @@ tags: [raises-exception]
 from guppylang.std.quantum import angle, rx
 
 @guppy
-def local_assignment(q: qubit) -> None:
+def local_assignment(q: qubit, c: qubit) -> None:
     outer_var = 1
-    with dagger:
+    with control(c):
         denominator = 4
         outer_var = 2
         rx(q, angle(outer_var / denominator))
@@ -127,9 +127,9 @@ For a similar reason, in the next example, `outer_var` is not available outside 
 tags: [raises-exception]
 ---
 @guppy
-def local_assignment(q: qubit) -> None:
+def local_assignment(q: qubit, c: qubit) -> None:
     outer_var = 1
-    with dagger:
+    with control(c):
         denominator = 4
         outer_var = 2
         rx(q, angle(outer_var / denominator))
@@ -139,3 +139,11 @@ def local_assignment(q: qubit) -> None:
 local_assignment.check()
 ```
 
+## More in depth
+
+The following pages explore modifiers in more detail:
+
+- [Control](control.md) — the `control` modifier and its rules.
+- [Dagger](dagger.md) — the `dagger` modifier and its rules.
+- [Function flags](functions.md) — applying modifiers to whole functions and higher-order usage.
+- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
