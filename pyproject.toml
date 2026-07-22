@@ -23,7 +23,7 @@ dependencies = [
 prerelease = "allow"
 
 [tool.uv.sources]
-# guppylang = { git = "https://github.com/quantinuum/guppylang/", rev = "4561d49", subdirectory = "guppylang"}
+guppylang = { git = "https://github.com/quantinuum/guppylang/", rev = "2eadd459c9da4048c630150eae6e81c3282c5bf5", subdirectory = "guppylang" }
 # hugr = { git = "https://github.com/quantinuum/hugr.git", rev = "fe98ba1", subdirectory = "hugr-py" }
 # tket2 = { git = "https://github.com/quantinuum/tket2", subdirectory = "tket2-py", rev = "309879e" }
 
