@@ -25,31 +25,34 @@ Yes, to a limited extent. As mentioned in the [pytket migration guide](migration
 Here is a basic example where we import a Bell state circuit from qiskit using the [qiskit_to_tk](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/api.html#pytket.extensions.qiskit.qiskit_convert.qiskit_to_tk) converter. This conversion is from the [pytket-qiskit extension](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/) which is a separate PyPi package.
 
 ```{code-cell} ipython3
+from guppylang import guppy
+from guppylang.std.quantum import measure_array, collect_measurements
 from qiskit import QuantumCircuit
 from pytket.extensions.qiskit.qiskit_convert import qiskit_to_tk
 
-# Define a simple Bell state circuit
+# Define a simple Bell state circuit in Qiskit.
 qc = QuantumCircuit(2)
 qc.h(0)
 qc.cx(0, 1)
 
-# Convert qiskit to pytket
-pytket_circuit = qiskit_to_tk(qc)
+# Convert qiskit to pytket.
+pytket_circ = qiskit_to_tk(qc)
 
 
 # Register the pytket Circuit as a Guppy function.
 bell_func = guppy.load_pytket("circ_func", pytket_circ)
 
 
-# We can now use bell_func as a subroutine in a larger Guppy program
+# We can now use bell_func as a subroutine in a larger Guppy program.
 @guppy
 def main() -> None:
     qs = array(qubit() for _ in range(2))
     bell_func(qs)
-    result("c", measure_array(qs))
+    measurements = measure_array(qs)
+    output("c", collect_measurements(measurements))
 
 sim_result_bell_circuit = (
-    main.emulator(n_qubits=2).with_seed(4242).with_shots(n_shots).run()
+    main.emulator(n_qubits=2).with_seed(4242).with_shots(1000).run()
 )
 
 print(sim_result_bell_circuit.collated_counts())
