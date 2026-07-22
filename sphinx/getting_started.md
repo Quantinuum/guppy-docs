@@ -32,7 +32,7 @@ The source code for Guppy can be found in a public repository on [GitHub](https:
 
 Guppy programs can be executed on the [Selene](https://github.com/quantinuum/selene) emulator. As of the v0.21 release, Selene is now included with `guppylang` and powers the [guppylang.emulator](../sphinx/api/emulator.md) module under the hood.
 
-For users of Qiskit and other software tools, there is some limited conversion available to Guppy. This is done by first converting to a [pytket](https://docs.quantinuum.com/tket) circuit and then loading this circuit as a Guppy function with [guppy.load_pytket](https://docs.quantinuum.com/guppy/api/decorator.html#guppylang.decorator.guppy.load_pytket).
+For users of Qiskit and other software tools, there is some limited conversion available to Guppy. This is done by first converting to a [pytket](https://docs.quantinuum.com/tket) circuit and then loading this circuit as a Guppy function with [guppy.load_pytket](https://docs.quantinuum.com/guppy/api/decorator.html#guppylang.decorator.guppy.load_pytket). See the [FAQs section](faqs.md#can-i-use-guppy-in-conjunction-with-qiskit-or-other-quantum-computing-tools) for more information.
 
 ## Example: A simple circuit
 
