@@ -35,7 +35,7 @@ qc = QuantumCircuit(2)
 qc.h(0)
 qc.cx(0, 1)
 
-# Convert qiskit to pytket.
+# Convert Qiskit to pytket.
 pytket_circ = qiskit_to_tk(qc)
 
 
