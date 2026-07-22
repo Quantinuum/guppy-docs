@@ -22,7 +22,7 @@ evaluation, see more in the [language guide section](language_guide/comptime.md)
 
 Yes, to a limited extent. As mentioned in the [pytket migration guide](migration_guide.md) it is possible to load pytket circuits as Guppy functions using [guppy.load_pytket](https://docs.quantinuum.com/guppy/api/decorator.html#guppylang.decorator.guppy.load_pytket). Therefore, if a program can be converted to pytket, it will generally be possible to use as a Guppy function as well.
 
-Here is a basic example where we import a Bell state circuit from qiskit using the [qiskit_to_tk](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/api.html#pytket.extensions.qiskit.qiskit_convert.qiskit_to_tk) converter. This conversion is from the [pytket-qiskit extension](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/) which is a separate PyPi package.
+Here is a basic example where we import a Bell state circuit from Qiskit using the [qiskit_to_tk](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/api.html#pytket.extensions.qiskit.qiskit_convert.qiskit_to_tk) converter. This conversion is from the [pytket-qiskit extension](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/) which is a separate PyPI package.
 
 ```{code-cell} ipython3
 from guppylang import guppy
