@@ -12,6 +12,7 @@ dependencies = [
     "sphinx-tabs>=3.5.0",
     "sphinx-design>=0.6.1",
     "furo>=2024.8.6",
+    "sphinx<9",
     "myst-nb>=1.1.2",
     "sphinx-copybutton>=0.5.2",
     "sphinxcontrib-googleanalytics>=0.4",
