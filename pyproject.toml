@@ -10,8 +10,14 @@ dependencies = [
     "matplotlib>=3.9.2",
     "networkx>=3.4.2",
     "sphinx-tabs>=3.5.0",
-    "tket~=0.13.1",
-    "roman-numerals-py==4.0"
+    "sphinx-design>=0.6.1",
+    "furo>=2024.8.6",
+    "sphinx<9",
+    "myst-nb>=1.1.2",
+    "sphinx-copybutton>=0.5.2",
+    "sphinxcontrib-googleanalytics>=0.4",
+    "quantinuum-sphinx>=0.6.0",
+    "pytket-qiskit>=0.77.0",
 ]
 
 [tool.uv]
@@ -24,11 +30,4 @@ prerelease = "allow"
 
 [dependency-groups]
 dev = [{ include-group = "docs" }]
-docs = [
-    "furo>=2024.8.6",
-    "myst-nb>=1.1.2",
-    "sphinx-copybutton>=0.5.2",
-    "sphinx-design>=0.6.1",
-    "sphinxcontrib-googleanalytics>=0.4",
-    "quantinuum-sphinx>=0.6.0",
-]
+docs = []
