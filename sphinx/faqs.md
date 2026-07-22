@@ -26,7 +26,7 @@ Here is a basic example where we import a Bell state circuit from Qiskit using t
 
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.quantum import measure_array, collect_measurements
+from guppylang.std.quantum import measure_array
 from qiskit import QuantumCircuit
 from pytket.extensions.qiskit.qiskit_convert import qiskit_to_tk
 
@@ -48,8 +48,7 @@ bell_func = guppy.load_pytket("circ_func", pytket_circ)
 def main() -> None:
     qs = array(qubit() for _ in range(2))
     bell_func(qs)
-    measurements = measure_array(qs)
-    output("c", collect_measurements(measurements))
+    result("c", measure_array(qs))
 
 sim_result_bell_circuit = (
     main.emulator(n_qubits=2).with_seed(4242).with_shots(1000).run()
