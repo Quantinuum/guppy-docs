@@ -14,7 +14,7 @@ This extended changelog intends to provide a convenient overview of major new fe
 
 
 ```{note}
-If you just want to see the breaking changes and instructions on how to update your existing code, please see the [migration guide](v1_migration.md).
+To see just the breaking changes and instructions on how to update existing code, please see the [migration guide](v1_migration.md).
 ```
 
 ## New quantum constructs
@@ -25,7 +25,7 @@ Guppy has a new dedicated [`Measurement`](../api/generated/guppylang.std.quantum
 
 ### Control and dagger modifiers
 
-You can now transform gates, blocks of quantum operations, and functions automatically using modifiers. 
+Gates, blocks of quantum operations, and functions can now be transformed automatically using modifiers. Control makes each operation controlled with an additional control qubit input. Dagger reverses gate order and replaces each gate with its inverse.
 
 ```{code-cell} ipython3
 from guppylang.decorator import guppy
@@ -80,19 +80,19 @@ Guppy now provides the ability to give an existing type another name using the `
 
 ### More support for generics
 
-You can now use generic variables in the type signature of comptime functions. However, explicitly specifying type arguments for both functions and structs is not supported yet.
+Generic variables can now be used in the type signature of comptime functions. However, explicitly specifying type arguments for both functions and structs is not supported yet.
 
 Read more about [comptime](language_guide/comptime.md) and [generics](language_guide/static.md) in their respective language guide sections.
 
 ### Python variables are now captured implicitly
 
-You no longer need to use `comptime` (or `py`) to pull in variables from Python code into your Guppy code, these will be captured implicitly. Anything requiring any form of computation still requires the use of the `comptime` keyword.
+The use of `comptime` (or `py`) is no longer required to pull in variables from Python code into Guppy code, these will be captured implicitly. Anything requiring any form of computation still requires the `comptime` keyword.
 
 ## Performance
 
 ### A new optimisation interface
 
-It is now possible to specify the level of optimization to be run on Guppy programs by calling `with_opt_level` on your entrypoint function. Read more about the different available optimization levels and defaults [here](TODO).
+It is now possible to specify the level of optimization to be run on Guppy programs by calling `with_opt_level` on the entrypoint function. Read more about the different available optimization levels and defaults [here](TODO).
 
 ### Runtime argument support in the emulator
 
