@@ -354,7 +354,7 @@ measure_subscript.check()
 ```
 
 To obtain ownership of an array element, we should use the [``array.take``](guppylang.std.builtins.array.take) or [``array.try_take``](guppylang.std.builtins.array.try_take) methods instead of the subscript syntax.
-See TODO for how to manipulate arrays using ``take``.
+See the [language guide section on arrays](data_types/arrays.md#extracting-individual-elements) for more details on how to use ``take``.
 
 
 ### Swapping of borrowed values via ``mem_swap``
