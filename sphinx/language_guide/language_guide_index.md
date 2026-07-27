@@ -6,14 +6,15 @@ kernelspec:
 
 # Guppy Language Guide
 
-Welcome to the Guppy Language Guide. This guide is intended to provide a step by step walkthrough of the major features of the Guppy programming language. 
-The guide contains explanations of the key Guppy data types, the ownership model, control flow and more. The content will be expanded and improved as more features become available.
+This guide is intended to provide a step by step walkthrough of the major features of the Guppy programming language. 
+It contains explanations of the key Guppy data types, functions and control flow, as well as the ownership model and static compilation.
 
-If you're brand new to Guppy, check out our [getting started guide](../getting_started.md) to install Guppy and start writing your first programs. There is also a [gallery of example programs](../examples_index.md) showcasing various quantum algorithms implemented in Guppy.
+If you are new to Guppy then first check out our [getting started guide](../getting_started.md) to install Guppy and start writing your first programs.
 
 
+---
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
 data_types/types_index.md
 functions.md
@@ -24,4 +25,8 @@ ownership.md
 measurement.md
 comptime.md
 libraries.md
+random.md
 ```
+---
+
+See also the [gallery of example programs](../examples_index.md) showcasing various quantum algorithms implemented in Guppy. This allows one to see the above language features within a general context. 

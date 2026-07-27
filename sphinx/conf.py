@@ -38,6 +38,7 @@ extensions = [
     "quantinuum_sphinx",
     "sphinx_tabs.tabs",
     "sphinx.ext.napoleon",
+    "sphinx_design",
 ]
 autosectionlabel_prefix_document = True
 
