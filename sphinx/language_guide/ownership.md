@@ -359,7 +359,7 @@ See the [language guide section on arrays](data_types/arrays.md#extracting-indiv
 
 ### Swapping of borrowed values via ``mem_swap``
 
-Since subscripting only borrows a given element, we also cannot use it to swap elements of an array:
+Since subscripting only borrows a given element, we also cannot use it to swap elements of an array as this would attempt to move a borrowed value:
 
 ```{code-cell} ipython3
 ---
