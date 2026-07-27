@@ -416,7 +416,7 @@ The next section shows an alternative method to achieve the same goal without th
 ### Temporary ownership through ``with_owned``
 
 In some cases, we might find ourselves in situations where we would like to obtain temporary ownership of a value that we have only borrowed.
-This can be achieved vie the [``with_owned``](guppylang.std.mem.with_owned) function in the standard library.
+This can be achieved via the [``with_owned``](guppylang.std.mem.with_owned) function in the standard library.
 A call ``with_owned(val, f)`` runs the function ``f`` where the borrowed argument ``val`` is temporarily promoted to an owned one.
 The function ``f`` should return two values:
 1. A value of arbitrary type that will be returned from ``with_owned``.
