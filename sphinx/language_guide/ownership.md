@@ -420,7 +420,7 @@ This can be achieved via the [``with_owned``](guppylang.std.mem.with_owned) func
 A call ``with_owned(val, f)`` runs the function ``f`` where the borrowed argument ``val`` is temporarily promoted to an owned one.
 The function ``f`` should return two values:
 1. A value of arbitrary type that will be returned from ``with_owned``.
-2. A value of type same type as ``val`` that is written back into ``val``.
+2. A value of the same type as ``val`` that is written back into ``val``.
    This can either be the original passed value, or a new value of the same type that was created inside ``f``.
 
 For example, using ``with_owned``, we can rewrite the ``my_measure_and_reset`` function to be infallible:
