@@ -202,7 +202,7 @@ def return_callable() -> Callable[[int], bool]:
 return_callable.check()
 ```
 
-We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the [``Function``](guppylang.std.builtins.Function) type introduced in the previous section instead of [``Callable`](collections.abc.callable)`:
+We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the [``Function``](guppylang.std.builtins.Function) type introduced in the previous section instead of [``Callable``](collections.abc.callable)`:
 
 ```{code-cell} ipython3
 @guppy
