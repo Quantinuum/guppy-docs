@@ -110,7 +110,7 @@ from guppylang.std.builtins import Function
 ``Function`` denotes an *opaque* function value that is not known at compile-time.
 Its syntax is similar to the ``Callable`` protocol [available in Python](https://typing.python.org/en/latest/spec/callables.html).
 For example, ``Function[[int], int]`` denotes an opaque function that takes and returns an ``int``.
-The concrete function definition types ``def a_function(n: int) -> int`` and ``def b_function(n: int) -> int`` types that the compiler assigned to our functions above automatically coerce to the same ``Function`` type:
+The concrete function definition types ``def a_function(n: int) -> int`` and ``def b_function(n: int) -> int`` that the compiler assigned to our functions above automatically coerce to the same ``Function`` type:
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import Function
@@ -205,9 +205,6 @@ return_callable.check()
 We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the ``Function`` type introduced in the previous section instead of ``Callable``:
 
 ```{code-cell} ipython3
----
-tags: [raises-exception]
----
 @guppy
 def return_function() -> Function[[int], bool]:
     return is_even
