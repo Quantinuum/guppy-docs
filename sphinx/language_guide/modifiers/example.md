@@ -51,7 +51,6 @@ def controlled_conjugation(c: qubit, q: qubit) -> None:
 controlled_conjugation.check()
 ```
 
-### Conjugation pattern with Pauli exponential
 
 A Pauli gadget for $P = Z \otimes Z \otimes Y \otimes X$ has this form: basis changes and a CNOT parity network compute $V$, a single `rz` is the action, and the dagger block uncomputes $V^\dagger$. The control is needed only for the central rotation.
 
@@ -159,10 +158,3 @@ def grover_101() -> None:
 
 grover_101.emulator(n_qubits=3).with_shots(1000).run().collated_counts()
 ```
-
-## See also
-
-- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
-- [Control](control.md) — add a control qubit to a block of operations.
-- [Dagger](dagger.md) — reverse a block of operations and replace each gate with its inverse.
-- [Function flags](functions.md) — apply modifiers to whole functions and use them as higher-order arguments.

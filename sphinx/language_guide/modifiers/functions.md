@@ -4,7 +4,7 @@ kernelspec:
   name: python3
 ---
 
-## Function flags
+# Function flags
 
 For a [control](control.md) block, calls to classical functions need no flag: they are evaluated normally and are not controlled. A call involving qubits must instead be marked `controllable=True`.
 
@@ -153,7 +153,7 @@ def unitary_fun(qs: array[qubit, 2], a: angle) -> None:
 unitary_fun.check()
 ```
 
-### Function flags with compile-time functions
+## Function flags with compile-time functions
 
 Function flags can also be used with [`guppy.comptime` functions](../comptime.md). Here, since the control flow is evaluated at compile time, no restrictions are enforced and the function can be called inside a dagger block.
 
@@ -422,11 +422,4 @@ def modify_measured_circuit(c: qubit, q: qubit) -> None:
 
 modify_measured_circuit.check()
 ```
-
-## Next steps
-
-- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
-- [Control](control.md) — add a control qubit to a block of operations.
-- [Dagger](dagger.md) — reverse a block of operations and replace each gate with its inverse.
-- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
 

@@ -4,7 +4,7 @@ kernelspec:
   name: python3
 ---
 
-## Dagger
+# Dagger
 
 `with dagger:` applies the inverse of its body. If the body performs $U_1$ followed by $U_2$, the dagger block performs $U_2^\dagger$ followed by $U_1^\dagger$.
 
@@ -24,7 +24,7 @@ sx_dg.check()
 
 
 
-### Classical assignments in dagger blocks
+## Classical assignments in dagger blocks
 
 Similar to the [control](control.md) modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
 
@@ -79,7 +79,7 @@ rz(-phi) q;
 rx(-theta) q;
 ``` -->
 
-### Forbidden operations in dagger blocks
+## Forbidden operations in dagger blocks
 
 Dagger blocks have the same qubit-operation restrictions as [control](control.md#forbidden-operations) blocks and cannot contain control flow.
 
@@ -124,7 +124,7 @@ def output_in_dagger(value: bool) -> None:
 
 output_in_dagger.check()
 ```
-### Combining dagger and controls
+## Combining dagger and controls
 
 Modifiers compose. This example is a doubly controlled inverse of `h` followed by `s`:
 
@@ -149,10 +149,3 @@ Resolve dagger:      ctrl @ sdg c1, q;      ctrl @ h c1, q;
 Push control c0:     ctrl(2) @ sdg c0, c1, q;
                      ctrl(2) @ h c0, c1, q;
 ```
-
-## Next steps
-
-- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
-- [Control](control.md) — add a control qubit to a block of operations.
-- [Function flags](functions.md) — apply modifiers to whole functions and use them as higher-order arguments.
-- [Examples](example.md) — worked examples including conjugation patterns and Grover search.

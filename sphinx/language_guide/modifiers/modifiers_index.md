@@ -5,7 +5,16 @@ kernelspec:
 ---
 
 
-# Controlling and Daggering quantum operations
+# Modifiers
+
+```{toctree}
+:maxdepth: 0
+
+control.md
+dagger.md
+functions.md
+example.md
+```
 
 Modifiers transform a block of quantum operations.
 They automatically produce controlled and inverse versions of quantum operations. They apply to a single gate, a block containing many gates, or a function, so you can write an operation once and reuse its controlled or daggered form. Guppy generates the transformed operations, freeing you from defining and maintaining each variant by hand.
@@ -75,7 +84,7 @@ controlled_inverse.check()
 Here we take the $S$ gate and modify it with [control](control.md) and [dagger](dagger.md). The controlled and daggered version of the gate is synthetised by the compiler at compilation time, in fact since the gate is a unitary operation we can always produce its controlled-daggered version.
 When applied, this function acts as a $CS^\dagger$ gate.
 
-### Modifiers and variable scope
+## Modifiers and variable scope
 
 The body has access to variables from its enclosing scope, but it cannot take ownership of them. For instance, the following program is rejected:
 
@@ -139,12 +148,3 @@ def local_assignment(q: qubit, c: qubit) -> None:
 
 local_assignment.check()
 ```
-
-## More in depth
-
-The following pages explore modifiers in more detail:
-
-- [Control](control.md) — the `control` modifier and its rules.
-- [Dagger](dagger.md) — the `dagger` modifier and its rules.
-- [Function flags](functions.md) — applying modifiers to whole functions and higher-order usage.
-- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
