@@ -212,7 +212,7 @@ tags: [raises-exception]
 def return_function() -> Function[[int], bool]:
     return is_even
 
-return_callable.check()
+return_function.check()
 ```
 
 The main downside of using ``Function`` over ``Callable`` is that ``Function`` is only valid for actual function definitions, whereas ``Callable`` is intended to accept any argument that can be called.
