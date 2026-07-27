@@ -7,15 +7,6 @@ kernelspec:
 
 # Modifiers
 
-```{toctree}
-:maxdepth: 0
-
-control.md
-dagger.md
-functions.md
-example.md
-```
-
 Modifiers transform a block of quantum operations.
 They automatically produce controlled and inverse versions of quantum operations. They apply to a single gate, a block containing many gates, or a function, so you can write an operation once and reuse its controlled or daggered form. Guppy generates the transformed operations, freeing you from defining and maintaining each variant by hand.
 
@@ -147,4 +138,14 @@ def local_assignment(q: qubit, c: qubit) -> None:
     rx(q, angle(outer_var / 4))
 
 local_assignment.check()
+```
+
+
+```{toctree}
+:maxdepth: 0
+
+control.md
+dagger.md
+functions.md
+example.md
 ```
