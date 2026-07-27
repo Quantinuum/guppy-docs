@@ -100,14 +100,14 @@ call_a_or_b.check()
 Here, we tried to assign either ``a_function`` or ``b_function`` to the variable ``f``, but the compiler tells us that these values have different types.
 This is because the default type assigned to a function value statically tracks the corresponding definition it came from.
 These are the ``def a_function(n: int) -> int`` and ``def b_function(n: int) -> int`` types that showed up in the error message above.
-To fix this, we can follow the compiler's suggestion and annotate ``f`` with a ``Function`` type.
-``Function`` is a built-in type that can be imported from the standard library:
+To fix this, we can follow the compiler's suggestion and annotate ``f`` with a [``Function``](guppylang.std.builtins.Function) type.
+[``Function``](guppylang.std.builtins.Function) is a built-in type that can be imported from the standard library:
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import Function
 ```
 
-``Function`` denotes an *opaque* function value that is not known at compile-time.
+[``Function``](guppylang.std.builtins.Function) denotes an *opaque* function value that is not known at compile-time.
 Its syntax is similar to the ``Callable`` protocol [available in Python](https://typing.python.org/en/latest/spec/callables.html).
 For example, ``Function[[int], int]`` denotes an opaque function that takes and returns an ``int``.
 The concrete function definition types ``def a_function(n: int) -> int`` and ``def b_function(n: int) -> int`` that the compiler assigned to our functions above automatically coerce to the same ``Function`` type:
@@ -134,7 +134,7 @@ By adding the ``Function`` annotation, we have effictively told the compiler tha
 
 Since Guppy treats functions as values, we can also define function that take other functions as arguments or return a function as a result.
 These are known as *higher-order functions*.
-The preferred method to take functions as arguments is via the ``Callable`` protocol already available in Python:
+The preferred method to take functions as arguments is via the [``Callable``](collections.abc.Callable) protocol already available in Python:
 
 ```{code-cell} ipython3
 from collections.abc import Callable
@@ -202,7 +202,7 @@ def return_callable() -> Callable[[int], bool]:
 return_callable.check()
 ```
 
-We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the ``Function`` type introduced in the previous section instead of ``Callable``:
+We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the [``Function``](guppylang.std.builtins.Function) type introduced in the previous section instead of [``Callable`](collections.abc.callable)`:
 
 ```{code-cell} ipython3
 @guppy
