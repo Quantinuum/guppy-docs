@@ -409,7 +409,7 @@ def my_measure_and_reset(q: qubit) -> Measurement:
 my_measure_and_reset.check()
 ```
 
-The downside of this implementation is that it requires allocating an additional qubit, which could potential fail if none are available.
+The downside of this implementation is that it requires allocating an additional qubit, which could potentially fail if none are available.
 The next section shows an alternative method to achieve the same goal without this downside.
 
 
