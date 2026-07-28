@@ -24,5 +24,6 @@ ownership.md
 measurement.md
 comptime.md
 libraries.md
+custom_metadata.md
 random.md
 ```

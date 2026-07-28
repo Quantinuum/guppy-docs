@@ -119,6 +119,7 @@ def main() -> None:
 main.emulator(n_qubits=1, libs=[lib_pkg]).run()
 ```
 
+(linking-and-visibility)=
 ## Linking and visibility
 
 As of the HUGR Python package `hugr>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
