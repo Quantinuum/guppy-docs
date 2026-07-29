@@ -6,7 +6,7 @@ kernelspec:
 
 # Custom Metadata
 
-Guppy supports adding arbitrary metadata to symbols that will be lowered to the final compilation product (the HUGR package). You can do this via the {py:deco}`guppylang.decorator.metadata` decorator, which you can add below the {py:deco}`guppylang.decorator.guppy` decorator:
+Guppy supports adding arbitrary metadata to symbols that will be lowered to the final compilation product (the HUGR package). This can be done with the {py:deco}`guppylang.decorator.metadata` decorator, which you can add below the {py:deco}`guppylang.decorator.guppy` decorator:
 
 ```{code-cell} ipython3
 from hugr.ops import FuncDefn
