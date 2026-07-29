@@ -15,4 +15,5 @@ arrays.md
 tuples.md
 structs.md
 angles.md
+aliases.md
 ```
