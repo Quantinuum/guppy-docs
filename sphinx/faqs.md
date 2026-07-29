@@ -17,6 +17,47 @@ compact to use guppy loops and functions to avoid repeating things in programs.
 The `comptime` functionality lets you mix Guppy and Python to make use of compile time
 evaluation, see more in the [language guide section](language_guide/comptime.md)
 
+
+## Can I use Guppy in conjunction with Qiskit or other quantum computing tools?
+
+Yes, to a limited extent. As mentioned in the [pytket migration guide](migration_guide.md) it is possible to load pytket circuits as Guppy functions using [guppy.load_pytket](https://docs.quantinuum.com/guppy/api/decorator.html#guppylang.decorator.guppy.load_pytket). Therefore, if a program can be converted to pytket, it will generally be possible to use as a Guppy function as well.
+
+Here is a basic example where we import a Bell state circuit from Qiskit using the [qiskit_to_tk](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/api.html#pytket.extensions.qiskit.qiskit_convert.qiskit_to_tk) converter. This conversion is from the [pytket-qiskit extension](https://docs.quantinuum.com/tket/extensions/pytket-qiskit/) which is a separate PyPI package.
+
+```{code-cell} ipython3
+from guppylang import guppy
+from guppylang.std.quantum import measure_array, collect_measurements
+from qiskit import QuantumCircuit
+from pytket.extensions.qiskit.qiskit_convert import qiskit_to_tk
+
+# Define a simple Bell state circuit in Qiskit.
+qc = QuantumCircuit(2)
+qc.h(0)
+qc.cx(0, 1)
+
+# Convert Qiskit to pytket.
+pytket_circ = qiskit_to_tk(qc)
+
+
+# Register the pytket Circuit as a Guppy function.
+bell_func = guppy.load_pytket("circ_func", pytket_circ)
+
+
+# We can now use bell_func as a subroutine in a larger Guppy program.
+@guppy
+def main() -> None:
+    qs = array(qubit() for _ in range(2))
+    bell_func(qs)
+    measurements = measure_array(qs)
+    output("c", collect_measurements(measurements))
+
+sim_result_bell_circuit = (
+    main.emulator(n_qubits=2).with_seed(4242).with_shots(1000).run()
+)
+
+print(sim_result_bell_circuit.collated_counts())
+```
+
 ## How do I use this pytket OpType or Box?
 
 Guppy has a standard (small) quantum set defined in the guppy standard library
@@ -25,7 +66,7 @@ The quantinuum hardware primitive gates are also available in the [qsystem modul
 
 To use a pytket op or Box synthesis outside this set you can define a circuit, get
 pytket to synthesise in to a universal gate set which is a subset of the gates known to
-Guppy, then load it in. See more in the [migration guide](migration_guide.md).
+Guppy, then load it in. See more in the [pytket migration guide](migration_guide.md).
 
 
 ## How do angles work?
@@ -47,6 +88,8 @@ def rotate(q: qubit) -> None:
     pi_2 = angle(2.0)
     rz(q, pi_2)
 ```
+
+See more in the [language guide section on angles](language_guide/data_types/angles.md).
 
 ## Why am I getting "unsupported" errors?
 
