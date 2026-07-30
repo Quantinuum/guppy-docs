@@ -107,7 +107,7 @@ def try_mutate() -> None:
     frozen_pauli = FrozenPauliString(array(True, False, True), array(False, True, False))
     frozen_pauli.xs = array(True, True, True) # attempt to change the xs field.
 
-try_mutate.check();
+try_mutate.check(); # Gives an error, we cannot mutate FrozenPauliString.
 ```
 
 
