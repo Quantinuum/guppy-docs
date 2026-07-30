@@ -11,7 +11,7 @@ kernelspec:
 
 In Guppy, structures (abbreviated as structs) provide a way for users to group related data.
  Structs are similar to tuples in that the data they store can have different types. 
- But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that currently the fields of Guppy structs have to be immutable.
+ But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that as of Guppy v1, structs are affine and mutable by default. Prior to the v1 release, Guppy structs were always immutable.
  We can also define methods on structs, just as we can on Python classes.
 
 To define a Guppy struct we use the python `class` keyword together with the `@guppy.struct` decorator.
@@ -45,6 +45,46 @@ Once we have defined a struct, we can check it just as we would check a Guppy fu
 ```{code-cell} ipython3
 PauliString.check()
 ```
+
+## Mutability
+
+As mentioned, Guppy structs mutable by default. Therefore we are able to modify the fields of the struct once its defined.
+
+```{code-cell} ipython3
+
+
+@guppy
+def mutate_pauli() -> None:
+    # Create an instance of PauliString to represent XZX (XIX * IZI ~ XZX).
+    my_pauli = PauliString(array(True, False, True), array(False, True, False)) 
+
+    # After this mutation, my_pauli now represents XIX
+    my_pauli.zs = array(False, False, False)
+
+mutate_pauli.check(); 
+```
+
+<!---
+Structs are also affine by default meaning they cannot be implicitly copied with an assignment.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+
+@guppy
+def implicit_copy() -> None:
+    my_pauli = PauliString(array(True, False, True), array(False, True, False)) 
+
+    my_new_pauli = my_pauli 
+
+    # Trying to access my_pauli after a move gives an error.
+    my_pauli.zs = array(False, False, False)
+
+implicit_copy.check(); 
+```
+-->
+
 
 ## Methods on structs
 
