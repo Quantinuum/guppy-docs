@@ -45,7 +45,7 @@ Once we have defined a struct, we can check it just as we would check a Guppy fu
 PauliString.check()
 ```
 
-## Mutability
+## Structs are mutable and affine by default
 
 As mentioned, Guppy structs mutable by default. Therefore we are able to modify the fields of the struct once its defined.
 
