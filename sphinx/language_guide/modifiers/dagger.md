@@ -22,8 +22,6 @@ def sx_dg(q: qubit) -> None:
 sx_dg.check()
 ```
 
-<<<<<<< HEAD
-
 
 ## Classical assignments in dagger blocks
 
