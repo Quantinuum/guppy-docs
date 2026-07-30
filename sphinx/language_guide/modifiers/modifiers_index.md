@@ -7,8 +7,7 @@ kernelspec:
 
 # Modifiers
 
-Modifiers transform a block of quantum operations.
-They automatically produce controlled and inverse versions of quantum operations. They apply to a single gate, a block containing many gates, or a function, so you can write an operation once and reuse its controlled or daggered form. Guppy generates the transformed operations, freeing you from defining and maintaining each variant by hand.
+Modifiers transform a block of quantum operations. They can be used to generate controlled and daggered versions of single gate, a block containing many gates or a Guppy function. Guppy generates the transformed operations, this means that the user does not need to provide the implementation of the controlled or daggered operation themselves.
 
 The modifier changes the underlying gates. For example, controlling a block adds the control to every gate it produces; effectively, a function `f(q)` becomes a controlled operation `ctrl-f(c, q)` with an additional control-qubit input. A [dagger](dagger.md) block reverses the gate order and replaces each gate with its inverse.
 
