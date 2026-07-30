@@ -119,6 +119,7 @@ def main() -> None:
 main.emulator(n_qubits=1, libs=[lib_pkg]).run()
 ```
 
+(linking-and-visibility)=
 ## Linking and visibility
 
 As of the HUGR Python package `hugr>=0.16.0`, it is possible to *link* packages, replacing calls to function declarations with calls to the corresponding function definitions, if they are available:
@@ -151,7 +152,7 @@ For the introductory example, assuming the functions reside in a file at `src/my
 - ``mylib.foo.bar.a_third_func``
 
 To be able to link the corresponding declarations and the functions together, they need to have the same name inside the HUGR package.
-In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``link_name`` decorator:
+In cases where the default name for declarations is wrong (e.g. when they are declared in some other module than the definitions or have different function names), the name they will receive can be manually overridden using the ``@link_name`` decorator:
 ```{code-cell} ipython3
 from guppylang import guppy
 from guppylang.library import link_name
@@ -198,7 +199,7 @@ class MyStruct:
     @guppy.declare
     def my_method(self) -> None: ...
 ```
-Specifying ``link_name`` on these methods will work as with top-level functions, with the default value including the struct name as part of the method name.
+Specifying ``@link_name`` on these methods will work as with top-level functions, with the default value including the struct name as part of the method name.
 However, the ``@guppy.struct`` and ``@guppy.enum`` decorators also support changing the name prefix up to and including the type name for all members using the default mechanism:
 ```{code-cell} ipython3
 from guppylang import guppy
