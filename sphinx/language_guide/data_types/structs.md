@@ -25,7 +25,6 @@ $$
 ```{code-cell} ipython3
 from guppylang import guppy
 from guppylang.std.builtins import array
-from guppylang.std.quantum import qubit
 
 @guppy.struct
 class PauliString:
@@ -84,6 +83,32 @@ def implicit_copy() -> None:
 implicit_copy.check(); 
 ```
 -->
+
+If we want to make a struct immutable, then we can specify the `frozen=True` keyword argument just like [Python dataclasses](https://docs.python.org/3/library/dataclasses.html#frozen-instances).
+
+
+```{code-cell} ipython3
+@guppy.struct(frozen=True)
+class FrozenPauliString:
+    xs: array[bool, 3]
+    zs: array[bool, 3]
+```
+
+As this `FrozenPauliString` object is immutable, we cannot mutate the fields after we initialize the struct.
+
+
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def try_mutate() -> None:
+    frozen_pauli = FrozenPauliString(array(True, False, True), array(False, True, False))
+    frozen_pauli.xs = array(True, True, True) # attempt to change the xs field.
+
+try_mutate.check();
+```
 
 
 ## Methods on structs
