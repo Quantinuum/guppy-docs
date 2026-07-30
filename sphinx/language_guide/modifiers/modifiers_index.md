@@ -27,7 +27,7 @@ from guppylang.std.quantum import qubit, h, measure
 def controlled_h() -> None:
     c = qubit()
     q = qubit()
-    h(q)
+    h(c)
     with control(c):
         h(q)
     bit_c = measure(c)

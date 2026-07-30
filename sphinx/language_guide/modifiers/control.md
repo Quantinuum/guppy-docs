@@ -124,10 +124,13 @@ Control blocks allow classical operations since they can be evaluated without af
 ---
 tags: [raises-exception]
 ---
+from guppylang.std.quantum import measure
+
 @guppy
 def allocation_in_control(c: qubit) -> None:
     with control(c):
         q = qubit()
+        measure(q)
 
 allocation_in_control.check()
 ```

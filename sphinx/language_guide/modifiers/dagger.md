@@ -17,11 +17,12 @@ from guppylang.std.quantum import h, qubit, s, x
 def sx_dg(q: qubit) -> None:
     with dagger:
         s(q)
-        x(q)
+        h(q)
 
 sx_dg.check()
 ```
 
+<<<<<<< HEAD
 
 
 ## Classical assignments in dagger blocks
@@ -39,6 +40,9 @@ invert_two_gates.check()
 ```
 
 The resulting quantum operations are equivalent to:
+=======
+For instance, the previous program corresponds to the sequence of operations is equivalent to:
+>>>>>>> na/modifier-documentation
 
 ```
 sdg q;
@@ -68,9 +72,8 @@ def invert_rotations(q: qubit) -> None:
 
 invert_rotations.check()
 ```
-<!--  ADD A comment here -->
 
-<!-- ```
+```
 a = 4;
 theta = 1 / a;
 a /= 2;
