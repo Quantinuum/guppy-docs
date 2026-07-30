@@ -17,28 +17,12 @@ from guppylang.std.quantum import h, qubit, s, x
 def sx_dg(q: qubit) -> None:
     with dagger:
         s(q)
-        x(q)
+        h(q)
 
 sx_dg.check()
 ```
 
-
-
-### Classical assignments in dagger blocks
-
-Similar to the [control](control.md) modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
-
-```{code-cell} ipython3
-@guppy
-def invert_two_gates(q: qubit) -> None:
-    with dagger:
-        h(q)
-        s(q)
-
-invert_two_gates.check()
-```
-
-The resulting quantum operations are equivalent to:
+For instance, the previous program corresponds to the sequence of operations is equivalent to:
 
 ```
 sdg q;
@@ -68,9 +52,8 @@ def invert_rotations(q: qubit) -> None:
 
 invert_rotations.check()
 ```
-<!--  ADD A comment here -->
 
-<!-- ```
+```
 a = 4;
 theta = 1 / a;
 a /= 2;
