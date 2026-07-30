@@ -27,7 +27,7 @@ comptime.md
 libraries.md
 custom_metadata.md
 random.md
-modifiers/main_page.md
+modifiers/modifiers_index.md
 ```
 ---
 

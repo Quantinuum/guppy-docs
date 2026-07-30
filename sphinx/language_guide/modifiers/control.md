@@ -4,7 +4,7 @@ kernelspec:
   name: python3
 ---
 
-## Control
+# Control
 
 `with control(c):` applies the operations in its body only when the control qubit `c` is in $\ket{1}$. With controls $c_1, \ldots, c_n$, it applies the operation when all controls are in $\ket{1}$:
 
@@ -47,7 +47,7 @@ def main(c0: qubit, c1: qubit, t: qubit) -> None:
 cnx.check()
 ```
 
-### Classical control
+## Classical control
 
 When a controlled block contains classical control flow, the control is pushed to every quantum operation produced by the branch or loop. Evaluating the classical condition and loop bounds is not controlled. For instance, the following two programs are equivalent:
 
@@ -93,7 +93,7 @@ control_loop.check()
 pushed_control_loop.check()
 ```
 
-### Classical assignments in control blocks
+## Classical assignments in control blocks
 
 Classical assignments are ignored by the control modifier: no controlled operation is generated for them. Thus the following programs are equivalent.
 
@@ -116,7 +116,7 @@ control_assignment.check()
 pushed_control_assignment.check()
 ```
 
-### Forbidden operations
+## Forbidden operations
 
 Control blocks allow classical operations since they can be evaluated without affecting the quantum state. However, they cannot allocate, measure, reset, or discard qubits, since these operations have quantum effects, but they are not controllable.
 
@@ -134,11 +134,3 @@ def allocation_in_control(c: qubit) -> None:
 
 allocation_in_control.check()
 ```
-
-## Next steps
-
-- [Overview](main_page.md) — introduction to modifiers and variable scope rules.
-- [Dagger](dagger.md) — reverse a block of operations and replace each gate with its inverse.
-- [Function flags](functions.md) — apply modifiers to whole functions and use them as higher-order arguments.
-- [Examples](example.md) — worked examples including conjugation patterns and Grover search.
-
