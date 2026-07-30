@@ -30,10 +30,6 @@ random.md
 <<<<<<< HEAD
 modifiers/modifiers_index.md
 ```
-=======
-modifiers/main_page.md
-```
 ---
 
 See also the [gallery of example programs](../examples_index.md) showcasing various quantum algorithms implemented in Guppy. This allows one to see the above language features within a general context. 
->>>>>>> na/modifier-documentation
