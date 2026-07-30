@@ -22,21 +22,6 @@ def sx_dg(q: qubit) -> None:
 sx_dg.check()
 ```
 
-
-## Classical assignments in dagger blocks
-
-Similar to the [control](control.md) modifier, dagger reverses only the quantum computation. Classical assignments keep their source order, while the quantum operations are inverted and reversed.
-
-```{code-cell} ipython3
-@guppy
-def invert_two_gates(q: qubit) -> None:
-    with dagger:
-        h(q)
-        s(q)
-
-invert_two_gates.check()
-```
-
 For instance, the previous program corresponds to the sequence of operations is equivalent to:
 
 ```
