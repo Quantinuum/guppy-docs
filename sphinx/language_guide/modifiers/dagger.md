@@ -39,10 +39,7 @@ def invert_two_gates(q: qubit) -> None:
 invert_two_gates.check()
 ```
 
-The resulting quantum operations are equivalent to:
-=======
 For instance, the previous program corresponds to the sequence of operations is equivalent to:
->>>>>>> na/modifier-documentation
 
 ```
 sdg q;
