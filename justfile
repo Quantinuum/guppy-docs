@@ -5,7 +5,7 @@ build:
     just build-docs
 
 dev:
-    uv run --group docs sphinx-autobuild -b html ./sphinx build
+    uv run sphinx-autobuild -b html ./sphinx build
 
 serve: build
     npm exec serve sphinx/build
