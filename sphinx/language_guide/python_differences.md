@@ -237,10 +237,12 @@ order the statements were written.
 Guppy relaxes this idea in a few ways to fit with the way modern and quantum
 computers may execute parts of a program in parallel, as follows.
 
-(Note: these guarantees are for guppylang v1, they may become more relaxed
+```{note}
+These guarantees are for guppylang v1, they may become more relaxed
 in future major releases. Also just that we *allow* statements to be reordered
 does not mean that this will necessarily happen in practice - but this may
-change, within the bounds of this spec, in future *minor* releases.)
+change, within the bounds of this spec, in future *minor* releases.
+```
 
 1. Operations that panic (both explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) s and other ops like array indexing) may be reordered with respect to each other. For example, this program:
 ```{code-cell} ipython3
