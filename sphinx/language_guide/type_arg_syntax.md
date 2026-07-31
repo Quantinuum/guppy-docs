@@ -28,9 +28,11 @@ foo[int, str](42, "guppy")
 
 Usually these type arguments can be left to be inferred by the type checker.
 
-### Bounds
+## Bounds
+
 Generic functions can have their type bounds specified by an annotation in the type parameter list. In Guppy these bounds can mean three things:
-#### Linearity
+
+### Linearity
 The type argument can be required to be copyable and/or droppable using the `Copy`, `Drop` bounds:
 
 ```{code-cell} ipython3
@@ -42,7 +44,7 @@ def copy[T: (Copy, Drop)](t: T) -> tuple[T, T]:
     return t, t
 ```
 
-#### Const arguments
+### Const arguments
 By default, a type parameter specified in this way represents an arbitrary type. We can also add annotations to the parameters.
 
 These annotations can also be used to specify that the parameter is a _const nat_ parameter, rather than a type:
@@ -55,7 +57,7 @@ def replicate[T: (Copy, Drop), N: nat](elem: T) -> array[T, N]:
     return array(elem for _ in range(N))
 ```
 
-#### Protocol bounds
+### Protocol bounds
  Type parameter syntax is used to specify the _protocols_ that a type argument must implement. In the below example, any type argument `T` to the function `foo` must implement the `MyProto` protocols.
 
 Assuming we've defined a protocol, `MyProto`:
@@ -66,7 +68,7 @@ class MyProto[T]:
     def foo[T](self, t: T) -> None: ...
 ```
 
-we can require that it is implemented by a type arg `T` by writing:
+We can require that it is implemented by a type arg `T` by writing:
 
 ```{code-cell} ipython3
  @guppy
@@ -75,7 +77,7 @@ we can require that it is implemented by a type arg `T` by writing:
 
  ```
 
-### Type Arguments to Classes
+## Type Arguments to Classes
 Guppy structs and protocols can also take type parameters in the same way. The type parameters will be in scope for the signatures of the methods:
 
 ```{code-cell} ipython3
