@@ -1,8 +1,8 @@
 r"""Configuration file for the Sphinx documentation builder."""
 
 import os
-import guppylang
 
+import guppylang
 
 html_title = f"Guppy v{guppylang.__version__} Documentation"
 
@@ -19,7 +19,7 @@ html_logo = "_static/guppy_icon_only.svg"
 html_favicon = "_static/quantinuum_favicon.svg"
 
 html_static_path = ["_static"]
-html_css_files = ["notebook-buttons.css"]
+html_css_files = ["notebook-actions-styles.css"]
 templates_path = ["_templates"]
 
 master_doc = "index"

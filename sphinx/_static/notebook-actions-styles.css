@@ -1,11 +1,12 @@
-.doc-action-row {
+.notebook-action-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin: 0.5rem 0 1rem;
 }
 
-.doc-action-button {
+.notebook-action-download,
+.notebook-action-playpond {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +23,8 @@
     border-color 160ms ease;
 }
 
-.doc-action-button .doc-action-icon {
+.notebook-action-download .notebook-action-icon,
+.notebook-action-playpond .notebook-action-icon {
   width: 0.96rem;
   height: 0.96rem;
   min-width: 0.96rem;
@@ -33,52 +35,52 @@
   flex: 0 0 0.96rem;
 }
 
-.doc-action-button-download {
+.notebook-action-download {
   color: inherit;
   border-color: #ccc;
   background-color: #fff;
 }
 
-.doc-action-button-download:visited {
+.notebook-action-download:visited {
   color: inherit;
   border-color: #ccc;
   background-color: #fff;
 }
 
-.doc-action-button-download:hover {
+.notebook-action-download:hover {
   background-color: #d6d6d6;
 }
 
-.doc-action-button-download:visited:hover {
+.notebook-action-download:visited:hover {
   color: inherit;
   border-color: #ccc;
   background-color: #d6d6d6;
 }
 
-.doc-action-button-playpond {
+.notebook-action-playpond {
   color: #fff;
   border-color: #3da596;
   background-color: #3da596;
 }
 
-.doc-action-button-playpond:visited {
+.notebook-action-playpond:visited {
   color: #fff;
   border-color: #3da596;
   background-color: #3da596;
 }
 
-.doc-action-button-playpond:hover {
+.notebook-action-playpond:hover {
   border-color: #318b81;
   background-color: #318b81;
 }
 
-.doc-action-button-playpond:visited:hover {
+.notebook-action-playpond:visited:hover {
   color: #fff;
   border-color: #318b81;
   background-color: #318b81;
 }
 
-.doc-action-button-playpond .doc-action-icon {
+.notebook-action-playpond .notebook-action-icon {
   color: #fff;
   fill: none;
   stroke: currentColor;
@@ -87,7 +89,7 @@
   stroke-linejoin: round;
 }
 
-.doc-action-button-playpond .doc-action-label {
+.notebook-action-playpond .notebook-action-label {
   position: relative;
   top: -1px;
 }
