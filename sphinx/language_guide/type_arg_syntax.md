@@ -96,7 +96,7 @@ def myfoo() -> None:
     return baz(MyStruct[int]())
 ```
 
-### Type aliases
+## Type aliases
 Type variables for Guppy type aliases must still be declared in the python 3.10 style:
 
 ```{code-cell} ipython3
@@ -111,5 +111,5 @@ N = guppy.nat_var("N")
 QArr = guppy.type_alias("QArr", "array[qubit, N]", params=[N])
 ```
 
-### Caveats
+## Caveats
 * Note that Guppy type parameters stand in for one type or constant. Python's `TypeVarTuple` and `ParamSpec` parameters (written as `*T` and `**P`, respectively) aren't supported.
