@@ -274,10 +274,10 @@ We anticipate that a future 1.x release may add some form of debugging output th
 
 ### Semantics of v1.0 release
 
-To document the behaviour of the current v1.0 release, but not as a guarantee about future minor **[or even patch]** releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
+To document the behaviour of the current v1.0 release, but not as a guarantee about future minor releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
 * other indexing operations that are *not* on the same array
 * `output` or `panic` operations
-* `exit` operations (this violates point 2 above and hence is a bug in this release)
+* `exit` operations
 
 This, explicit `panic` and `output` operations have their order maintained, but  this is not guaranteed for other releases in the 1.x line.
 
@@ -299,5 +299,3 @@ def foo(arr1: array[qubit, 3], i: int) -> None:
 ```
 seeing the message "Array access may not have succeeded" is accurate, this
 does not not necessarily mean that the array index was in bounds.
-
-(The same may occur for `exit` but again this is a bug.)
