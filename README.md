@@ -3,10 +3,11 @@
 This repository contains documentation for the Guppy programming language.
 
 ## Contents
-* The Guppy language guide
-* The API documentation for the guppylang package
-* FAQs, changelog and migration guides
-* The guppylang [example notebooks](https://github.com/quantinuum/guppylang/tree/main/examples) (included via the guppylang submodule)
+
+- The Guppy language guide
+- The API documentation for the guppylang package
+- FAQs, changelog and migration guides
+- The guppylang [example notebooks](https://github.com/quantinuum/guppylang/tree/main/examples) (included via the guppylang submodule)
 
 The Sphinx docs are written in MyST markdown and rendered with the [myst-nb](https://myst-nb.readthedocs.io/en/latest/) library. This variant of markdown supports code cells which are executed at docs build time. See the section on [text-based notebooks](https://myst-nb.readthedocs.io/en/latest/authoring/basics.html#text-based-notebooks). The docs are styled with the [quantinuum-sphinx](https://github.com/quantinuum/quantinuum-sphinx) theme.
 
@@ -22,16 +23,17 @@ Note that there are some known issues with the `just coverage` check which need 
 
 The following checks are run when a pull request is opened.
 
-* Spell checking - spell checking is done using the [typos crate](https://github.com/crate-ci/typos).
-* The sphinx docs build is tested. This includes all code snippets and example notebooks. If a code snippet throws an error, this will fail the docs build.
-* Link checking (using the [sphinx-linkcheck builder](https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder)) - All links in the `sphinx` directory are tested. Broken links will cause the C.I. checks to fail.
-* (currently disabled) Sphinx coverage checks using [sphinx.ext.coverage](https://www.sphinx-doc.org/en/master/usage/extensions/coverage.html) - check that all of the public guppylang API is documented.
+- Spell checking - spell checking is done using the [typos crate](https://github.com/crate-ci/typos).
+- The sphinx docs build is tested. This includes all code snippets and example notebooks. If a code snippet throws an error, this will fail the docs build.
+- Link checking (using the [sphinx-linkcheck builder](https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder)) - All links in the `sphinx` directory are tested. Broken links will cause the C.I. checks to fail.
+- (currently disabled) Sphinx coverage checks using [sphinx.ext.coverage](https://www.sphinx-doc.org/en/master/usage/extensions/coverage.html) - check that all of the public guppylang API is documented.
 
 ## Building the docs locally
 
 Requirements:
-* The [just command runner](https://github.com/casey/just) 
-* Sphinx docs -> [uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+- The [just command runner](https://github.com/casey/just)
+- Sphinx docs -> [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 See the `devenv.nix` file.
 
@@ -46,6 +48,13 @@ Alternatively you can update the submodules if you have already cloned the repos
 ```shell
 git submodule update --init
 ```
+
+Run the docs site in hot reload mode
+
+```shell
+just dev
+```
+
 Next run the build with `just build`.
 
 ```shell
