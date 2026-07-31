@@ -8,7 +8,7 @@ kernelspec:
 
 Protocols were introduced to Guppy in version 1.0.
 
-A protocol is a named set of typed methods that a type must implement. This was introduced to [Python](https://typing.python.org/en/latest/spec/protocol.html) to support "duck typing", wherein all that is required to call a method on a Python object is for it to implement the method at the right type.
+A protocol is a named set of typed methods that a type must implement. This was [introduced to Python](https://typing.python.org/en/latest/spec/protocol.html) to support "duck typing", wherein all that is required to call a method on a Python object is for it to implement the method at the right type.
 ## Defining a protocol
 In Guppy, protocols are defined using a decorator around a Python class with no fields. The methods required by the protocol should be added to the class, wrapped with a `@guppy.require` decorator.
 ```{code-cell} ipython3
@@ -170,7 +170,7 @@ run_experiment.check()
 ```
 
 ## Callable
-As of Guppy v1.0, the [`Callable`]((../api/generated/guppylang.std.builtins.callable.rst)) type in guppy is treated as an interface.
+As of Guppy v1.0, the [`Callable`](functions.md#guppy-functions-can-be-higher-order-functions) type in guppy is treated as an interface.
 This means that taking a `Callable` argument in a function will have that function require a type parameter that implements the `Callable` protocol.
 
 This protocol behaves differently to user-defined protocols because it's not currently possible in guppy to correctly write the type signature of `__call__`.
