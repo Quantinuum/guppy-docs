@@ -19,6 +19,7 @@ html_logo = "_static/guppy_icon_only.svg"
 html_favicon = "_static/quantinuum_favicon.svg"
 
 html_static_path = ["_static"]
+html_css_files = ["notebook-buttons.css"]
 templates_path = ["_templates"]
 
 master_doc = "index"

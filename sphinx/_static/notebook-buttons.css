@@ -1,0 +1,93 @@
+.doc-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.doc-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border: 1px solid;
+  padding: 0.38rem 0.6rem;
+  border-radius: 0.28rem;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 550;
+  line-height: 1.1;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.doc-action-button .doc-action-icon {
+  width: 0.96rem;
+  height: 0.96rem;
+  min-width: 0.96rem;
+  min-height: 0.96rem;
+  max-width: 0.96rem;
+  max-height: 0.96rem;
+  display: block;
+  flex: 0 0 0.96rem;
+}
+
+.doc-action-button-download {
+  color: inherit;
+  border-color: #ccc;
+  background-color: #fff;
+}
+
+.doc-action-button-download:visited {
+  color: inherit;
+  border-color: #ccc;
+  background-color: #fff;
+}
+
+.doc-action-button-download:hover {
+  background-color: #d6d6d6;
+}
+
+.doc-action-button-download:visited:hover {
+  color: inherit;
+  border-color: #ccc;
+  background-color: #d6d6d6;
+}
+
+.doc-action-button-playpond {
+  color: #fff;
+  border-color: #3da596;
+  background-color: #3da596;
+}
+
+.doc-action-button-playpond:visited {
+  color: #fff;
+  border-color: #3da596;
+  background-color: #3da596;
+}
+
+.doc-action-button-playpond:hover {
+  border-color: #318b81;
+  background-color: #318b81;
+}
+
+.doc-action-button-playpond:visited:hover {
+  color: #fff;
+  border-color: #318b81;
+  background-color: #318b81;
+}
+
+.doc-action-button-playpond .doc-action-icon {
+  color: #fff;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.doc-action-button-playpond .doc-action-label {
+  position: relative;
+  top: -1px;
+}
