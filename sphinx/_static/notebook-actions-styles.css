@@ -35,35 +35,29 @@
   flex: 0 0 0.96rem;
 }
 
-.notebook-action-download {
+.notebook-action-row a.notebook-action-download,
+.notebook-action-row a.notebook-action-download:visited,
+.notebook-action-row a.notebook-action-download:hover,
+.notebook-action-row a.notebook-action-download:active,
+.notebook-action-row a.notebook-action-download:focus {
   color: inherit;
   border-color: #ccc;
   background-color: #fff;
 }
 
-.notebook-action-download:visited {
-  color: inherit;
-  border-color: #ccc;
-  background-color: #fff;
-}
-
-.notebook-action-download:hover {
+.notebook-action-row a.notebook-action-download:hover {
   background-color: #d6d6d6;
 }
 
-.notebook-action-download:visited:hover {
-  color: inherit;
-  border-color: #ccc;
+.notebook-action-row a.notebook-action-download:visited:hover {
   background-color: #d6d6d6;
 }
 
-.notebook-action-playpond {
-  color: #fff;
-  border-color: #3da596;
-  background-color: #3da596;
-}
-
-.notebook-action-playpond:visited {
+.notebook-action-row a.notebook-action-playpond,
+.notebook-action-row a.notebook-action-playpond:visited,
+.notebook-action-row a.notebook-action-playpond:hover,
+.notebook-action-row a.notebook-action-playpond:active,
+.notebook-action-row a.notebook-action-playpond:focus {
   color: #fff;
   border-color: #3da596;
   background-color: #3da596;
@@ -74,8 +68,7 @@
   background-color: #318b81;
 }
 
-.notebook-action-playpond:visited:hover {
-  color: #fff;
+.notebook-action-row a.notebook-action-playpond:visited:hover {
   border-color: #318b81;
   background-color: #318b81;
 }
