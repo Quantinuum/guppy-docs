@@ -31,6 +31,10 @@ class MyProto[T]:
     def foo[S, T](self, S) -> T: ...
 ```
 
+```{note}
+The bodies of the methods declared with `@guppy.require` must be empty (literally `...`). Default implementations of protocol methods is not currently supported in Guppy.
+```
+
 ### Implementing a protocol
 Any Guppy type with implementations of all of a protocol's required methods implements the protocol.
 No explicit syntax needs to be added to register a class as implementing a protocol. 
