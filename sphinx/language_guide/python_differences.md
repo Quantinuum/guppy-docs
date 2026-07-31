@@ -285,6 +285,8 @@ This, explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) and [o
 
 For example,
 ```{code-cell} ipython3
+from guppylang.std.quantum import qubit
+
 @guppy
 def baz[n, m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
     h(arr1[10])
