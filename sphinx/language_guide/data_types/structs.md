@@ -47,7 +47,7 @@ PauliString.check()
 
 ## Structs are mutable and affine by default
 
-As mentioned, Guppy structs mutable by default. Therefore we are able to modify the fields of the struct once its defined.
+Guppy structs are mutable by default: we can modify the fields of a struct after it has been defined.
 
 ```{code-cell} ipython3
 
