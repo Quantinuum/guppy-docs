@@ -231,7 +231,7 @@ See the [API documentation](guppylang.std.option.Option) as well as our [T state
 
 ## Parallel Execution Semantics
 
-In python, programs behave as if every statement was executed in exactly the
+In Python, programs behave as if every statement was executed in exactly the
 order the statements were written.
 
 Guppy relaxes this idea in a few ways to fit with the way modern and quantum
@@ -243,7 +243,7 @@ does not mean that this will necessarily happen in practice - but this may
 change, within the bounds of this spec, in future *minor* releases.)
 
 1. Operations that panic (both explicit `panic`s and other ops like array indexing) may be reordered with respect to each other. For example, this program:
-```
+```{code-cell} ipython3
 @guppy
 def foo(i: int) -> int:
   if i < -10:
@@ -253,7 +253,7 @@ def foo(i: int) -> int:
   return i
 ```
 A call such as `foo(-20)` will definitely panic, but may panic with either message. As a second example:
-```
+```{code-cell} ipython3
 @guppy
 def bar(arr: array[int, 3], i : int) -> int:
    if i % 2 == 1:
@@ -261,25 +261,28 @@ def bar(arr: array[int, 3], i : int) -> int:
    return arr[i]
 ```
 The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
-for the array of 3 elements, *or* the message `i should have been even`.
+for the array, *or* the message `i should have been even`.
 
-2. However, the following *are* guaranteed for all v1.x:
-* A `panic` (explicit or implicit) and an `output` will happen in the same order they are written in the source code.
-* Multiple `output`s will occur in the order they are present in the source code. **[At least for v1]**
-* `panic` and `exit` will not be reordered: the exit code will be the same as for python
+2. However, in all v1.x releases:
+* A `panic` (explicit or implicit) and an `exit` will happen in the same order they are written in the source code - the program will succeed or fail just as Python.
+* Multiple `output`s will occur in the order they are present in the source code.
 * `exit` and `output` will not be reordered
 
-**We have not specified whether `panic` and `output` can be reordered, and we should.**
+Note this means `panic` and `output` can be reordered, but see next section.
+
+We anticipate that a future 1.x release may add some form of debugging output that is guaranteed to execute in source-code order relative to `panic`.
 
 ### Semantics of v1.0 release
 
 To document the behaviour of the current v1.0 release, but not as a guarantee about future minor **[or even patch]** releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
-* other indexing operations on *different arrays*
-* `result`, `panic`, or `exit` operations
-* (that is, they may be reordered with respect to any operation *not* on the same array)
+* other indexing operations that are *not* on the same array
+* `output` or `panic` operations
+* `exit` operations (this violates point 2 above and hence is a bug in this release)
+
+This, explicit `panic` and `output` operations have their order maintained, but  this is not guaranteed for other releases in the 1.x line.
 
 For example,
-```
+```{code-cell} ipython3
 @guppy
 def baz[n,m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
     h(arr1[10])
@@ -288,16 +291,13 @@ def baz[n,m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
 If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
 (just as python). However, if both these problems occur in the same call to `baz`
 then v1.0 does not guaranteed which array access will be reported as failing. Similarly:
-```
+```{code-cell} ipython3
 @guppy
 def foo(arr1: array[qubit, 3], i: int) -> None:
   h(arr1[i])
-  if i < 1:
-    panic("Index was not strictly greater than zero)
+  panic("Array access may not have succeeded")
 ```
-seeing the message "Index was...." does not necessarily mean that the array access succeeded and thus that i==0; it could also occur for out-of-range i<0.
+seeing the message "Array access may not have succeeded" is accurate, this
+does not not necessarily mean that the array index was in bounds.
 
-<!-- on copyable-element arrays, `take` compiles to `get`,
-and `get` although not ordered itself is always compiled with an `unwrap` that *is* ordered -->
-
-
+(The same may occur for `exit` but again this is a bug.)
