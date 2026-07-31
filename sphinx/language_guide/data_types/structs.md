@@ -84,7 +84,7 @@ implicit_copy.check();
 ```
 -->
 
-If we want to make a struct immutable, then we can specify the `frozen=True` keyword argument just like [Python dataclasses](https://docs.python.org/3/library/dataclasses.html#frozen-instances).
+If we want to make a struct immutable, then we can specify the `frozen=True` keyword argument, similarly to [Python dataclasses](https://docs.python.org/3/library/dataclasses.html#frozen-instances).
 
 
 ```{code-cell} ipython3
