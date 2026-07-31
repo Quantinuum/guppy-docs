@@ -4,6 +4,9 @@ build-docs:
 build:
     just build-docs
 
+dev:
+    uv run --group docs sphinx-autobuild -b html ./sphinx build
+
 serve: build
     npm exec serve sphinx/build
 
