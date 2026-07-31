@@ -6,7 +6,7 @@ kernelspec:
 
 # Guppy Language Guide
 
-This guide is intended to provide a step by step walkthrough of the major features of the Guppy programming language. 
+This guide is intended to provide a step by step walkthrough of the major features of the Guppy programming language.
 It contains explanations of the key Guppy data types, functions and control flow, as well as the ownership model and static compilation.
 
 If you are new to Guppy then first check out our [getting started guide](../getting_started.md) to install Guppy and start writing your first programs.
@@ -18,6 +18,7 @@ If you are new to Guppy then first check out our [getting started guide](../gett
 
 data_types/types_index.md
 functions.md
+type_arg_syntax.md
 control_flow.md
 static.md
 python_differences.md
@@ -31,4 +32,4 @@ modifiers/modifiers_index.md
 ```
 ---
 
-See also the [gallery of example programs](../examples_index.md) showcasing various quantum algorithms implemented in Guppy. This allows one to see the above language features within a general context. 
+See also the [gallery of example programs](../examples_index.md) showcasing various quantum algorithms implemented in Guppy. This allows one to see the above language features within a general context.
