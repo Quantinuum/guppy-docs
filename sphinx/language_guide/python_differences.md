@@ -178,7 +178,7 @@ big_nat.check()
 ## I/O
 
 Guppy doesn't support the `print` function.
-Program outputs must be reported using the `output` function that takes a static string tag along with the value that should be outputted:
+Program outputs must be reported using the [output](../api/generated/guppylang.std.builtins.output.rst)  function that takes a static string tag along with the value that should be outputted:
 
 ```{code-cell} ipython3
 @guppy
@@ -198,7 +198,7 @@ output_example.emulator(1).run().results
 ## Exceptions
 
 When something goes wrong in a Python program, we typically throw an exception.
-Guppy on the other hand provides a `panic` function that that can be used to exit the program if something unexpected happens:
+Guppy on the other hand provides a [panic](../api/generated/guppylang.std.builtins.panic.rst)  function that that can be used to exit the program if something unexpected happens:
 
 ```{code-cell} ipython3
 @guppy
@@ -210,7 +210,7 @@ def division(a: int, b: int) -> float:
 division.check()
 ```
 
-Also see our [postselection example](../guppylang/examples/postselect) for use cases of `panic` and the related `exit` function.
+Also see our [postselection example](../guppylang/examples/postselect) for use cases of [panic](../api/generated/guppylang.std.builtins.panic.rst)  and the related [exit](../api/generated/guppylang.std.builtins.exit.rst)  function.
 
 Importantly, panics cannot be caught since Guppy does not support `try`-`catch` statements.
 If we want to write a function that can recover from an error condition, then we could use the [`Option`](guppylang.std.option.Option) type from the Guppy standard library to represent partial functions:
@@ -242,7 +242,7 @@ in future major releases. Also just that we *allow* statements to be reordered
 does not mean that this will necessarily happen in practice - but this may
 change, within the bounds of this spec, in future *minor* releases.)
 
-1. Operations that panic (both explicit `panic`s and other ops like array indexing) may be reordered with respect to each other. For example, this program:
+1. Operations that panic (both explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) s and other ops like array indexing) may be reordered with respect to each other. For example, this program:
 ```{code-cell} ipython3
 @guppy
 def foo(i: int) -> int:
@@ -264,22 +264,22 @@ The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
 for the array, *or* the message `i should have been even!`.
 
 2. However, in all v1.x releases:
-* A `panic` (explicit or implicit) and an `exit` will happen in the same order they are written in the source code - the program will succeed or fail just as Python.
-* Multiple `output`s will occur in the order they are present in the source code.
-* `exit` and `output` will not be reordered
+* A [panic](../api/generated/guppylang.std.builtins.panic.rst)  (explicit or implicit) and an [exit](../api/generated/guppylang.std.builtins.exit.rst)  will happen in the same order they are written in the source code - the program will succeed or fail just as Python.
+* Multiple [output](../api/generated/guppylang.std.builtins.output.rst) s will occur in the order they are present in the source code.
+* [exit](../api/generated/guppylang.std.builtins.exit.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst)  will not be reordered
 
-Note this means `panic` and `output` can be reordered, but see next section.
+Note this means [panic](../api/generated/guppylang.std.builtins.panic.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst)  can be reordered, but see next section.
 
-We anticipate that a future 1.x release may add some form of debugging output that is guaranteed to execute in source-code order relative to `panic`.
+We anticipate that a future 1.x release may add some form of debugging output that is guaranteed to execute in source-code order relative to [panic](../api/generated/guppylang.std.builtins.panic.rst) .
 
 ### Semantics of v1.0 release
 
 To document the behaviour of the current v1.0 release, but not as a guarantee about future minor releases, reordering of panics only occurs for indexing operations on arrays with linear or affine elements (explicit `take`, or borrowing of elements to pass to functions), which may be reordered with respect to
 * other indexing operations that are *not* on the same array
-* `output` or `panic` operations
-* `exit` operations
+* [output](../api/generated/guppylang.std.builtins.output.rst)  or [panic](../api/generated/guppylang.std.builtins.panic.rst)  operations
+* [exit](../api/generated/guppylang.std.builtins.exit.rst)  operations
 
-This, explicit `panic` and `output` operations have their order maintained, but  this is not guaranteed for other releases in the 1.x line.
+This, explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) and [output](../api/generated/guppylang.std.builtins.output.rst)  operations have their order maintained, but  this is not guaranteed for other releases in the 1.x line.
 
 For example,
 ```{code-cell} ipython3
