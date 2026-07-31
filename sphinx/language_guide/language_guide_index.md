@@ -18,6 +18,7 @@ If you are new to Guppy then first check out our [getting started guide](../gett
 
 data_types/types_index.md
 functions.md
+type_arg_syntax.md
 control_flow.md
 static.md
 python_differences.md
