@@ -365,7 +365,7 @@ from guppylang.std.quantum import discard, discard_array
 @guppy
 def main() -> None:
     qs = array(qubit() for _ in range(10))
-    result("init", qs.is_borrowed(3))  # False
+    output("init", qs.is_borrowed(3))  # False
 
     # We can't put anything at an index that hasn't been borrowed
     q = qubit()
@@ -375,14 +375,14 @@ def main() -> None:
 
     # We can't take out stuff that's already been borrowed
     q = qs.take(3)
-    result("after_take", qs.is_borrowed(3))  # True
+    output("after_take", qs.is_borrowed(3))  # True
     # So `try_take` returns nothing because of the `take` above
     qs.try_take(3).unwrap_nothing()
     measure(q)
 
     # But we can put something back at a borrowed index
     qs.put(qubit(), 3)
-    result("after_put", qs.is_borrowed(3))  # False
+    output("after_put", qs.is_borrowed(3))  # False
     h(qs[3])
 
     discard_array(qs)

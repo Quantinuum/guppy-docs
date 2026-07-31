@@ -304,6 +304,10 @@
 
 .. autodecorator:: guppylang.decorator.custom_guppy_decorator
 
+.. autodecorator:: metadata
+
+   See :doc:`../language_guide/custom_metadata`.
+
 .. autodecorator:: expected_qubits
 
 .. autofunction:: get_calling_frame

@@ -4,11 +4,11 @@
 :maxdepth: 1
 
 decorator.md
-emulator.md
-defs.md
 std.md
+defs.md
 library.md
 optimizer.md
+emulator.md
 experimental.md
 ```
 

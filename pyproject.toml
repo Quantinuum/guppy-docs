@@ -5,30 +5,28 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.12,<4"
 dependencies = [
-    "guppylang==1.0.0-rc1",
+    "guppylang==1.0.0-rc2",
     "jupyter>=1.1.0",
     "matplotlib>=3.9.2",
     "networkx>=3.4.2",
     "sphinx-tabs>=3.5.0",
-    "roman-numerals-py==4.0",
     "sphinx-design>=0.6.1",
+    "furo>=2024.8.6",
+    "myst-nb>=1.1.2",
+    "sphinx-copybutton>=0.5.2",
+    "sphinxcontrib-googleanalytics>=0.4",
+    "quantinuum-sphinx>=0.6.0",
+    "pytket-qiskit>=0.77.0",
 ]
 
 [tool.uv]
 prerelease = "allow"
 
 [tool.uv.sources]
-# guppylang = { git = "https://github.com/quantinuum/guppylang/", rev = "4561d49", subdirectory = "guppylang"}
+# guppylang = { git = "https://github.com/quantinuum/guppylang/", rev = "2eadd459c9da4048c630150eae6e81c3282c5bf5", subdirectory = "guppylang" }
 # hugr = { git = "https://github.com/quantinuum/hugr.git", rev = "fe98ba1", subdirectory = "hugr-py" }
 # tket2 = { git = "https://github.com/quantinuum/tket2", subdirectory = "tket2-py", rev = "309879e" }
 
 [dependency-groups]
-dev = [{ include-group = "docs" }]
-docs = [
-    "furo>=2024.8.6",
-    "myst-nb>=1.1.2",
-    "sphinx-copybutton>=0.5.2",
-    "sphinx-design>=0.6.1",
-    "sphinxcontrib-googleanalytics>=0.4",
-    "quantinuum-sphinx>=0.6.0",
-]
+
+docs = []
