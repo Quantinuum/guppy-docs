@@ -27,6 +27,7 @@ measurement.md
 comptime.md
 libraries.md
 custom_metadata.md
+protocols.md
 random.md
 modifiers/modifiers_index.md
 ```
