@@ -35,21 +35,21 @@
   flex: 0 0 0.96rem;
 }
 
-.notebook-action-row a.notebook-action-download,
-.notebook-action-row a.notebook-action-download:visited,
-.notebook-action-row a.notebook-action-download:hover,
-.notebook-action-row a.notebook-action-download:active,
-.notebook-action-row a.notebook-action-download:focus {
+.notebook-action-download,
+.notebook-action-download:visited,
+.notebook-action-download:hover,
+.notebook-action-download:active,
+.notebook-action-download:focus {
   color: inherit;
   border-color: #ccc;
   background-color: #fff;
 }
 
-.notebook-action-row a.notebook-action-download:hover {
+.notebook-action-download:hover {
   background-color: #d6d6d6;
 }
 
-.notebook-action-row a.notebook-action-download:visited:hover {
+.notebook-action-download:visited:hover {
   background-color: #d6d6d6;
 }
 
