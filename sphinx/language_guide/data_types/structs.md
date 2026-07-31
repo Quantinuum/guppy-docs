@@ -11,7 +11,7 @@ kernelspec:
 
 In Guppy, structures (abbreviated as structs) provide a way for users to group related data.
  Structs are similar to tuples in that the data they store can have different types. 
- But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that currently the fields of Guppy structs have to be immutable.
+ But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that as of Guppy v1, structs are affine and mutable by default. Prior to the v1 release, Guppy structs were always immutable.
  We can also define methods on structs, just as we can on Python classes.
 
 To define a Guppy struct we use the python `class` keyword together with the `@guppy.struct` decorator.
@@ -25,7 +25,6 @@ $$
 ```{code-cell} ipython3
 from guppylang import guppy
 from guppylang.std.builtins import array
-from guppylang.std.quantum import qubit
 
 @guppy.struct
 class PauliString:
@@ -45,6 +44,72 @@ Once we have defined a struct, we can check it just as we would check a Guppy fu
 ```{code-cell} ipython3
 PauliString.check()
 ```
+
+## Structs are mutable and affine by default
+
+Guppy structs are mutable by default: we can modify the fields of a struct after it has been defined.
+
+```{code-cell} ipython3
+
+
+@guppy
+def mutate_pauli() -> None:
+    # Create an instance of PauliString to represent XZX (XIX * IZI ~ XZX).
+    my_pauli = PauliString(array(True, False, True), array(False, True, False)) 
+
+    # After this mutation, my_pauli now represents XIX
+    my_pauli.zs = array(False, False, False)
+
+mutate_pauli.check(); 
+```
+
+<!---
+Structs are also affine by default meaning they cannot be implicitly copied with an assignment.
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+
+@guppy
+def implicit_copy() -> None:
+    my_pauli = PauliString(array(True, False, True), array(False, True, False)) 
+
+    my_new_pauli = my_pauli 
+
+    # Trying to access my_pauli after a move gives an error.
+    my_pauli.zs = array(False, False, False)
+
+implicit_copy.check(); 
+```
+-->
+
+If we want to make a struct immutable, then we can specify the `frozen=True` keyword argument, similarly to [Python dataclasses](https://docs.python.org/3/library/dataclasses.html#frozen-instances).
+
+
+```{code-cell} ipython3
+@guppy.struct(frozen=True)
+class FrozenPauliString:
+    xs: array[bool, 3]
+    zs: array[bool, 3]
+```
+
+As this `FrozenPauliString` object is immutable, we cannot mutate the fields after we initialize the struct.
+
+
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+@guppy
+def try_mutate() -> None:
+    frozen_pauli = FrozenPauliString(array(True, False, True), array(False, True, False))
+    frozen_pauli.xs = array(True, True, True) # attempt to change the xs field.
+
+try_mutate.check(); # Gives an error, we cannot mutate FrozenPauliString.
+```
+
 
 ## Methods on structs
 
