@@ -8,22 +8,28 @@ kernelspec:
 
 Guppy makes use of the python's [type parameter syntax](https://docs.python.org/3/reference/compound_stmts.html#type-params), introduced in python 3.12 (see: [PEP 695](https://peps.python.org/pep-0695/)).
 
-This means that type arguments can be given explicitly using square brackets when calling a function. Using this syntax, guppy function signatures can be written like:
+This means that type arguments can be given explicitly using square brackets when calling a function. Using this syntax, Guppy function signatures can be written like:
 
-```python
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
 def foo[A, B](a: A, b: B) -> B:
 ```
 
-These guppy functions have type parameters `A: Type, B: Type`, and `a: Type`. Their type arguments can be specified explicitly by callers:
+These Guppy functions have type parameters `A: Type, B: Type`, and `a: Type`. Their type arguments can be specified explicitly by callers:
 
-```python
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
 foo[int, str](42, "guppy")
 ```
 
 Usually these type arguments can be left to be inferred by the type checker.
 
 ### Bounds
-Generic functions can have their type bounds specified by an annotation in the type parameter list. In guppy these bounds can mean three things:
+Generic functions can have their type bounds specified by an annotation in the type parameter list. In Guppy these bounds can mean three things:
 #### Linearity
 The type argument can be required to be copyable and/or droppable using the `Copy`, `Drop` bounds:
 
@@ -70,7 +76,7 @@ we can require that it is implemented by a type arg `T` by writing:
  ```
 
 ### Type Arguments to Classes
-guppy structs and protocols can also take type parameters in the same way. The type parameters will be in scope for the signatures of the methods:
+Guppy structs and protocols can also take type parameters in the same way. The type parameters will be in scope for the signatures of the methods:
 
 ```{code-cell} ipython3
 @guppy.struct(frozen=True)
@@ -89,7 +95,7 @@ def myfoo() -> None:
 ```
 
 ### Type aliases
-Type variables for guppy type aliases must still be declared in the python 3.10 style:
+Type variables for Guppy type aliases must still be declared in the python 3.10 style:
 
 ```{code-cell} ipython3
 T = guppy.type_var("T")
@@ -104,4 +110,4 @@ QArr = guppy.type_alias("QArr", "array[qubit, N]", params=[N])
 ```
 
 ### Caveats
-* Note that guppy type parameters stand in for one type or constant. Python's `TypeVarTuple` and `ParamSpec` parameters (written as `*T` and `**P`, respectively) aren't supported.
+* Note that Guppy type parameters stand in for one type or constant. Python's `TypeVarTuple` and `ParamSpec` parameters (written as `*T` and `**P`, respectively) aren't supported.
