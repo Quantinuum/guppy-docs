@@ -10,7 +10,7 @@ kernelspec:
 ## Introduction
 
 In Guppy, structures (abbreviated as structs) provide a way for users to group related data.
- Structs are similar to tuples in that the data they store can can have different types. 
+ Structs are similar to tuples in that the data they store can have different types. 
  But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that currently the fields of Guppy structs have to be immutable.
  We can also define methods on structs, just as we can on Python classes.
 
@@ -168,7 +168,7 @@ We will define instances of the struct representing various Pauli strings. We ca
 
 
 ```{code-cell} ipython3
-from guppylang.std.builtins import result
+from guppylang.std.builtins import output
 
 @guppy
 def main() -> None:
@@ -188,18 +188,18 @@ def main() -> None:
         array(True, False, True), array(False, True, False)
     )
 
-    result("XII == ZII?", pauli_XII == pauli_ZII) # Expect 0 (False)
-    result("IZI == XZX?", pauli_IZI == pauli_XZX) # Expect 0 (False)
+    output("XII == ZII?", pauli_XII == pauli_ZII) # Expect 0 (False)
+    output("IZI == XZX?", pauli_IZI == pauli_XZX) # Expect 0 (False)
 
     # We expect a return value of 0 (False) for these three checks.
-    result("[XII, ZII] == 0?", pauli_XII.commutes_with(pauli_ZII))
-    result("[ZII, XII] == 0?", pauli_ZII.commutes_with(pauli_XII))
-    result("[IZI, XXZ] == 0?", pauli_IZI.commutes_with(pauli_XXZ))
+    output("[XII, ZII] == 0?", pauli_XII.commutes_with(pauli_ZII))
+    output("[ZII, XII] == 0?", pauli_ZII.commutes_with(pauli_XII))
+    output("[IZI, XXZ] == 0?", pauli_IZI.commutes_with(pauli_XXZ))
     
     # We expect a return value of 1 (True) for these three checks.
-    result("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
-    result("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
-    result("[XII, IZI] == 0?", pauli_XII.commutes_with(pauli_IZI))
+    output("[XXZ, XZX] == 0?", pauli_XXZ.commutes_with(pauli_XZX))
+    output("[XZX, XXZ] == 0?", pauli_XZX.commutes_with(pauli_XXZ))
+    output("[XII, IZI] == 0?", pauli_XII.commutes_with(pauli_IZI))
 ```
 
 We can execute the program with Selene emulator to verify that our methods work as expected.

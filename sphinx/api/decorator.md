@@ -280,7 +280,35 @@
    discard all qubits you know are measured during the circuit, or avoid measurements
    in the circuit and measure in Guppy afterwards.
 
+
+.. autoclass:: GuppyKwargs
+   :show-inheritance:
+
+   .. autoattribute:: unitary
+   .. autoattribute:: controllable
+   .. autoattribute:: daggerable
+
+.. autoclass:: GuppyStructKwargs
+   :show-inheritance:
+
+   .. autoattribute:: link_name
+
+
+.. autoclass:: GuppyEnumKwargs
+   :show-inheritance:
+
+   .. autoattribute:: link_name
+
+.. autoclass:: ParsedGuppyKwargs
+   :members:
+
 .. autodecorator:: guppylang.decorator.custom_guppy_decorator
+
+.. autodecorator:: metadata
+
+   See :doc:`../language_guide/custom_metadata`.
+
+.. autodecorator:: expected_qubits
 
 .. autofunction:: get_calling_frame
 

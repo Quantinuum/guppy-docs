@@ -4,14 +4,11 @@ This repository contains documentation for the Guppy programming language.
 
 ## Contents
 * The Guppy language guide
-* The Guppy landing page
 * The API documentation for the guppylang package
 * FAQs, changelog and migration guides
 * The guppylang [example notebooks](https://github.com/quantinuum/guppylang/tree/main/examples) (included via the guppylang submodule)
 
 The Sphinx docs are written in MyST markdown and rendered with the [myst-nb](https://myst-nb.readthedocs.io/en/latest/) library. This variant of markdown supports code cells which are executed at docs build time. See the section on [text-based notebooks](https://myst-nb.readthedocs.io/en/latest/authoring/basics.html#text-based-notebooks). The docs are styled with the [quantinuum-sphinx](https://github.com/quantinuum/quantinuum-sphinx) theme.
-
-For information on how the landing page is built, see the [landing page README](https://github.com/quantinuum/guppy-docs/blob/main/landing/README.md).
 
 ## Updating the docs for a new Guppy release
 
@@ -35,7 +32,6 @@ The following checks are run when a pull request is opened.
 Requirements:
 * The [just command runner](https://github.com/casey/just) 
 * Sphinx docs -> [uv](https://docs.astral.sh/uv/getting-started/installation/)
-* Landing page -> [Node and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)
 
 See the `devenv.nix` file.
 
@@ -50,7 +46,7 @@ Alternatively you can update the submodules if you have already cloned the repos
 ```shell
 git submodule update --init
 ```
-Next run the build with `just build`. This builds both the Sphinx docs and the landing page
+Next run the build with `just build`.
 
 ```shell
 just build

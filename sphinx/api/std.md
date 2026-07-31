@@ -29,7 +29,7 @@ Standard library builtins are to be used within Guppy [functions](../language_gu
     platform
     qsystem
     quantum
-    quantum_functional
+    random
     reflection
     string
     err
