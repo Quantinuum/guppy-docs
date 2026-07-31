@@ -1,16 +1,14 @@
 # Optimizer
 
 ```{eval-rst}
+
 .. currentmodule:: guppylang.optimizer
+.. automodule:: guppylang.optimizer
+.. autosummary::
+    :template: autosummary/class.rst
+    :toctree: generated
+    :nosignatures:
 
-.. autoclass:: OptimizationLevel
-    :members:
-
-.. autoclass:: OptimizerInstance
-
-    .. automethod:: with_optimization
-    .. automethod:: emulator
-    .. automethod:: compile
-    .. automethod:: compile_entrypoint
-    .. automethod:: compile_function
+    OptimizerInstance
+    OptimizationLevel
 ```

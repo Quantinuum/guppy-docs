@@ -12,6 +12,8 @@ kernelspec:
 While Guppy functions mostly look like regular Python functions (just annotated with the `@guppy` decorator), the code they contain is processed differently compared to Python code. You can normally run Python programs directly on your machine, whereas we want to be able to run Guppy programs with a variety of simulators and quantum hardware. 
 
 In order to achieve this, programs are statically compiled into an intermediate representation called [HUGR](https://github.com/quantinuum/hugr?tab=readme-ov-file).  An intermediate representation allows us to optimise programs before further converting them to code that can actually be executed on the desired target. 
+The optimisations applied during compilation can be configured using
+[optimization levels](../api/optimizer.md).
 
 A big advantage of compilation is that it helps us catch errors earlier than runtime. For example, the compiler ensures that variables are definitely defined before they are used.
 
