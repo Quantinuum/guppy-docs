@@ -261,7 +261,7 @@ def bar(arr: array[int, 3], i : int) -> int:
    return arr[i]
 ```
 The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
-for the array, *or* the message `i should have been even`.
+for the array, *or* the message `i should have been even!`.
 
 2. However, in all v1.x releases:
 * A `panic` (explicit or implicit) and an `exit` will happen in the same order they are written in the source code - the program will succeed or fail just as Python.
