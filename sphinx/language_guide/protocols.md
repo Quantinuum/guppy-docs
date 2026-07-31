@@ -121,21 +121,26 @@ Let's see an example of using protocols to make an interface for the state prepa
 
 ```{code-cell} ipython3
 from guppylang import guppy
-from guppylang.std.builtins import nat, qubit, array, result, Function, owned
-from guppylang.std.quantum import Measurement, measure_array, x
+from guppylang.std.builtins import array, Function, nat, output, qubit
+from guppylang.std.quantum import measure_array, x
+
 
 @guppy.protocol
 class StatePrep[N: nat]:
     @guppy.require
     def prep(self) -> array[qubit, N]: ...
 
+
 @guppy
-def process[N: nat](p: StatePrep[N], hadamard_test: Function[[array[qubit,N]], None]) -> None:
+def process[N: nat](
+    p: StatePrep[N], hadamard_test: Function[[array[qubit, N]], None]
+) -> None:
     """Run the algorithm using the given state prep circuit."""
     qs = p.prep()
     hadamard_test(qs)
     b = measure_array(qs)[0]
-    result('ancilla_measurement', b.read())
+    output("ancilla_measurement", b.read())
+
 
 # A default state prep routine that does nothing to the qubits
 @guppy.struct(frozen=True)
@@ -143,6 +148,7 @@ class DummyStatePrep[N: nat]:
     @guppy
     def prep(self) -> array[qubit, N]:
         return array(qubit() for _ in range(N))
+
 
 @guppy.struct(frozen=True)
 class MyStatePrep:
@@ -153,10 +159,12 @@ class MyStatePrep:
         x(qs[1])
         return qs
 
+
 @guppy
-def run_experiment(hadamard_test: Function[[array[qubit,4]], None]) -> None:
+def run_experiment(hadamard_test: Function[[array[qubit, 4]], None]) -> None:
     process(DummyStatePrep[4](), hadamard_test)
     process(MyStatePrep(), hadamard_test)
+
 
 run_experiment.check()
 ```
