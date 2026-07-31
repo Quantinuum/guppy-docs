@@ -284,7 +284,7 @@ This, explicit `panic` and `output` operations have their order maintained, but 
 For example,
 ```{code-cell} ipython3
 @guppy
-def baz[n,m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
+def baz[n, m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
     h(arr1[10])
     h(arr2[11])
 ```
