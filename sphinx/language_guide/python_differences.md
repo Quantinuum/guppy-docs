@@ -271,7 +271,7 @@ for the array, *or* the message `i should have been even`.
 * Multiple [output](../api/generated/guppylang.std.builtins.output.rst)s will occur in the order they are present in the source code.
 * [exit](../api/generated/guppylang.std.builtins.exit.rst) and [output](../api/generated/guppylang.std.builtins.output.rst)  will not be reordered
 
-Note this means [panic](../api/generated/guppylang.std.builtins.panic.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst) may appear to execute in a different order to the source code, although see [next section](#semantics-of-v10-release).
+Note this means [panic](../api/generated/guppylang.std.builtins.panic.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst) may appear to execute in a different order to the source code, although see [v1.0 semantics](#semantics-of-v10-release).
 
 We anticipate that a future 1.x release may add some form of debugging output that is guaranteed to execute in source-code order relative to [panic](../api/generated/guppylang.std.builtins.panic.rst).
 
