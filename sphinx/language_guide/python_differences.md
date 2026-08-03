@@ -231,20 +231,21 @@ See the [API documentation](guppylang.std.option.Option) as well as our [T state
 
 ## Parallel Execution Semantics
 
-In Python, programs behave as if every statement was executed in exactly the
-order the statements were written.
+In Python, we expect programs to behave as if every statement was executed in
+exactly the order the statements were written.
 
 Guppy relaxes this idea in a few ways to fit with the way modern and quantum
 computers may execute parts of a program in parallel, as follows.
 
 ```{note}
-These guarantees are for guppylang v1, they may become more relaxed
-in future major releases. Also just that we *allow* statements to be reordered
-does not mean that this will necessarily happen in practice - but this may
-change, within the bounds of this spec, in future *minor* releases.
+These guarantees are for guppylang v1, they may become more relaxed in future major releases.
+Also just that we *allow* statements to be reordered does not mean that this will
+necessarily happen in practice for any paritucal example. However, even for the
+exact same example, this may change in future *minor* releases, within the bounds
+of this specification.
 ```
 
-1. Operations that panic (both explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) s and other ops like array indexing) may be reordered with respect to each other. For example, this program:
+1. Operations that panic (both explicit [panic](../api/generated/guppylang.std.builtins.panic.rst)s and other ops like array indexing) may appear to execute in a different order than in the source code. For example, this program:
 ```{code-cell} ipython3
 @guppy
 def foo(i: int) -> int:
@@ -259,20 +260,20 @@ A call such as `foo(-20)` will definitely panic, but may panic with either messa
 @guppy
 def bar(arr: array[int, 3], i : int) -> int:
    if i % 2 == 1:
-      panic("i should have been even!")
+      panic("i should have been even")
    return arr[i]
 ```
 The call `bar(arr, 5)` may fail with *either* that the index was out of bounds
-for the array, *or* the message `i should have been even!`.
+for the array, *or* the message `i should have been even`.
 
 2. However, in all v1.x releases:
-* A [panic](../api/generated/guppylang.std.builtins.panic.rst)  (explicit or implicit) and an [exit](../api/generated/guppylang.std.builtins.exit.rst)  will happen in the same order they are written in the source code - the program will succeed or fail just as Python.
-* Multiple [output](../api/generated/guppylang.std.builtins.output.rst) s will occur in the order they are present in the source code.
-* [exit](../api/generated/guppylang.std.builtins.exit.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst)  will not be reordered
+* A [panic](../api/generated/guppylang.std.builtins.panic.rst) (explicit or implicit) and an [exit](../api/generated/guppylang.std.builtins.exit.rst) will happen in the same order they are written in the source code - the program will succeed or fail just as Python.
+* Multiple [output](../api/generated/guppylang.std.builtins.output.rst)s will occur in the order they are present in the source code.
+* [exit](../api/generated/guppylang.std.builtins.exit.rst) and [output](../api/generated/guppylang.std.builtins.output.rst)  will not be reordered
 
-Note this means [panic](../api/generated/guppylang.std.builtins.panic.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst)  can be reordered, but see next section.
+Note this means [panic](../api/generated/guppylang.std.builtins.panic.rst)  and [output](../api/generated/guppylang.std.builtins.output.rst) may appear to execute in a different order to the source code, although see [v1.0 semantics](#semantics-of-v10-release).
 
-We anticipate that a future 1.x release may add some form of debugging output that is guaranteed to execute in source-code order relative to [panic](../api/generated/guppylang.std.builtins.panic.rst) .
+We anticipate that a future 1.x release may add some form of debugging output that is guaranteed to execute in source-code order relative to [panic](../api/generated/guppylang.std.builtins.panic.rst).
 
 ### Semantics of v1.0 release
 
@@ -281,7 +282,7 @@ To document the behaviour of the current v1.0 release, but not as a guarantee ab
 * [output](../api/generated/guppylang.std.builtins.output.rst)  or [panic](../api/generated/guppylang.std.builtins.panic.rst)  operations
 * [exit](../api/generated/guppylang.std.builtins.exit.rst)  operations
 
-This, explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) and [output](../api/generated/guppylang.std.builtins.output.rst)  operations have their order maintained, but  this is not guaranteed for other releases in the 1.x line.
+Also, explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) and [output](../api/generated/guppylang.std.builtins.output.rst) operations have their order maintained, but this is not guaranteed for other releases in the 1.x line.
 
 For example,
 ```{code-cell} ipython3
@@ -293,13 +294,13 @@ def baz[n, m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
     h(arr2[11])
 ```
 If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
-(just as python). However, if both these problems occur in the same call to `baz`
-then v1.0 does not guaranteed which array access will be reported as failing. Similarly:
+(just as Python). However, if both these problems occur in the same call to `baz`
+then v1.0 does not guaranteed which array access will be reported as failing. Similarly here:
 ```{code-cell} ipython3
 @guppy
 def foo(arr1: array[qubit, 3], i: int) -> None:
   h(arr1[i])
   panic("Array access may not have succeeded")
 ```
-seeing the message "Array access may not have succeeded" is accurate, this
+the message `Array access may not have succeeded` is accurate, seeing this
 does not not necessarily mean that the array index was in bounds.
