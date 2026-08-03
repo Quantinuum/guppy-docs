@@ -293,7 +293,7 @@ def baz[n, m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
     h(arr2[11])
 ```
 If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
-(just as python). However, if both these problems occur in the same call to `baz`
+(just as Python). However, if both these problems occur in the same call to `baz`
 then v1.0 does not guaranteed which array access will be reported as failing. Similarly:
 ```{code-cell} ipython3
 @guppy
