@@ -240,8 +240,9 @@ computers may execute parts of a program in parallel, as follows.
 > [!NOTE]
 > These guarantees are for guppylang v1, they may become more relaxed in future major releases.
 > Also just that we *allow* statements to be reordered does not mean that this will
-> necessarily happen in practice - but this may change, within the bounds of this
-> spec, in future *minor* releases.
+> necessarily happen in practice for any paritucal example. However, even for the
+> exact same example, this may change in future *minor* releases, within the bounds
+> of this specification.
 
 1. Operations that panic (both explicit [panic](../api/generated/guppylang.std.builtins.panic.rst)s and other ops like array indexing) may appear to execute in a different order than in the source code. For example, this program:
 ```{code-cell} ipython3
@@ -300,5 +301,5 @@ def foo(arr1: array[qubit, 3], i: int) -> None:
   h(arr1[i])
   panic("Array access may not have succeeded")
 ```
-seeing the message "Array access may not have succeeded" is accurate, this
+seeing the message `Array access may not have succeeded` is accurate, this
 does not not necessarily mean that the array index was in bounds.
