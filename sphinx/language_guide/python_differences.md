@@ -294,12 +294,12 @@ def baz[n, m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
 ```
 If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
 (just as Python). However, if both these problems occur in the same call to `baz`
-then v1.0 does not guaranteed which array access will be reported as failing. Similarly:
+then v1.0 does not guaranteed which array access will be reported as failing. Similarly here:
 ```{code-cell} ipython3
 @guppy
 def foo(arr1: array[qubit, 3], i: int) -> None:
   h(arr1[i])
   panic("Array access may not have succeeded")
 ```
-seeing the message `Array access may not have succeeded` is accurate, this
+the message `Array access may not have succeeded` is accurate, seeing this
 does not not necessarily mean that the array index was in bounds.
