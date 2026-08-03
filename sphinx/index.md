@@ -8,6 +8,6 @@ api/api_index.md
 guppylang/guppylang/CHANGELOG.md
 migration_guide.md
 faqs.md
-Guppy v1 preview docs <https://docs.quantinuum.com/guppy-v1.x/getting_started.html>
+Guppy v1 docs <https://docs.quantinuum.com/guppy/getting_started.html>
 GitHub <https://github.com/quantinuum/guppylang>
 ```
