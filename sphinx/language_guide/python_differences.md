@@ -237,12 +237,13 @@ exactly the order the statements were written.
 Guppy relaxes this idea in a few ways to fit with the way modern and quantum
 computers may execute parts of a program in parallel, as follows.
 
-> [!NOTE]
-> These guarantees are for guppylang v1, they may become more relaxed in future major releases.
-> Also just that we *allow* statements to be reordered does not mean that this will
-> necessarily happen in practice for any paritucal example. However, even for the
-> exact same example, this may change in future *minor* releases, within the bounds
-> of this specification.
+```{note}
+These guarantees are for guppylang v1, they may become more relaxed in future major releases.
+Also just that we *allow* statements to be reordered does not mean that this will
+necessarily happen in practice for any paritucal example. However, even for the
+exact same example, this may change in future *minor* releases, within the bounds
+of this specification.
+```
 
 1. Operations that panic (both explicit [panic](../api/generated/guppylang.std.builtins.panic.rst)s and other ops like array indexing) may appear to execute in a different order than in the source code. For example, this program:
 ```{code-cell} ipython3
