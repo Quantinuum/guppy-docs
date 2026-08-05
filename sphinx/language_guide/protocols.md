@@ -35,7 +35,7 @@ class MyProto[T]:
 ```
 
 ```{note}
-The bodies of the methods declared with `@guppy.require` must be empty (literally `...`). Default implementations of protocol methods is not currently supported in Guppy.
+The bodies of the methods declared with `@guppy.require` must be empty (literally `...`). Default implementations of protocol methods are not currently supported in Guppy.
 ```
 
 ### Implementing a protocol
@@ -180,9 +180,9 @@ run_experiment.check()
 ```
 
 ## Callable
-As of Guppy v1.0, the [`Callable`](functions.md#guppy-functions-can-be-higher-order-functions) type in guppy is treated as an interface.
+As of Guppy v1.0, the [`Callable`](functions.md#guppy-functions-can-be-higher-order-functions) type in Guppy is treated as an interface.
 This means that taking a `Callable` argument in a function will have that function require a type parameter that implements the `Callable` protocol.
 
-This protocol behaves differently to user-defined protocols because it's not currently possible in guppy to correctly write the type signature of `__call__`.
+This protocol behaves differently to user-defined protocols because it's not currently possible in Guppy to correctly write the type signature of `__call__`.
 
-Thus, there are special cases for [guppy functions](../api/generated/guppylang.std.builtins.Function.rst) (e.g. which have type `Function[[A,B],C]`), and [modified](modifiers/modifiers_index.md) versions of those functions.
+Thus, there are special cases for [Guppy functions](../api/generated/guppylang.std.builtins.Function.rst) (e.g. which have type `Function[[A,B],C]`), and [modified](modifiers/modifiers_index.md) versions of those functions.
