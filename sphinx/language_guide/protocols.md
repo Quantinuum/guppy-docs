@@ -19,16 +19,19 @@ from typing import Self
 @guppy.protocol
 class MyProto:
     @guppy.require
-    def foo(self, nat) -> nat: ...
+    def foo(self, n: nat) -> nat: ...
 ```
-Note that all protocol methods must take a `self` arg - the class that implements the protocol - as a first argument.
+```{note}
+Arguments to required functions need to be given names, like the `n: nat` above, but the argument names aren't considered when checking that the protocol is implemented.
+```
+All protocol methods must take a `self` arg - the class that implements the protocol - as a first argument.
 
 Protocols can take type arguments, as can their required methods:
 ```{code-cell} ipython3
 @guppy.protocol
 class MyProto[T]:
     @guppy.require
-    def foo[S, T](self, S) -> T: ...
+    def foo[S, T](self, s: S) -> T: ...
 ```
 
 ```{note}
