@@ -19,7 +19,7 @@ from typing import Self
 @guppy.protocol
 class MyProto:
     @guppy.require
-    def foo(self, nat) -> nat: ...
+    def foo(self, n: nat) -> nat: ...
 ```
 Note that all protocol methods must take a `self` arg - the class that implements the protocol - as a first argument.
 
@@ -28,7 +28,7 @@ Protocols can take type arguments, as can their required methods:
 @guppy.protocol
 class MyProto[T]:
     @guppy.require
-    def foo[S, T](self, S) -> T: ...
+    def foo[S, T](self, s: S) -> T: ...
 ```
 
 ```{note}
