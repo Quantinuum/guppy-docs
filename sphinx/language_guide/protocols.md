@@ -94,7 +94,7 @@ def main() -> None:
 Unfortunately, this doesn't allow us to use the syntactic sugar `x + y` in `add_two`.
 ```
 
-### Taking a protocol arguments
+### Taking protocol arguments
 As shown above, protocols are written as bounds on type arguments using [type parameter syntax](type_arg_syntax.md).
 Naturally this means we can add multiple protocol bounds to a type argument, like
 ```{code-cell} ipython3
@@ -121,6 +121,9 @@ tags: [skip-execution]
 ---
 @guppy
 def foo[T: MyProto](t: T) -> ...
+```
+```{note}
+Type variables declared with `guppy.type_var(...)` cannot be given protocol bounds. Thus, a type variable that needs to implement a protocol must be specified with Python 3.12's type argument syntax.
 ```
 
 ## Example: State Preparation
