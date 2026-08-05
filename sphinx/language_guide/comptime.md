@@ -154,7 +154,7 @@ plus_state.compile_function();
 
 ## Compile time arguments
 
-Guppy also supports "comptime arguments". This function arguments can be annotated as known at compile time. This allows us to write Guppy functions and methods which are more expressive provided we do not use any runtime values.
+Guppy also supports "comptime arguments". These function arguments can be annotated as known at compile time. This allows us to write Guppy functions and methods which are more expressive provided we do not use any runtime values.
 
 As an example, let us consider a function which allocates an array of `n` qubits using a comprehension. 
 ```{code-cell} ipython3

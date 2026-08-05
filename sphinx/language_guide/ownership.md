@@ -211,7 +211,7 @@ borrow_consumed.check() # Check fails :(
 We have just seen how Guppy does not allow consumed qubits to be used. Conversely, there is also a safety concern if qubits are not deallocated after they are used. Unmeasured temporary qubits often indicate an implementation bug. Further, if these qubits are discarded this frees up qubits which can potentially be used later in the computation.
 
 Guppy ensures that qubits are properly deallocated after they are no longer in use. 
-To enable this safety guarantee, guppy functions must either consume a qubit they own (by a destructive measurement or discard) or return it to the calling scope.
+To enable this safety guarantee, Guppy functions must either consume a qubit they own (by a destructive measurement or discard) or return it to the calling scope.
 
 Here the function below allocates a qubit and applies a Hadamard gate without returning the qubit. The Hadamard merely borrows the qubit without consuming it. This is considered a leakage error as there would be no remaining reference to the qubit `q` once `main` returns.
 

@@ -14,7 +14,7 @@ In Guppy, structures (abbreviated as structs) provide a way for users to group r
  But the data in a struct instance is accessed via the fields instead of tuple unpacking or indexing. Note that as of Guppy v1, structs are affine and mutable by default. Prior to the v1 release, Guppy structs were always immutable.
  We can also define methods on structs, just as we can on Python classes.
 
-To define a Guppy struct we use the python `class` keyword together with the `@guppy.struct` decorator.
+To define a Guppy struct we use the Python `class` keyword together with the `@guppy.struct` decorator.
 
 To illustrate how structs work in Guppy, let's define a `PauliString` struct that represents a tensor product of single-qubit Pauli operators. 
 
