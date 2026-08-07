@@ -18,18 +18,18 @@ If you are new to Guppy then first check out our [getting started guide](../gett
 
 data_types/types_index.md
 functions.md
-type_arg_syntax.md
 control_flow.md
 static.md
-python_differences.md
 ownership.md
 measurement.md
 comptime.md
-libraries.md
-custom_metadata.md
-protocols.md
-random.md
 modifiers/modifiers_index.md
+protocols.md
+libraries.md
+python_differences.md
+random.md
+type_arg_syntax.md
+custom_metadata.md
 ```
 ---
 
