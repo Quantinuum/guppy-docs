@@ -148,7 +148,7 @@ def main() -> None:
 package = main.compile()
 ```
 
-There may be some specialized benchmarking use cases where we want to turn off even these basic quantum optimizations. In such a case we should compile with `OptimizationLevel.Classical` as below. This applies the classical optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass but applies no quantum optimization.
+There may be some specialized benchmarking use cases where we want to turn off even these basic quantum optimizations. This can be done by adjusting the [OptimizationLevel](api/generated/guppylang.optimizer.OptimizationLevel.rst) when compiling. In such a case we should compile with `OptimizationLevel.Classical` as below. This applies the classical optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass but applies no quantum optimization.
 
 ```{code-cell} ipython3
 from guppylang import OptimizationLevel, guppy
