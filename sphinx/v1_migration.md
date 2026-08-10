@@ -123,6 +123,53 @@ main.check() # Fails type check in v1, valid in 0.x
 This code above gives an error in Guppy v1. However if we specified `@guppy.struct(frozen=True)` then this code would type-check as `s1` would be an immutable copy of `s0` instead of a reference to `s0`.
 
 
+## Some basic quantum optimizations are now done by default
+
+The Guppy v1 release brings a [optimization interface](api/optimizer.md) for applying compiler passes to Guppy programs. Programs in Guppy v1 now have the [RemoveRedundancies](https://docs.quantinuum.com/tket/api-docs/passes.html#pytket.passes.RemoveRedundancies) pass applied upon `.compile()` and `.emulator` along with the classical structural optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass. This pass performs some very basic optimizations such as cancelling adjacent self-inverse gates, diagonal gates before measurements etc. 
+
+This means that the two redundant CX gates will be cancelled in the function below
+
+```{code-cell} ipython3
+from guppylang import guppy
+from guppylang.std.quantum import h, cx, qubit, measure
+
+@guppy
+def main() -> None:
+    q0, q1 = qubit(), qubit()
+    h(q0)
+    # Two redundant CX gates
+    cx(q0, q1)
+    cx(q0, q1)
+    # Measure q0 and q1
+    measure(q0)
+    measure(q1)
+
+# Redundant CX gates are now cancelled by RemoveRedundancies
+package = main.compile()
+```
+
+There may be some specialized benchmarking use cases where we want to turn off even these basic quantum optimizations. This can be done by adjusting the [OptimizationLevel](api/generated/guppylang.optimizer.OptimizationLevel.rst) when compiling. In such a case we should compile with `OptimizationLevel.Classical` as below. This applies the classical optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass but applies no quantum optimization.
+
+```{code-cell} ipython3
+from guppylang import OptimizationLevel, guppy
+from guppylang.std.quantum import h, cx, qubit, measure
+
+@guppy
+def main() -> None:
+    q0, q1 = qubit(), qubit()
+    h(q0)
+    # Two redundant CX gates
+    cx(q0, q1)
+    cx(q0, q1)
+    # Measure q0 and q1
+    measure(q0)
+    measure(q1)
+
+# OptimizationLevel.Classical applies Normalize but will keep the self-inverse CX gates.
+package = main.with_opt_level(OptimizationLevel.Classical).compile()
+```
+
+
 ## Standard library breakages
 
 1. Internal fields of `collections` types are now private
