@@ -127,7 +127,7 @@ This code above gives an error in Guppy v1. However if we specified `@guppy.stru
 
 The Guppy v1 release brings a [optimization interface](api/optimizer.md) for applying compiler passes to Guppy programs.
 In the new release, there are now some optimizations which are applied by default.
- Programs in Guppy v1 now have the [RemoveRedundancies](https://docs.quantinuum.com/tket/api-docs/passes.html#pytket.passes.RemoveRedundancies) pass applied upon `.compile()` and `.emulator` after some classical structural optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass. 
+ Programs in Guppy v1 now have the [RemoveRedundancies](https://docs.quantinuum.com/tket/api-docs/passes.html#pytket.passes.RemoveRedundancies) pass applied upon `.compile()` and `.emulator` after some classical structural optimizations done by the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass. 
  This [RemoveRedundancies](https://docs.quantinuum.com/tket/api-docs/passes.html#pytket.passes.RemoveRedundancies) pass performs some very basic quantum optimizations such as cancelling adjacent self-inverse gates, diagonal gates before measurements etc. [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) performs some purely classical optimizations and has no effect on the quantum gates.
 
 This means that the two redundant CX gates will be cancelled in the function below
