@@ -197,23 +197,18 @@ PauliString.check()
 In our `PauliString` example so far, we have hard-coded the length of the string to be three Pauli terms. We can generalize this struct using the following generic syntax.
 
 ```{code-cell} ipython3
-from typing import Generic
-
-n = guppy.nat_var("n")
-
-
 @guppy.struct
-class PauliString(Generic[n]):
+class PauliString[n: nat]:
     xs: array[bool, n]
-    zs: array[bool, n]
+    ys: array[bool, n]
 
 
     @guppy
-    def __eq__(self: PauliString[n], other: PauliString[n]) -> bool:
+    def __eq__[n: nat](self: PauliString[n], other: PauliString[n]) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: PauliString[n], other: PauliString[n]) -> bool:
+    def commutes_with[n: nat](self: PauliString[n], other: PauliString[n]) -> bool:
         return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
             self.zs, other.xs
         )
