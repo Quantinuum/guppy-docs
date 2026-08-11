@@ -200,7 +200,7 @@ In our `PauliString` example so far, we have hard-coded the length of the string
 @guppy.struct
 class PauliString[n: nat]:
     xs: array[bool, n]
-    ys: array[bool, n]
+    zs: array[bool, n]
 
 
     @guppy
