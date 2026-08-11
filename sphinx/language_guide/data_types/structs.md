@@ -122,15 +122,12 @@ Let's first define a notion of equality with an `__eq__` method. We will test fo
 As a first step we can define an `array_eq` helper function which returns `True` if two boolean arrays contain the same elements and returns `False` otherwise.
 
 ```{code-cell} ipython3
-n = guppy.nat_var("n")
-
 @guppy
-def array_eq(a: array[bool, n], b: array[bool, n]) -> bool:
+def array_eq[n: nat](a: array[bool, n], b: array[bool, n]) -> bool:
     for i in range(n):
         if a[i] != b[i]:
             return False
     return True
-
 ```
 
 We can now use this helper function to define an `__eq__` method on the `PauliString` struct. Note that in Guppy, struct methods also require the `@guppy` decorator just like Guppy functions.
@@ -142,7 +139,7 @@ class PauliString:
     zs: array[bool, 3]
 
     @guppy
-    def __eq__(self: "PauliString", other: "PauliString") -> bool:
+    def __eq__(self: PauliString, other: PauliString) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 ```
 
@@ -164,7 +161,7 @@ If the parity is even the two strings commute.
 
 ```{code-cell} ipython3
 @guppy
-def bitwise_and_parity(a: array[bool, n], b: array[bool, n]) -> bool:
+def bitwise_and_parity[n: nat](a: array[bool, n], b: array[bool, n]) -> bool:
     and_arr = array(a[i] & b[i] for i in range(n))
     out = False
     for i in range(n):
@@ -183,11 +180,11 @@ class PauliString:
     zs: array[bool, 3]
 
     @guppy
-    def __eq__(self: "PauliString", other: "PauliString") -> bool:
+    def __eq__(self: PauliString, other: PauliString) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: "PauliString", other: "PauliString") -> bool:
+    def commutes_with(self: PauliString, other: PauliString) -> bool:
         return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
             self.zs, other.xs
         )
@@ -200,22 +197,18 @@ PauliString.check()
 In our `PauliString` example so far, we have hard-coded the length of the string to be three Pauli terms. We can generalize this struct using the following generic syntax.
 
 ```{code-cell} ipython3
-from typing import Generic
-
-n = guppy.nat_var("n")
-
-
 @guppy.struct
-class PauliString(Generic[n]):
+class PauliString[n: nat]:
     xs: array[bool, n]
     zs: array[bool, n]
 
+
     @guppy
-    def __eq__(self: "PauliString[n]", other: "PauliString[n]") -> bool:
+    def __eq__[n: nat](self: PauliString[n], other: PauliString[n]) -> bool:
         return array_eq(self.xs, other.xs) and array_eq(self.zs, other.zs)
 
     @guppy
-    def commutes_with(self: "PauliString[n]", other: "PauliString[n]") -> bool:
+    def commutes_with[n: nat](self: PauliString[n], other: PauliString[n]) -> bool:
         return not bitwise_and_parity(self.xs, other.zs) ^ bitwise_and_parity(
             self.zs, other.xs
         )
