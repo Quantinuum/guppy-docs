@@ -34,8 +34,8 @@ class PauliString:
 
 In this struct we represent a Pauli string by two arrays of booleans indicating whether the Pauli string contains $X$ or $Z$ terms at a given location. 
 
-So for the Pauli string $XZX$ the `xs` field would be `array(1, 0, 1)` and `zs` would be `array(0, 1, 0)`.
-As $XZ=-iY$ we can represent the string $YXY$ with the arrays `xs = array(1, 1, 1)` and `zs = array(1, 0, 1)`. Note that in this simplified example we neglect the complex phase.
+So for the Pauli string $XZX$ the `xs` field would be `array(True, False, True)` and `zs` would be `array(False, True, False)`.
+As $XZ=-iY$ we can represent the string $YXY$ with the arrays `xs = array(True, True, True)` and `zs = array(True, False, True)`. Note that in this simplified example we neglect the complex phase.
 
 In this example we have hard-coded the length to be 3. We can generalize this struct later.
 
