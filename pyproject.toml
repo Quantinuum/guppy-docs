@@ -14,7 +14,6 @@ dependencies = [
     "furo>=2024.8.6",
     "myst-nb>=1.1.2",
     "sphinx-copybutton>=0.5.2",
-    "sphinxcontrib-googleanalytics>=0.4",
     "quantinuum-sphinx>=0.6.0",
     "pytket-qiskit>=0.77.0",
     "sphinx-autobuild>=2025.8.25",

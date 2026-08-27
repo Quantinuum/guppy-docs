@@ -1,8 +1,6 @@
 r"""Configuration file for the Sphinx documentation builder."""
 
-import os
 import guppylang
-
 
 html_title = f"Guppy v{guppylang.__version__} Documentation"
 
@@ -34,7 +32,6 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosectionlabel",
-    "sphinxcontrib.googleanalytics",
     "quantinuum_sphinx",
     "sphinx_tabs.tabs",
     "sphinx.ext.napoleon",
@@ -176,16 +173,11 @@ coverage_ignore_functions = [
     "empty_priority_queue",
     "empty_stack",
 ]
-# -------------------------------------------------------------------
-# Google analytics
-
-gaid = os.getenv("GOOGLE_ANALYTICS_ID", "G-YPQ1FTGDL3")
-googleanalytics_id = gaid
 
 master_doc = "index"
 
 # Exclude unsupported members of guppylang.std
-from guppylang.std import unsupported  # noqa: E402
+from guppylang.std import unsupported
 
 
 def skip_member(app, what, name, obj, skip, options):
