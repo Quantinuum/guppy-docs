@@ -34,8 +34,8 @@ class PauliString:
 
 In this struct we represent a Pauli string by two arrays of booleans indicating whether the Pauli string contains $X$ or $Z$ terms at a given location. 
 
-So for the Pauli string $XZX$ the `xs` field would be `array(1, 0, 1)` and `zs` would be `array(0, 1, 0)`.
-As $XZ=-iY$ we can represent the string $YXY$ with the arrays `xs = array(1, 1, 1)` and `zs = array(1, 0, 1)`. Note that in this simplified example we neglect the complex phase.
+So for the Pauli string $XZX$ the `xs` field would be `array(True, False, True)` and `zs` would be `array(False, True, False)`.
+As $XZ=-iY$ we can represent the string $YXY$ with the arrays `xs = array(True, True, True)` and `zs = array(True, False, True)`. Note that in this simplified example we neglect the complex phase.
 
 In this example we have hard-coded the length to be 3. We can generalize this struct later.
 
@@ -63,8 +63,7 @@ def mutate_pauli() -> None:
 mutate_pauli.check(); 
 ```
 
-<!---
-Structs are also affine by default meaning they cannot be implicitly copied with an assignment.
+Guppy structs are also affine, just like arrays, so they cannot be implicitly copied through variable assignment. If we assign a `PauliString` instance to a new variable and then try to access the original, we will get an error.
 
 ```{code-cell} ipython3
 ---
@@ -82,7 +81,6 @@ def implicit_copy() -> None:
 
 implicit_copy.check(); 
 ```
--->
 
 If we want to make a struct immutable, then we can specify the `frozen=True` keyword argument, similarly to [Python dataclasses](https://docs.python.org/3/library/dataclasses.html#frozen-instances).
 
