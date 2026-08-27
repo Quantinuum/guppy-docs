@@ -34,7 +34,6 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosectionlabel",
-    "sphinxcontrib.googleanalytics",
     "quantinuum_sphinx",
     "sphinx_tabs.tabs",
     "sphinx.ext.napoleon",
@@ -185,7 +184,7 @@ googleanalytics_id = gaid
 master_doc = "index"
 
 # Exclude unsupported members of guppylang.std
-from guppylang.std import unsupported  # noqa: E402
+from guppylang.std import unsupported
 
 
 def skip_member(app, what, name, obj, skip, options):
