@@ -63,8 +63,7 @@ def mutate_pauli() -> None:
 mutate_pauli.check(); 
 ```
 
-<!---
-Structs are also affine by default meaning they cannot be implicitly copied with an assignment.
+Guppy structs are also affine, just like arrays, so they cannot be implicitly copied through variable assignment. If we assign a `PauliString` instance to a new variable and then try to access the original, we will get an error.
 
 ```{code-cell} ipython3
 ---
@@ -82,7 +81,6 @@ def implicit_copy() -> None:
 
 implicit_copy.check(); 
 ```
--->
 
 If we want to make a struct immutable, then we can specify the `frozen=True` keyword argument, similarly to [Python dataclasses](https://docs.python.org/3/library/dataclasses.html#frozen-instances).
 
