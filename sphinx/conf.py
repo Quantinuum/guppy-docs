@@ -1,8 +1,6 @@
 r"""Configuration file for the Sphinx documentation builder."""
 
-import os
 import guppylang
-
 
 html_title = f"Guppy v{guppylang.__version__} Documentation"
 
@@ -175,11 +173,6 @@ coverage_ignore_functions = [
     "empty_priority_queue",
     "empty_stack",
 ]
-# -------------------------------------------------------------------
-# Google analytics
-
-gaid = os.getenv("GOOGLE_ANALYTICS_ID", "G-YPQ1FTGDL3")
-googleanalytics_id = gaid
 
 master_doc = "index"
 
