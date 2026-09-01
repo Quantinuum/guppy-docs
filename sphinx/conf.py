@@ -124,6 +124,7 @@ linkcheck_exclude_documents = ["guppylang/guppylang/CHANGELOG"]
 linkcheck_ignore = [
     "https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html",
     "https://docs.quantinuum.com/selene",
+    r"https://[a-z0-9-]+\.stackexchange\.com/",
 ]
 
 linkcheck_rate_limit_timeout = 100
