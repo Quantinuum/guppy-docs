@@ -189,5 +189,28 @@ def skip_member(app, what, name, obj, skip, options):
     return None
 
 
+def prune_sourceless_viewcode_modules(app):
+    """Drop viewcode entries for modules whose source could not be read.
+
+    ``sphinx.ext.viewcode`` stores ``False`` for a module it could not read the
+    source of (e.g. the compiled ``builtins`` module) and never writes a page
+    for it, but its ``_modules`` index is built from every module it saw, so it
+    links to pages that do not exist. Pruning them before viewcode's own
+    ``html-collect-pages`` handler (hence the lower priority) keeps the index
+    limited to modules that actually get a page.
+
+    The ``not entry`` test mirrors the skip condition in viewcode's own
+    ``collect_pages``, so exactly the modules it declines to render are removed.
+    Entries for real modules are ``(code, tags, used, refname)`` tuples and are
+    therefore always truthy.
+    """
+    modules = getattr(app.env, "_viewcode_modules", None)
+    if modules:
+        for modname in [name for name, entry in modules.items() if not entry]:
+            del modules[modname]
+    return ()
+
+
 def setup(app):
     app.connect("autodoc-skip-member", skip_member)
+    app.connect("html-collect-pages", prune_sourceless_viewcode_modules, priority=100)
