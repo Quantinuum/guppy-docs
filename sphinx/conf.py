@@ -4,6 +4,8 @@ import guppylang
 
 html_title = f"Guppy v{guppylang.__version__} Documentation"
 
+project = "guppylang"
+
 html_theme = "quantinuum_sphinx"
 html_theme_options = {
     "sidebar_hide_name": False,
