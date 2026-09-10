@@ -13,7 +13,7 @@ import math
 
 from guppylang import array, guppy
 from guppylang.std.builtins import control, dagger, nat, output
-from guppylang.std.quantum import angle, h, measure, qubit, rx, s, x, z
+from guppylang.std.quantum import angle, h, measure, qubit, rx, rz, s, x, z
 
 @guppy
 def classical_step(n: int) -> int:
@@ -160,16 +160,14 @@ Function flags can also be used with [`guppy.comptime` functions](../comptime.md
 <!--  Say that this is possible only thank to comptime -->
 ```{code-cell} ipython3
 @guppy.comptime(unitary=True)
-def choose_gate(q: qubit, flag: bool) -> None:
-    if flag:
-        h(q)
-    else:
-        x(q)
+def rz_to_all[n: nat](qs: array[qubit, n]) -> None:
+    for q in qs:
+        rz(q, angle(-0.5))
 
 @guppy
-def modified_comptime_call(c: qubit, q: qubit) -> None:
+def modified_comptime_call(c: qubit, qs: array[qubit, 3]) -> None:
     with control(c), dagger:
-        choose_gate(q, True)
+        rz_to_all(qs)
 
 modified_comptime_call.check()
 ```
