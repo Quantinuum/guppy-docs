@@ -352,7 +352,7 @@ For example, `controllable=True` together with a custom `daggered` method is ins
 tags: [raises-exception]
 ---
 @guppy.unitary
-class missing_combined_version:
+class missing_ctrl_daggered:
     @guppy(controllable=True)
     def __call__(q: qubit) -> None:
         s(q)
@@ -370,7 +370,7 @@ Conversely, supplying only `ctrl_daggered` does not provide the separate control
 tags: [raises-exception]
 ---
 @guppy.unitary
-class missing_separate_versions:
+class missing_controlled_and_daggered:
     @guppy
     def __call__(q: qubit) -> None:
         s(q)
