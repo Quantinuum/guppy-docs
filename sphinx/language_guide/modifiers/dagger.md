@@ -29,16 +29,12 @@ sdg q;
 h q;
 ```
 
-<!-- 
-TODO: till more classical op are allowed inside dagger blocks, we 
-do not need this in docs
-
-see (https://github.com/Quantinuum/guppy-docs/issues/194)
-
-Classical operations remain in order even though the quantum operations are reversed:
-
+Some simple classical operations, such as array indexing, assignment of classical variables, angles definition or arithmetic operations, are allowed inside dagger blocks.
+When those operations are performed inside a dagger block, they are executed in the original order, unaffected by the inversion of the quantum part. 
+For example, consider the following function:
 ```{code-cell} ipython3
-from guppylang.std.quantum import rz
+from guppylang.std.angles import angle
+from guppylang.std.quantum import rx, rz
 
 @guppy
 def invert_rotations(q: qubit) -> None:
@@ -52,7 +48,7 @@ def invert_rotations(q: qubit) -> None:
 
 invert_rotations.check()
 ```
-
+The `dagger` block corresponds to the following sequence of operations:
 ```
 a = 4;
 theta = 1 / a;
@@ -60,7 +56,8 @@ a /= 2;
 phi = 1 / a;
 rz(-phi) q;
 rx(-theta) q;
-``` -->
+```
+
 
 ## Forbidden operations in dagger blocks
 
