@@ -30,7 +30,7 @@ h q;
 ```
 
 Some simple classical operations, such as array indexing, angle construction, or arithmetic operations, are allowed inside dagger blocks.
-When those operations are performed inside a dagger block, they are executed in the original order, unaffected by the inversion of the quantum part. 
+When those operations are performed inside a dagger block, they are executed in the original orderd; only the quantum operations are inverted.
 For example, consider the following function:
 ```{code-cell} ipython3
 from guppylang.std.angles import angle
