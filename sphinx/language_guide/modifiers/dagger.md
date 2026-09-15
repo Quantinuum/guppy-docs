@@ -29,7 +29,7 @@ sdg q;
 h q;
 ```
 
-Some simple classical operations, such as array indexing, angle construction, or arithmetic operations, are allowed inside dagger blocks.
+Some simple classical operations, such as array indexing, angle construction (e.g. `angle(1/2)`), or arithmetic operations, are allowed inside dagger blocks.
 When those operations are performed inside a dagger block, they are executed in the original ordered; only the quantum operations are inverted.
 For example, consider the following function:
 ```{code-cell} ipython3
