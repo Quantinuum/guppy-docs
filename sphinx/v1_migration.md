@@ -10,7 +10,7 @@ Guppy v1 is the first stable release of the Guppy quantum programming language. 
 
 Guppy v1 requires Python 3.12 or later: support for Python 3.10 and 3.11 has been removed.
 
-This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
+This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of the new features available in Guppy v1, see the {ref}`Guppy v1 release notes <guppy-release-1-0-1>`.
 
 
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
