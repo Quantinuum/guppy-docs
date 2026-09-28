@@ -134,7 +134,7 @@ By adding the ``Function`` annotation, we have effictively told the compiler tha
 
 Since Guppy treats functions as values, we can also define function that take other functions as arguments or return a function as a result.
 These are known as *higher-order functions*.
-The preferred method to take functions as arguments is via the [``Callable``](collections.abc.Callable) protocol already available in Python:
+The preferred method to take functions as arguments is via the [``Callable``](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable) protocol already available in Python:
 
 ```{code-cell} ipython3
 from collections.abc import Callable
@@ -202,7 +202,7 @@ def return_callable() -> Callable[[int], bool]:
 return_callable.check()
 ```
 
-We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the [``Function``](guppylang.std.builtins.Function) type introduced in the previous section instead of [``Callable``](collections.abc.callable)`:
+We want to lift this restriction in a future version of Guppy, however, for now the best work around is to use the [``Function``](guppylang.std.builtins.Function) type introduced in the previous section instead of [``Callable``](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable):
 
 ```{code-cell} ipython3
 @guppy

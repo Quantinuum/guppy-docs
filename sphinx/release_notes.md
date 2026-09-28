@@ -63,7 +63,7 @@ See the [full changelog for 1.0.1](https://github.com/Quantinuum/guppylang/relea
 
 #### A new `Measurement` type
 
-Guppy has a new dedicated [`Measurement`](https://docs.quantinuum.com/guppy/api/generated/guppylang.std.quantum.measure.html) type. Values returned from measurement functions now have this type instead of returning a `bool` directly. See the [language guide section on measurements](https://docs.quantinuum.com/guppy/language_guide/measurement.html) for the design rationale behind this and the relevant migration guide section [here](https://docs.quantinuum.com/guppy/v1_migration.html#the-stdquantummeasure-function-now-returns-a-measurement-rather-than-a-bool).
+Guppy has a new dedicated [`Measurement`](https://docs.quantinuum.com/guppy/api/generated/guppylang.std.quantum.measure.html) type. Values returned from measurement functions now have this type instead of returning a `bool` directly. See the [language guide section on measurements](https://docs.quantinuum.com/guppy/language_guide/measurement.html) for the design rationale behind this and the {ref}`Guppy v1 migration instructions <guppy-v1-measurement-migration>` for updating existing code.
 
 #### Control and dagger modifiers
 
