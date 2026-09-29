@@ -127,6 +127,7 @@ linkcheck_ignore = [
     "https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html",
     "https://docs.quantinuum.com/selene",
     r"https://[a-z0-9-]+\.stackexchange\.com/",
+    "https://docs.quantinuum.com/guppy/language_guide/comptime.html#capturing-python-values",
 ]
 
 linkcheck_rate_limit_timeout = 100
