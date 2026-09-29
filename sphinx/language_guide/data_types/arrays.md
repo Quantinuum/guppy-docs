@@ -53,7 +53,7 @@ get_array_of_arrays.check()
 
 Note that in addition to the standard array type, there is also [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) which is immutable.
 
-Currently `frozenarray`s can only be created when loading a Python list in a `comptime` or `py` expression. For more on `comptime` expressions, see the relevant [language guide section](../comptime.md#comptime-expressions).
+Currently, `frozenarray`s can be created by capturing a Python list or by evaluating a Python list expression with `comptime`. For more about capturing Python values, see the relevant [language guide section](../comptime.md#capturing-python-values).
 
 
 As `frozenarray` is immutable we cannot reassign its entries as we can with the `array` type.
@@ -63,20 +63,20 @@ As `frozenarray` is immutable we cannot reassign its entries as we can with the 
 tags: [raises-exception]
 ---
 from guppylang.std.array import frozenarray
-from guppylang.std.builtins import comptime
+
+FROZEN_NUMBERS = [1, 3, 5, 7, 9]
 
 @guppy
 def mutate_frozenarray() -> frozenarray[int, 5]:
-    numbers = comptime([1, 3, 5, 7, 9]) # Create a frozenarray from a Python list
-    numbers[0] = 39 # Try to change first element to 39
-    return numbers
+    FROZEN_NUMBERS[0] = 39  # Try to change first element to 39
+    return FROZEN_NUMBERS
 
 mutate_frozenarray.check()
 ```
 
 Note that it is preferable to use `frozenarray` (rather than a mutable `array`) where possible for performance reasons. Being immutable, a `frozenarray` will compile faster and have superior runtime performance when targeting Quantinuum systems hardware and emulators.
 
-An example use case for a `frozenarray` would be for lookup table decoders in quantum error correction. For example, we could precompute a large numpy array of integers which represent syndromes and their corresponding corresponding corrections. This array can then be loaded into a Guppy context as a comptime list. We can then have read only access to our table during the runtime of our quantum program.
+An example use case for a `frozenarray` would be for lookup table decoders in quantum error correction. For example, we could precompute a large Python list of integers which represent syndromes and their corresponding corrections. Referencing this list directly in a Guppy function captures it as a `frozenarray`, giving us read-only access to the table during the runtime of our quantum program.
 
 ## Indexing into arrays
 
@@ -318,15 +318,13 @@ A [frozenarray](../../api/generated/guppylang.std.array.frozenarray.rst) can be 
 
 ```{code-cell} ipython3
 from guppylang.std.array import frozenarray
-from guppylang.std.builtins import comptime
+
+COPY_SOURCE = [1, 11, 21]
 
 @guppy
 def main() -> None:
-    # Create a frozenarray using a comptime expression
-    frozen_arr = comptime([1, 11, 21])
-
-    # Copy the frozenarray
-    arr_copy: array[int, 3] = frozen_arr.mutable_copy()
+    # Capture the Python list and copy it into a mutable array
+    arr_copy: array[int, 3] = COPY_SOURCE.mutable_copy()
 
     # The arr_copy object is mutable
     arr_copy[0] = 171 

@@ -60,12 +60,71 @@ Inside those sections, we'll be able to use all the features that Python offers,
 
 
 
+## Capturing Python values
+
+A regular ``@guppy`` function can refer directly to variables from the surrounding Python scope.
+Guppy captures supported Python values and embeds them as constants in the compiled program; they do not need to be wrapped in ``comptime`` or ``py``.
+
+For example, we can use [``networkx``](https://networkx.org/) to generate a random graph, convert its edges to a Python list, and then reference that list directly in Guppy:
+
+```{code-cell} ipython3
+import networkx as nx
+from guppylang.std.quantum import cz
+
+g = nx.erdos_renyi_graph(n=20, p=0.2)
+edges = list(g.edges)
+
+@guppy
+def apply_edges(qs: array[qubit, 20]) -> None:
+    for i, j in edges:
+        cz(qs[i], qs[j])
+
+apply_edges.compile_function();
+```
+
+Captured values must have types that are compatible with Guppy, for example numbers, tuples, or lists thereof.
+Python lists are captured as immutable Guppy arrays (see [below](#arrays-and-lists) for details).
+Other Python data structures or classes are not supported because Guppy does not understand them.
+For example, capturing NetworkX's edge view directly fails:
+
+```{code-cell} ipython3
+---
+tags: [raises-exception]
+---
+edge_view = g.edges
+
+@guppy
+def apply_edge_view(qs: array[qubit, 20]) -> None:
+    for i, j in edge_view:
+        cz(qs[i], qs[j])
+
+apply_edge_view.compile_function();  # Compilation fails
+```
+
+Captured Python values can also be used in types. Here, ``N`` supplies both the array size in the return type and the bounds of the Guppy loops:
+
+```{code-cell} ipython3
+from guppylang.std.quantum import h
+
+N = 20
+
+@guppy
+def plus_state() -> array[qubit, N]:
+    qs = array(qubit() for _ in range(N))
+    for i in range(N):
+        h(qs[i])
+    return qs
+
+plus_state.compile_function();
+```
+
+Only a Python value referenced by name is captured implicitly.
+If Python must evaluate an expression—such as a function call, attribute access, or arithmetic—the expression must be marked with ``comptime(...)``.
+
 ## Comptime expressions
 
-Code that should be executed at compile-time rather than run-time is marked with the ``comptime`` keyword.
-The simplest variant of this feature is the ``comptime(...)`` expression that marks a single expression to be executed at compile-time.
-
-For example, we can wrap the division by zero from the previous section into a ``comptime`` expression:
+The ``comptime(...)`` expression marks an expression to be evaluated by Python at compile time.
+For example, we can wrap the division by zero from the previous section in a ``comptime`` expression:
 
 ```{code-cell} ipython3
 ---
@@ -90,47 +149,11 @@ tags: [raises-exception]
 divide_by_zero.compile_function();  # Division by zero is triggered here
 ```
 
-### Use case: parameterising programs
+Guppy's ``comptime`` code is executed by the Python interpreter, which is why the example can use Python's ``math`` library.
+As with captured values, the result of a ``comptime`` expression must have a Guppy-compatible type.
+The legacy spelling ``py(...)`` is an alias for ``comptime(...)``; new code should use ``comptime`` when an expression needs compile-time evaluation.
 
-Guppy's ``comptime`` code is executed by the Python interpreter.
-That's why we were able to use Python's ``math`` library in the example above.
-Furthermore, ``comptime`` expressions have access to all outer Python variables in scope.
-This allows us to precompute values in Python using arbitrary libraries that wouldn't be available in Guppy, and then use this data inside a Guppy function.
-
-For example, we could use the [``networkx``](https://networkx.org/) library to generate a random graph and then construct the corresponding graph state in Guppy:
-
-```{code-cell} ipython3
-import networkx as nx
-from guppylang.std.quantum import cz
-
-g = nx.erdos_renyi_graph(n=20, p=0.2)
-
-@guppy
-def apply_edges(qs: array[qubit, 20]) -> None:
-    for i, j in comptime(list(g.edges)):
-        cz(qs[i], qs[j])
-
-apply_edges.compile_function();
-```
-
-Note that ``comptime`` expressions must evaluate to types that are compatible with Guppy, for example numbers, tuples, or lists thereof.
-In particular, Python lists are interpreted as immutable Guppy arrays (see [below](#arrays-and-lists) for details).
-Other Python data structures or classes are not supported as Guppy doesn't understand them.
-That's why we had to write ``list(g.edges)`` instead of just ``g.edges`` above:
-
-```{code-cell} ipython3
----
-tags: [raises-exception]
----
-@guppy
-def apply_edges(qs: array[qubit, 20]) -> None:
-    for i, j in comptime(g.edges):
-        cz(qs[i], qs[j])
-
-apply_edges.compile_function();  # Compilation fails
-```
-
-### Use case: type-level comptime expressions
+### Type-level comptime expressions
 
 Guppy allows us to define functions that are [generic](static.md#generics) over the size of arrays, for example taking an ``array[qubit, n]`` where ``n`` is a type-level variable.
 However, the kinds of operations available on those type-level numbers is limited.
@@ -138,18 +161,14 @@ For example, it's not possible to write ``array[qubit, n+1]`` for an array of le
 Comptime expressions can be a nice workaround in those situations since they are also valid on type-level:
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import h
-
-N = 20  # Define array length as Python variable
-
 @guppy
-def plus_state() -> array[qubit, comptime(N + 1)]:
+def larger_plus_state() -> array[qubit, comptime(N + 1)]:
     qs = array(qubit() for _ in range(comptime(N + 1)))
     for i in range(comptime(N + 1)):
         h(qs[i])
     return qs
 
-plus_state.compile_function();
+larger_plus_state.compile_function();
 ```
 
 ## Compile time arguments
@@ -362,7 +381,7 @@ def array_mismatch(x: int) -> int:
 array_mismatch.compile_function();  # Compilation fails
 ```
 
-Note that if we load a Python list inside a `comptime` expression, we get a [frozenarray](../api/generated/guppylang.std.array.frozenarray.rst) which is immutable. For more on `frozenarray` see the [arrays section](../language_guide/data_types/arrays.md#frozenarrays) of the language guide.
+Note that when we capture a Python list, or produce one with a `comptime` expression, we get a [frozenarray](../api/generated/guppylang.std.array.frozenarray.rst) which is immutable. For more on `frozenarray` see the [arrays section](../language_guide/data_types/arrays.md#frozenarrays) of the language guide.
 
 
 ### Type checking and safety
@@ -453,4 +472,3 @@ def apply_gates(q: qubit) -> None:
 ```
 
 This is because the ``for`` loop and ``match`` statements are all executed at compile-time, so only the gate sequence remains.
-
