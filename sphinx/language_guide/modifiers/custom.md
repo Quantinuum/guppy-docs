@@ -5,6 +5,9 @@ kernelspec:
 ---
 
 # Custom Modifiers
+```{note}
+Introduced in ``v1.1.1``.
+```
 
 When a function is called inside a modifier block, Guppy normally generates its controlled or daggered implementation from the function body.
 This requires the body to satisfy the restrictions described in [control](control.md), [dagger](dagger.md), and [function flags](functions.md).
