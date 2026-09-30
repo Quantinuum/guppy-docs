@@ -1,6 +1,11 @@
 ---
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Repository ref to check out
+        type: string
+        default: main
   push:
     branches: [main]
     paths: [pyproject.toml]
@@ -16,6 +21,7 @@ engine:
   id: copilot
   model: claude-sonnet-5
 checkout:
+  ref: ${{ inputs.ref || 'main' }}
   fetch-depth: 0
   submodules: true
 network: defaults
