@@ -3,7 +3,7 @@
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
 (guppy-release-1-1-2)=
-## 1.1.2 — 29 September 2026
+## 1.1.2 — 30 September 2026
 
 ### Fixes
 * Fixed local variables being incorrectly shadowed by global definitions of the same name. ([#2375](https://github.com/Quantinuum/guppylang/issues/2375)).
