@@ -2,6 +2,16 @@
 
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
+(guppy-release-1-1-2)=
+## 1.1.2 — 29 September 2026
+
+### Fixes
+* Fixed local variables being incorrectly shadowed by global definitions of the same name. ([#2375](https://github.com/Quantinuum/guppylang/issues/2375)).
+* Fixed compilation of generic functions called inside a `with control` block, where copyable generic captures could retain a stale `Inout` flag and cause the block signature to disagree with its CFG outputs. ([#2248](https://github.com/Quantinuum/guppylang/issues/2248)).
+* Corrected the diagnostic span for a missing return statement when a `while` loop uses a walrus (`:=`) condition, so the error now highlights the whole loop and includes the "Consider adding a return statement" note. ([#1792](https://github.com/Quantinuum/guppylang/issues/1792))
+
+See the [full changelog for 1.1.2](https://github.com/Quantinuum/guppylang/releases/tag/guppylang-v1.1.2).
+
 (guppy-release-1-1-1)=
 ## 1.1.1 — 14 September 2026
 
