@@ -14,7 +14,7 @@ permissions:
 
 engine:
   id: copilot
-  model: claude-sonnet-4.6
+  model: claude-sonnet-5
 checkout:
   fetch-depth: 0
   submodules: true
