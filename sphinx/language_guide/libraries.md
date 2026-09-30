@@ -6,7 +6,9 @@ kernelspec:
 
 # Libraries
 
+```{note}
 Introduced in ``v0.21.13``.
+```
 
 ## Introduction
 
