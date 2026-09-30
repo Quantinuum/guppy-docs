@@ -1,2 +1,4 @@
 # Fine-tune GitHub's language detection
 sphinx/**/*.md linguist-detectable
+
+.github/workflows/*.lock.yml linguist-generated=true
