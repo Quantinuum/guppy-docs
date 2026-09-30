@@ -8,9 +8,13 @@ on:
 permissions:
   contents: read
   pull-requests: read
-  copilot-requests: write
+  # Using a PAT to access copilot until we can get organizational
+  # copilot billing with GH enterprise.
+  copilot-requests: none
 
-engine: copilot
+engine:
+  id: copilot
+  model: claude-sonnet-4.6
 checkout:
   fetch-depth: 0
   submodules: true
@@ -22,6 +26,10 @@ tools:
     toolsets: [repos, pull_requests]
 
 safe-outputs:
+  threat-detection:
+    engine:
+      id: copilot
+      model: claude-haiku-4.5
   create-pull-request:
     draft: true
     max: 10
