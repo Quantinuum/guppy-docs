@@ -10,9 +10,10 @@ Guppy v1 is the first stable release of the Guppy quantum programming language. 
 
 Guppy v1 requires Python 3.12 or later: support for Python 3.10 and 3.11 has been removed.
 
-This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of all of the new features available in Guppy v1, see the [changelog](../sphinx/guppylang/guppylang/CHANGELOG.md).
+This guide details the key code changes needed to migrate to Guppy v1 from the 0.x series and explains the rationale for the changes. For a summary of the new features available in Guppy v1, see the {ref}`Guppy v1 release notes <guppy-release-1-0-1>`.
 
 
+(guppy-v1-measurement-migration)=
 ## The `std.quantum.measure` function now returns a `Measurement` rather than a `bool`
 
 A major change in Guppy v1 is that the [measure](api/generated/guppylang.std.quantum.measure.rst) function no longer returns a `bool` indicating $\lvert0\rangle$ or $\lvert1\rangle$. Instead, it returns a [Measurement](api/generated/guppylang.std.quantum.Measurement.rst) object. This can be resolved to a boolean
@@ -151,7 +152,7 @@ def main() -> None:
 package = main.compile()
 ```
 
-There may be some specialized benchmarking use cases where we want to turn off even these basic quantum optimizations. This can be done by adjusting the [OptimizationLevel](api/generated/guppylang.optimizer.OptimizationLevel.rst) when compiling. In such a case we should compile with [OptimizationLevel.Classical](api/generated/guppylang.optimizer.OptimizationLevel.rst#guppylang.optimizer.OptimizationLevel.Classical) as below. This applies the classical optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass but does no quantum optimization.
+There may be some specialized benchmarking use cases where we want to turn off even these basic quantum optimizations. This can be done by adjusting the [OptimizationLevel](api/generated/guppylang.optimizer.OptimizationLevel.rst) when compiling. In such a case we should compile with {py:attr}`guppylang.optimizer.OptimizationLevel.Classical` as below. This applies the classical optimizations in the [Normalize](https://quantinuum.github.io/tket2/generated/tket.passes.Normalize.html) pass but does no quantum optimization.
 
 ```{code-cell} ipython3
 from guppylang import OptimizationLevel, guppy

@@ -6,7 +6,7 @@ This repository contains documentation for the Guppy programming language.
 
 - The Guppy language guide
 - The API documentation for the guppylang package
-- FAQs, changelog and migration guides
+- FAQs, release notes and migration guides
 - The guppylang [example notebooks](https://github.com/quantinuum/guppylang/tree/main/examples) (included via the guppylang submodule)
 
 The Sphinx docs are written in MyST markdown and rendered with the [myst-nb](https://myst-nb.readthedocs.io/en/latest/) library. This variant of markdown supports code cells which are executed at docs build time. See the section on [text-based notebooks](https://myst-nb.readthedocs.io/en/latest/authoring/basics.html#text-based-notebooks). The docs are styled with the [quantinuum-sphinx](https://github.com/quantinuum/quantinuum-sphinx) theme.
@@ -14,8 +14,10 @@ The Sphinx docs are written in MyST markdown and rendered with the [myst-nb](htt
 ## Updating the docs for a new Guppy release
 
 1. Update the `pyproject.toml` in this repository, run `uv sync` to update `uv.lock`.
-2. Bump the `guppylang` submodule in this repository to the latest release tag (this submodule is only used for example notebooks and changelog).
+2. Bump the `guppylang` submodule in this repository to the latest release tag (this submodule is only used for the example notebooks).
 3. Create a release from this repository. The docs website will deploy the content corresponding to the latest release tag from this repository.
+
+When the Guppy version in `pyproject.toml` is updated, the [release notes update workflow](.github/workflows/release-notes-update.md) will open an automated draft pull request proposing a new entry in the [release notes](sphinx/release_notes.md). Use this draft PR as a base, update it as needed, and merge it when ready.
 
 Note that there are some known issues with the `just coverage` check which need to be resolved before the check is reliable.
 
