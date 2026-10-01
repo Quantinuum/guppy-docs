@@ -146,4 +146,5 @@ local_assignment.check()
 control.md
 dagger.md
 functions.md
+custom.md
 ```
