@@ -233,7 +233,7 @@ def use_custom_h(c: qubit, q: qubit) -> None:
 use_custom_h.check()
 ```
 
-### Using metadata with custom implementations
+### Using decorators with custom implementations
 
 Metadata and [function flags](functions.md) belong on `__call__`.
 For example, this declaration sets an expected qubit count and allows automatic generation of all modified versions:
