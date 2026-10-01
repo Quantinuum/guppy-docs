@@ -95,8 +95,6 @@ nb_merge_streams = True  # Accumulates all stdout streams into one, same with st
 # See https://github.com/quantinuum-dev/guppy-docs/pull/51#issuecomment-2757314376
 suppress_warnings = [
     "misc.highlighting_failure",
-    # Suppress warnings about markdown headings in the generated changelog.
-    "autosectionlabel.guppylang/guppylang/CHANGELOG",
 ]
 
 exclude_patterns = [
@@ -114,6 +112,7 @@ exclude_patterns = [
     "guppylang/docs/**",
     "guppylang/tests/**",
     "guppylang/guppylang-internals/CHANGELOG.md",
+    "guppylang/guppylang/CHANGELOG.md",
     "guppylang/quickstart.md",
     "guppylang/DEVELOPMENT.md",
 ]
@@ -121,12 +120,11 @@ exclude_patterns = [
 
 # Sphinx link checks
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
-linkcheck_exclude_documents = ["guppylang/guppylang/CHANGELOG"]
-
 linkcheck_ignore = [
     "https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html",
     "https://docs.quantinuum.com/selene",
     r"https://[a-z0-9-]+\.stackexchange\.com/",
+    "https://docs.quantinuum.com/guppy/language_guide/comptime.html#capturing-python-values",
 ]
 
 linkcheck_rate_limit_timeout = 100
