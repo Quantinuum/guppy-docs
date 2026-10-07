@@ -2,6 +2,16 @@
 
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
+(guppy-release-1-1-3)=
+## 1.1.3 — 7 October 2026
+
+### Fixes
+* Fixed inference of type variables in higher-order generic modifier arguments, such as passing a generic `@guppy.unitary` function to a parameter typed `Daggerable[[array[qubit, n]], None]`. ([#2402](https://github.com/Quantinuum/guppylang/pull/2402))
+* Fixed instance method resolution so methods provided by protocol bounds on generic type variables, such as `__bool__` from a `Booleable` bound, are found correctly. ([#2401](https://github.com/Quantinuum/guppylang/pull/2401))
+* Fixed resolution of enclosing-scope names inside `@guppy.unitary` methods, where the method's `__call__` definition was missing the enclosing class frame. ([#2389](https://github.com/Quantinuum/guppylang/pull/2389))
+
+See the [full changelog for 1.1.3](https://github.com/Quantinuum/guppylang/releases/tag/guppylang-v1.1.3).
+
 (guppy-release-1-1-2)=
 ## 1.1.2 — 30 September 2026
 
