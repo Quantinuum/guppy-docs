@@ -195,7 +195,7 @@ def prefix[T: Drop, n: nat](xs: array[T, comptime(n + 1)] @owned) -> array[T, n]
     return first
 ```
 
-Here, ``comptime(n + 1)`` encodes a Python expression that is evaluated at comptile-time to compute the required length of the array.
+Here, ``comptime(n + 1)`` encodes a Python expression that is evaluated at compile-time to compute the required length of the array.
 Note that we included ``from __future__ import annotations`` to prevent the Python interpreter from executing the ``comptime`` expression.
 Alternatively, we can also quote the expression, i.e. write ``"comptime(n + 1)"``.
 

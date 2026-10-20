@@ -169,7 +169,7 @@ def larger_plus_state[N: nat]() -> array[qubit, comptime(N + 1)]:
     return qs
 ```
 
-Note that we needed to included ``from __future__ import annotations`` to prevent the Python interpreter from executing the ``comptime`` expression.
+Note that we needed to include ``from __future__ import annotations`` to prevent the Python interpreter from executing the ``comptime`` expression.
 Alternatively, we can also quote the expression, i.e. write ``"comptime(N + 1)"``.
 When calling ``larger_plus_state``, we need to explicitly provide an annotation for ``N`` since the compiler is not able to infer values through ``comptime`` expressions:
 
