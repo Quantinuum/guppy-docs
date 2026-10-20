@@ -153,22 +153,86 @@ Guppy's ``comptime`` code is executed by the Python interpreter, which is why th
 As with captured values, the result of a ``comptime`` expression must have a Guppy-compatible type.
 The legacy spelling ``py(...)`` is an alias for ``comptime(...)``; new code should use ``comptime`` when an expression needs compile-time evaluation.
 
-### Type-level comptime expressions
+## Type-level comptime expressions
 
 Guppy allows us to define functions that are [generic](static.md#generics) over the size of arrays, for example taking an ``array[qubit, n]`` where ``n`` is a type-level variable.
-However, the kinds of operations available on those type-level numbers is limited.
-For example, it's not possible to write ``array[qubit, n+1]`` for an array of length ``n + 1``.
-Comptime expressions can be a nice workaround in those situations since they are also valid on type-level:
+We can use ``comptime`` expressions in types to perform computations on these type-level variables:
 
 ```{code-cell} ipython3
+from __future__ import annotations
+
 @guppy
-def larger_plus_state() -> array[qubit, comptime(N + 1)]:
+def larger_plus_state[N: nat]() -> array[qubit, comptime(N + 1)]:
     qs = array(qubit() for _ in range(comptime(N + 1)))
     for i in range(comptime(N + 1)):
         h(qs[i])
     return qs
+```
 
-larger_plus_state.compile_function();
+Note that we needed to included ``from __future__ import annotations`` to prevent the Python interpreter from executing the ``comptime`` expression.
+Alternatively, we can also quote the expression, i.e. write ``"comptime(N + 1)"``.
+When calling ``larger_plus_state``, we need to explicitly provide an annotation for ``N`` since the compiler is not able to infer values through ``comptime`` expressions:
+
+```{code-cell} ipython3
+@guppy
+def three_qubit_plus() -> tuple[qubit, qubit, qubit]:
+    [q1, q2, q3] = larger_plus_state[2]()
+    return q1, q2, q3
+
+three_qubit_plus.check()
+```
+
+As a more complicated example, the function below takes two arrays of lengths ``N`` and ``M``, and returns the concatenated array of length ``N + M``:
+
+```{code-cell} ipython3
+from guppylang.std.array import empty_array
+
+@guppy
+def append[N: nat, M: nat](
+    xs: array[int, N], ys: array[int, M]
+) -> array[int, comptime(N + M)]:
+    out = array(0 for _ in range(comptime(N + M)))
+    for i in range(N):
+        out[i] = xs[i]
+    for i in range(M):
+        out[N + i] = ys[i]
+    return out
+
+@guppy
+def test_append() -> None:
+    xs = append(array(1), array(2, 3, 4))
+    output("xs", xs)
+
+test_append.emulator(n_qubits=1).run().results
+```
+
+We can also use ``comptime`` expressions in [struct](data_types/structs.md) fields.
+The example below uses this to define a matrix type that is backed by an array in row-major order:
+
+```{code-cell} ipython3
+@guppy.struct
+class Matrix[N: nat, M: nat]:
+    values: array[int, comptime(N * M)]
+
+    @guppy
+    @staticmethod
+    def from_rows[N: nat, M: nat](rows: array[array[int, M], N]) -> Matrix[N, M]:
+        return Matrix[N, M](
+            array(rows[i // M][i % M] for i in range(comptime(N * M)))
+        )
+
+    @guppy
+    def get(self, row: int, column: int) -> int:
+        return self.values[row * M + column]
+
+@guppy
+def test_matrix() -> None:
+    m = Matrix.from_rows(
+        array(array(1, 2, 3), array(4, 5, 6), array(7, 8, 9))
+    )
+    output("trace", m.get(0, 0) + m.get(1, 1) + m.get(2, 2))
+
+test_matrix.emulator(n_qubits=1).run().results
 ```
 
 ## Compile time arguments

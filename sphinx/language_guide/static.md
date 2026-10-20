@@ -122,25 +122,22 @@ def identity(x):
 In Guppy however, we need to explicitly state that the type is a generic parameter to make the function polymorphic:
 
 ```{code-cell} ipython3
-T = guppy.type_var("T")
-
 @guppy
-def identity(x: T) -> T:
+def identity[T: Copy](x: T) -> T:
     return x
 ```
 
+The annotation ``T: Copy`` means that the ``identity`` function is only defined for copyable types ``T``.
+See the chapters on [type argument syntax](type_arg_syntax.md) and [ownership](ownership.md) for further details.
 An example of parameters representing natural numbers are functions that are generic over the length of arrays:
 
 ```{code-cell} ipython3
 from guppylang.std.builtins import array
 
-T = guppy.type_var("T")
-n = guppy.nat_var("n")
-
 @guppy
-def apply_identity(a: array[T, n]) -> None:
+def apply_identity[T: Copy, n: nat](a: array[T, n]) -> None:
     for i in range(n):
-        identity(a[i])
+        a[i] = identity(a[i])
 ```
 
 This function now works for arrays of any length and type! This is possible because the compiler turns each instantiation of a generic function into a concrete instance with specific types in a process called monomorphisation.
@@ -159,10 +156,8 @@ main.check() # Check succeeds :)
 
 Normally determining the specific type is done automatically through type inference, but it is also possible to explicitly apply type arguments if needed.
 ```{code-cell} ipython3
-n = guppy.nat_var("n")
-
 @guppy
-def foo(x: array[int, n]) -> int: 
+def foo[n: nat](x: array[int, n]) -> int: 
     return n
 
 @guppy
@@ -178,7 +173,7 @@ Generics can be particularly useful for parameterising quantum programs by an ar
 from guppylang.std.quantum import qubit, cx, measure_array, Measurement
 
 @guppy
-def rep_code(q: array[qubit, n]) -> array[Measurement, n]:
+def rep_code[n: nat](q: array[qubit, n]) -> array[Measurement, n]:
     a = array(qubit() for _ in range(n))
     for i in range(n - 1):                
         cx(q[i], a[i])
@@ -188,31 +183,24 @@ def rep_code(q: array[qubit, n]) -> array[Measurement, n]:
 rep_code.check()
 ```
 
-As we saw in the previous section, it is sometimes not possible for the Guppy compiler to infer types and it is necessary to include additional information through type annotations. This can be the case with functions that have generic return values. Consider the following `append` function which takes an array of qubits and appends a qubit to the end. In this example, the input array of qubits is of generic size `n` while the return is of size `m`. 
+Furthermore, ``comptime`` expressions can be used to encode more complicated relationships between array lengths and type parameters.
+For example, consider the following function that takes array of length ``n + 1`` and returns a new array without the last element:
 
 ```{code-cell} ipython3
-from guppylang.std.builtins import owned
-from guppylang.std.option import some
-
-m = guppy.nat_var("m")
+from __future__ import annotations
 
 @guppy
-def append(q_arr: array[qubit, n] @owned, qb: qubit @owned) -> array[qubit, m]:
-    q_arr_opt = array(nothing[qubit]() for _ in range(m))
-    
-    idx = 0
-    for q in q_arr:
-        q_arr_opt[idx].swap(some(q)).unwrap_nothing()
-        idx += 1
-
-    q_arr_opt[m-1].swap(some(qb)).unwrap_nothing()
-
-    qs = array(q.unwrap() for q in q_arr_opt)
-    
-    return qs
+def prefix[T: Drop, n: nat](xs: array[T, comptime(n + 1)] @owned) -> array[T, n]:
+    *first, _last = xs
+    return first
 ```
 
-When we then call `append` in from our `main` program, the compiler will throw an error as it is unable to infer the return size `m` of the array.
+Here, ``comptime(n + 1)`` encodes a Python expression that is evaluated at comptile-time to compute the required length of the array.
+Note that we included ``from __future__ import annotations`` to prevent the Python interpreter from executing the ``comptime`` expression.
+Alternatively, we can also quote the expression, i.e. write ``"comptime(n + 1)"``.
+
+Finally, we noted above that it is sometimes not possible for the Guppy compiler to infer types and it is necessary to include additional information through type annotations.
+Function arguments with ``comptime`` expressions is one such example:
 
 ```{code-cell} ipython3
 ---
@@ -220,23 +208,24 @@ tags: [raises-exception]
 ---
 @guppy
 def main() -> None:
-    qb = array(qubit() for _ in range(2))
-    qb_new = append(qb, qubit())
-    
-    measure_array(qb_new)
+    xs = array(1, 2, 3, 4)
+    ys = prefix(xs)
+    output("prefix", ys)
 
 main.check()
 ```
 
-However, as we know the size of the array that should be returned, we can provide this information with a type hint for the compiler:
+The compiler throws an error since it cannot infer the value of ``n`` through the ``comptime`` expression.
+We can fix this by giving an explicit annotation to the compiler:
 
 ```{code-cell} ipython3
 @guppy
 def main() -> None:
-    qb = array(qubit() for _ in range(2))
-    qb_new: array[qubit, 2] = append(qb, qubit()) # Type hint added
-    
-    measure_array(qb_new)
+    xs = array(1, 2, 3, 4)
+    ys = prefix[int, 3](xs)
+    output("prefix", ys)
 
-main.check()
+main.emulator(n_qubits=1).run().results
 ```
+
+See the [chapter on the ``comptime`` feature](comptime.md#type-level-comptime-expressions) for more examples of ``comptime`` expressions.
