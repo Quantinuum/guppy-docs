@@ -206,6 +206,14 @@ def test_append() -> None:
 test_append.emulator(n_qubits=1).run().results
 ```
 
+```{code-cell} python
+---
+tags: [remove-cell]
+---
+# Hidden test for expected output
+assert _[0].entries == [("xs", [1, 2, 3, 4])]
+```
+
 We can also use ``comptime`` expressions in [struct](data_types/structs.md) fields.
 The example below uses this to define a matrix type that is backed by an array in row-major order:
 
@@ -233,6 +241,14 @@ def test_matrix() -> None:
     output("trace", m.get(0, 0) + m.get(1, 1) + m.get(2, 2))
 
 test_matrix.emulator(n_qubits=1).run().results
+```
+
+```{code-cell} python
+---
+tags: [remove-cell]
+---
+# Hidden test for expected output
+assert _[0].entries == [("trace", 15)]
 ```
 
 ## Compile time arguments
