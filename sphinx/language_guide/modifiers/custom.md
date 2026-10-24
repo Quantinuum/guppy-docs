@@ -79,14 +79,16 @@ use_repeated_rz.check()
 
 Call `repeated_rz` like a function; the surrounding modifiers select the implementation.
 Although the definition uses Python class syntax, it groups function implementations rather than defining objects.
-There is no `self` parameter and no instance to construct.
+For a standalone custom modifier like this one, there is no `self` parameter and no instance to construct.
+Custom modifiers defined as struct or enum methods take `self`, as described in [Custom Modifiers as Struct and Enum Methods](#custom-modifiers-as-struct-and-enum-methods).
 
 ## Declaring a Custom Modifier
 
 A custom modifier declaration starts with a `__call__` method, which defines the operation performed by an ordinary function call.
 This method is required, even if the operation will only be used inside modifier blocks.
 We can then add `daggered`, `controlled`, and `ctrl_daggered` to supply whichever modified implementations we need, subject to the combinations described in the next section.
-Each method is a separate Guppy function decorated with `@guppy`; none takes `self` or accesses instance state.
+Each implementation is a separate Guppy function decorated with `@guppy`.
+In a standalone declaration, these functions do not take `self` or access instance state.
 
 The signatures describe different versions of the same operation, so they must agree:
 
@@ -385,3 +387,125 @@ class missing_controlled_and_daggered:
 ```
 
 Supply both missing methods, or enable their automatic generation with `unitary=True` on `__call__`.
+
+## Custom Modifiers as Struct and Enum Methods
+
+```{note}
+Support for custom modifiers introduced in ``v1.2``.
+```
+
+We can define a custom modifier as a method by nesting its `@guppy.unitary` class inside a `@guppy.struct` or `@guppy.enum` definition.
+Each implementation then takes `self` as its first argument, followed by the operation's other arguments.
+In all four implementations, `self` refers to the enclosing struct or enum instance on which the method was called.
+This lets every version of the operation access that instance's data and call its other Guppy methods.
+
+### Struct methods
+
+For example, a `Rotation` struct can store the angle used by a custom rotation method:
+
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
+@guppy.struct
+class Rotation:
+    a: angle
+
+    @guppy.unitary
+    class apply:
+        @guppy
+        def __call__(self, q: qubit) -> None:
+            rz(q, self.a)
+
+        @guppy
+        def daggered(self, q: qubit) -> None:
+            rz(q, -self.a)
+
+        @guppy
+        def controlled[n: nat](
+            self, q: qubit, controls: array[qubit, n]
+        ) -> None:
+            with control(controls):
+                rz(q, self.a)
+
+        @guppy
+        def ctrl_daggered[n: nat](
+            self, q: qubit, controls: array[qubit, n]
+        ) -> None:
+            with control(controls):
+                rz(q, -self.a)
+
+@guppy
+def use_rotation(c: qubit, q: qubit) -> None:
+    rotation = Rotation(angle(1 / 4))
+    rotation.apply(q)                 # Uses __call__ with self = rotation.
+    with dagger:
+        rotation.apply(q)             # Uses daggered with self = rotation.
+    with control(c):
+        rotation.apply(q)             # Uses controlled with self = rotation.
+    with control(c), dagger:
+        rotation.apply(q)             # Uses ctrl_daggered with self = rotation.
+
+use_rotation.check()
+```
+
+The call `rotation.apply(q)` supplies `rotation` as `self` automatically.
+The modifier block selects the implementation and passes the same receiver to it; for example, `daggered` reads `rotation.a` through `self.a`.
+The nested `apply` class groups the implementations, so we construct a `Rotation` and call its `apply` method directly.
+
+The call `rotation.apply(q)` supplies `rotation` as `self` automatically.
+The modifier block selects the implementation and passes the same receiver to it; for example, `daggered` reads `rotation.a` through `self.a`.
+The nested `apply` class groups the implementations, so we construct a `Rotation` and call its `apply` method directly.
+
+We have removed the explicit `"Rotation"` annotation from `self` in all implementations, allowing Guppy to infer the type automatically.
+
+The signature rules above also apply to `self`: every implementation must agree on its type and ownership annotation.
+Here `self` is borrowed, so the same `rotation` remains available after each call.
+The controlled implementations keep `self` first and add the control array last; Guppy supplies that array from the surrounding `control` block.
+
+### Enum methods
+
+For an enum method, `self` is the enum value, including its variant and any variant data.
+We can match on `self` to choose the operation to apply.
+This example uses an unannotated `self`, which Guppy infers as `PhaseGate` in both implementations:
+
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
+@guppy.enum
+class PhaseGate:
+    S = {}
+    Sdg = {}
+
+    @guppy.unitary
+    class apply:
+        @guppy
+        def __call__(self, q: qubit) -> None:
+            match self:
+                case PhaseGate.S():
+                    s(q)
+                case PhaseGate.Sdg():
+                    sdg(q)
+
+        @guppy
+        def daggered(self, q: qubit) -> None:
+            match self:
+                case PhaseGate.S():
+                    sdg(q)
+                case PhaseGate.Sdg():
+                    s(q)
+
+@guppy
+def use_phase_method(q: qubit) -> None:
+    gate = PhaseGate.S()
+    gate.apply(q)                     # __call__ sees self = PhaseGate.S().
+    with dagger:
+        gate.apply(q)                 # daggered sees the same enum value.
+
+use_phase_method.check()
+```
+
+Here `daggered` receives the same `PhaseGate.S()` value as `__call__`, and uses it to select the inverse gate.
+We could instead annotate both receivers as `self: "PhaseGate"`.
+Adding `controlled` or `ctrl_daggered` follows the same pattern as for structs: keep the enum receiver first and append the control array to the operation's arguments.
