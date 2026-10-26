@@ -2,6 +2,29 @@
 
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
+(guppy-release-1-2-0)=
+## 1.2.0 — 26 October 2026
+
+Guppy 1.2 adds type-level arithmetic and a new standard math module, and tightens up effect tracking so the compiler can order side-effecting operations more precisely.
+
+See the [full changelog for 1.2.0](https://github.com/Quantinuum/guppylang/releases/tag/guppylang-v1.2.0).
+
+### Language and libraries
+
+Added type-level arithmetic, letting comptime expressions such as `n + 1` appear directly in generic type parameters. Without `from __future__ import annotations`, the comptime expression needs to be quoted, and the feature is not yet supported in protocols. Added a `guppylang.std.math` module exposing `sin`, `cos`, `tan`, `log`, `exp`, `pow`, and other functions backed by the HUGR math extension. Extended `round` to accept an `ndigits` argument for `nat`, `int`, and `float`. Added `empty_array` to `guppylang.std.array` to create an array with all elements pre-borrowed, useful for combining arrays without resorting to `array[Option[T], N]`. Added `GuppyLibrary.register_member`, so members can be added to a library after construction instead of only via `GuppyLibrary.from_members`.
+
+```{note}
+Removed the top-level generic parameters `T`, `n`, and `L` from `guppylang.std.array`. Code that imported these directly must declare its own generic parameters instead; code that only uses the module's structs and functions is unaffected.
+```
+
+### Compilation and emulation
+
+Reworked how side-effecting operations (allocation, deallocation, output, panics, and RNG) are tracked internally, splitting the previous single effect kind into `ALLOC`, `FREE`, `OUTPUT`, `PANIC`, and `RNG` with weak and strong ordering between them. This removes unsound effect defaults from `hugr_op` and `custom_func` and fills in many previously-missing effect declarations, so custom functions and modifiers now compile with more accurate ordering guarantees. Fixed `@guppy.comptime` so barriers and array `output` calls applied to statically-known values are preserved and no longer dropped or needlessly repacked. Bumped the `tket`/`tket-py` dependency to 0.15.12, fixing a `pytket` optimization pass that could alter the semantics of boolean logic; related dependency bumps include `hugr` to 0.18.8 and `selene-hugr-qis-compiler` to 0.5.1.
+
+### Fixes and diagnostics
+
+Fixed `mypy` inference for Guppy decorator factories, so patterns such as `@guppy(daggerable=True)` applied to a function are no longer rejected with a spurious `Never` argument-type error. Fixed resolution of custom modifier implementations for functions loaded as values (such as being passed as arguments or stored in a container) so indirect calls are correctly recorded in the modifier call graph. Fixed a memory leak where the compiler retained entire Python call stacks while storing frames during compilation; only a lightweight frame snapshot is kept now, preventing generated modules from being kept alive unnecessarily.
+
 (guppy-release-1-1-4)=
 ## 1.1.4 — 22 October 2026
 
