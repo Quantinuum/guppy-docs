@@ -2,6 +2,14 @@
 
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
+(guppy-release-1-1-4)=
+## 1.1.4 — 22 October 2026
+
+### Fixes
+* Fixed resolution of custom modifier implementations for functions that are loaded as values (such as being passed as arguments or stored in a container) instead of called directly, so indirect calls to those functions are now correctly recorded in the modifier call graph. ([#2392](https://github.com/Quantinuum/guppylang/pull/2392))
+
+See the [full changelog for 1.1.4](https://github.com/Quantinuum/guppylang/releases/tag/guppylang-v1.1.4).
+
 (guppy-release-1-1-3)=
 ## 1.1.3 — 7 October 2026
 
