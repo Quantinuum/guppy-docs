@@ -28,6 +28,7 @@ Note that this release technically contains a breaking change to the `guppylang.
 
 - Fixed `mypy` inference for Guppy decorator factories, so patterns such as `@guppy(daggerable=True)` applied to a function are no longer rejected with a spurious `Never` argument-type error.
 - Fixed a memory leak where the compiler retained entire Python call stacks while storing frames during compilation; only a lightweight frame snapshot is kept now, preventing generated modules from being kept alive unnecessarily.
+- Bumping the `tket`/`tket-py` dependency to 0.15.12 fixed a `pytket` optimization pass bug that could alter the semantics of boolean logic.
 
 (guppy-release-1-1-4)=
 ## 1.1.4 — 22 October 2026
