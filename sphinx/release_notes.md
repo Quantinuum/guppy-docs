@@ -21,7 +21,7 @@ See the [full changelog for 1.2.0](https://github.com/Quantinuum/guppylang/relea
 - Added support for barriers in a `comptime` context.
 
 ```{note}
-Note that this release technically contains a breaking change to the `guppylang.std.array` library: The the top-level generic parameters `T`, `n`, and `L` have been removed (in favour of Python 3.12 generics syntax). Code that imported these directly must declare its own generic parameters instead; code that only uses the module's structs and functions is unaffected.
+This release technically contains a breaking change to the `guppylang.std.array` library: The top-level generic parameters `T`, `n`, and `L` have been removed (in favour of Python 3.12 generics syntax). Code that imported these directly must declare its own generic parameters instead; code that only uses the module's structs and functions is unaffected.
 ```
 
 ### Fixes
