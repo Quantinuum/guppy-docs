@@ -12,7 +12,7 @@ See the [full changelog for 1.2.0](https://github.com/Quantinuum/guppylang/relea
 
 ### Language and libraries
 
-- Added type-level arithmetic: If you have a generic variable representing a natural number `N: nat`, you can now perform arithmetic on it using "comptime" expressions, for example `comptime(N+1)`. Note that you need to import `from __future__ import annotations` or place the expression in backticks for this to work.
+- Added type-level arithmetic: If you have a generic variable representing a natural number `N: nat`, you can now perform arithmetic on it using "comptime" expressions, for example `comptime(N+1)`. Note that you need to import `from __future__ import annotations` or place the expression in quotes for this to work.
 - Added a `guppylang.std.math`module exposing functions such as `sin`, `cos`, `tan`, `log`, `exp`, and `pow`.
 - Extended round to accept an `ndigits` argument for `nat`, `int`, and `float`. 
 - Added `empty_array` to `guppylang.std.array` to create an array with all elements pre-borrowed, useful for combining arrays without resorting to option arrays. 
