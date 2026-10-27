@@ -136,6 +136,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "nexus": ("https://docs.quantinuum.com/nexus/", None),
     "pytket": ("https://docs.quantinuum.com/tket/api-docs/", None),
+    "tket": ("https://quantinuum.github.io/tket2/", None),
     "hugr": ("https://quantinuum.github.io/hugr/", None),
 }
 
