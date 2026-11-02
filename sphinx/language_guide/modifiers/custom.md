@@ -391,7 +391,7 @@ Supply both missing methods, or enable their automatic generation with `unitary=
 ## Custom Modifiers as Struct and Enum Methods
 
 ```{note}
-Support for custom modifiers introduced in ``v1.2``.
+Introduced in ``v1.2.0``.
 ```
 
 We can define a custom modifier as a method by nesting its `@guppy.unitary` class inside a `@guppy.struct` or `@guppy.enum` definition.
@@ -404,9 +404,6 @@ This lets every version of the operation access that instance's data and call it
 For example, a `Rotation` struct can store the angle used by a custom rotation method:
 
 ```{code-cell} ipython3
----
-tags: [skip-execution]
----
 @guppy.struct
 class Rotation:
     a: angle
@@ -470,38 +467,27 @@ We can match on `self` to choose the operation to apply.
 This example uses an unannotated `self`, which Guppy infers as `PhaseGate` in both implementations:
 
 ```{code-cell} ipython3
----
-tags: [skip-execution]
----
 @guppy.enum
 class PhaseGate:
     S = {}
-    Sdg = {}
+
 
     @guppy.unitary
     class apply:
         @guppy
         def __call__(self, q: qubit) -> None:
-            match self:
-                case PhaseGate.S():
-                    s(q)
-                case PhaseGate.Sdg():
-                    sdg(q)
-
+           s(q)
+    
         @guppy
         def daggered(self, q: qubit) -> None:
-            match self:
-                case PhaseGate.S():
-                    sdg(q)
-                case PhaseGate.Sdg():
-                    s(q)
+                sdg(q)
 
 @guppy
 def use_phase_method(q: qubit) -> None:
     gate = PhaseGate.S()
-    gate.apply(q)                     # __call__ sees self = PhaseGate.S().
+    gate.apply(q)                     # __call__ 
     with dagger:
-        gate.apply(q)                 # daggered sees the same enum value.
+        gate.apply(q)                 # daggered
 
 use_phase_method.check()
 ```
