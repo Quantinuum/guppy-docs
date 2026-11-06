@@ -28,7 +28,7 @@ This guide is organised by the gate being modified. Each entry states the native
 - [V and Vdg](#v-and-vdg)
 - [Global phase](#global-phase)
 
-See also the [worked examples](#worked-examples) for explicit circuits and dirty-ancilla restoration.
+See also the [worked examples](#worked-examples) for explicit circuits and restoration of dirty ancillas[^dirty-ancilla].
 
 ## Notation and phase conventions
 
@@ -94,7 +94,7 @@ $$
 
 with identity action on $a$ after the complete sequence. Each block is recursively decomposed until native cases are reached.
 
-A dirty ancilla may start in an arbitrary state and may be entangled. To see that it is restored, let
+To see that the dirty ancilla is restored, let
 
 $$
 p=\left(\bigwedge C_1\right)xy,\qquad q=\bigwedge C_2.
@@ -450,6 +450,10 @@ The phase correction is essential to the [multi-controlled X construction](#x). 
 
 ## Global phase
 
+```{note}
+Global phase is not currently exposed in Guppy's public API; support is planned for a future release. The compiler uses it internally for decompositions such as controlled S (CS), as shown in the [S and Sdg entry](#s-and-sdg).
+```
+
 A scalar phase becomes a conditional phase when controlled:
 
 $$
@@ -613,3 +617,5 @@ Thus $c_4$ flips exactly when $c_1c_2c_3=1$, while $t$ is restored exactly to it
 The sequence introduces no basis-dependent phases, so restoration also holds for superpositions and entanglement. In particular, $t$ may already be entangled with $c_4$ by the preceding controlled V.
 
 After the borrowed-qubit block returns, the enclosing decomposition continues to use $t$ as its original target. No additional qubit is allocated: the dirty workspace is provided internally by recursive borrowing.
+
+[^dirty-ancilla]: A **dirty ancilla** is an existing qubit borrowed as temporary workspace in an arbitrary, possibly unknown state. It may be in superposition or entangled with other qubits, and does not need to be initialised to $|0\rangle$. The decomposition must restore its state and any entanglement exactly before returning it.

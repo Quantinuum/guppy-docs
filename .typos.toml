@@ -1,1 +1,4 @@
 files.extend-exclude = ["sphinx/guppylang/**"]
+
+[default.extend-words]
+BA = "BA"
