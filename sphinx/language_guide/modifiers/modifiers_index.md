@@ -147,4 +147,6 @@ control.md
 dagger.md
 functions.md
 custom.md
+modifier-gate-decompositions.md
 ```
+
