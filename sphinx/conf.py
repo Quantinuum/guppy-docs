@@ -189,6 +189,23 @@ def skip_member(app, what, name, obj, skip, options):
     return None
 
 
+import logging
+
+from sphinx.util import logging as sphinx_logging
+
+
+class IgnoreMaybeLeakedDuplicate(logging.Filter):
+    def filter(self, record):
+        return not record.getMessage().startswith(
+            "duplicate object description of guppylang.std.qsystem._common.MaybeLeaked,"
+        )
+
+
+sphinx_logging.getLogger("sphinx.domains.python").logger.addFilter(
+    IgnoreMaybeLeakedDuplicate()
+)
+
+
 def prune_sourceless_viewcode_modules(app):
     """Drop viewcode entries for modules whose source could not be read.
 
