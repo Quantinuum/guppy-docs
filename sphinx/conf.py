@@ -95,6 +95,7 @@ nb_merge_streams = True  # Accumulates all stdout streams into one, same with st
 # See https://github.com/quantinuum-dev/guppy-docs/pull/51#issuecomment-2757314376
 suppress_warnings = [
     "misc.highlighting_failure",
+    "autosectionlabel.release_notes",
 ]
 
 exclude_patterns = [
@@ -186,6 +187,23 @@ def skip_member(app, what, name, obj, skip, options):
     if name in dir(unsupported):
         return True
     return None
+
+
+import logging
+
+from sphinx.util import logging as sphinx_logging
+
+
+class IgnoreMaybeLeakedDuplicate(logging.Filter):
+    def filter(self, record):
+        return not record.getMessage().startswith(
+            "duplicate object description of guppylang.std.qsystem._common.MaybeLeaked,"
+        )
+
+
+sphinx_logging.getLogger("sphinx.domains.python").logger.addFilter(
+    IgnoreMaybeLeakedDuplicate()
+)
 
 
 def prune_sourceless_viewcode_modules(app):
