@@ -2,6 +2,25 @@
 
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
+(guppy-release-1-2-1)=
+## 1.2.1 — 11 November 2026
+
+This release fixes several linearity-checking gaps around structs, enums, and `with control` blocks, adds support for docstrings in `@guppy.unitary` classes, and raises the minimum `tket`/`tket-py` version.
+
+See the [full changelog for 1.2.1](https://github.com/Quantinuum/guppylang/releases/tag/guppylang-v1.2.1).
+
+### Fixes
+
+- Rejected whole-value uses of mixed quantum/classical structs and tuples under dagger, closing a soundness gap where such values previously compiled without error.
+- Fixed linearity checking of struct and tuple fields inside `with control` blocks, so copyable fields passed alongside controlled qubits are no longer incorrectly flagged or dropped.
+- Fixed detection of qubits nested in struct and enum fields when checking control constraints, so calls such as `use1(s)` inside `with control(c)` are correctly rejected with a `Control constraint violation` when `s` contains a qubit.
+- Added support for docstrings at the start of `@guppy.unitary`-decorated classes; they are now ignored instead of causing a compilation error.
+- Raised the minimum `tket`/`tket-py` version to 0.15.15.
+
+### Internal
+
+- Decoupled the `selene` dependencies from the core compiler, so `guppylang` can be used in environments where the `selene` toolchain has been removed or stubbed out, for example via `uv sync --no-install-package selene_sim`.
+
 (guppy-release-1-2-0)=
 ## 1.2.0 — 26 October 2026
 
