@@ -1,5 +1,5 @@
-build-docs:
-    cd sphinx && uv run --group docs sphinx-build -b html . build
+build-docs *SPHINX_ARGS:
+    cd sphinx && uv run --group docs sphinx-build {{SPHINX_ARGS}} -b html . build
 
 build:
     just build-docs
