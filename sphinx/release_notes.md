@@ -11,9 +11,9 @@ See the [full changelog for 1.2.1](https://github.com/Quantinuum/guppylang/relea
 
 ### Fixes
 
-- Rejected whole-value uses of mixed quantum/classical structs and tuples under dagger, closing a soundness gap where such values previously compiled without error.
-- Fixed linearity checking of struct and tuple fields inside `with control` blocks, so copyable fields passed alongside controlled qubits are no longer incorrectly flagged or dropped.
-- Fixed detection of qubits nested in struct and enum fields when checking control constraints, so calls such as `use1(s)` inside `with control(c)` are correctly rejected with a `Control constraint violation` when `s` contains a qubit.
+- Rejected whole-value uses of mixed quantum/classical structs and tuples under dagger, avoiding a compiler error due to potentially non-invertible computation.
+- Fixed linearity checking of struct and tuple fields with `control` blocks: before, when a struct field was used as a controller, the whole struct was wrongly considered "borrowed”, preventing the user from using other struct fields in the modifier block.
+- Fixed detection of qubits nested in struct and enum fields when checking control constraints: calls taking structs and enums with quantum fields were considered classical, skipping the control constraint check.
 - Added support for docstrings at the start of `@guppy.unitary`-decorated classes; they are now ignored instead of causing a compilation error.
 - Raised the minimum `tket`/`tket-py` version to 0.15.15.
 
