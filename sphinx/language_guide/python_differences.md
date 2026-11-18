@@ -6,7 +6,7 @@ kernelspec:
 
 # Differences between Guppy and Python
 
-As explained in the [previous chapter](static.md), Guppy's execution model differs quite significantly from Python's:
+As explained in the [chapter on static compilation](static.md), Guppy's execution model differs quite significantly from Python's:
 instead of using an interpreter, we compile Guppy code into a standalone binary.
 This approach leads to better runtime performance and enables us to catch errors at compile-time, but it also means that some of Python’s more dynamic features are not supported.
 In this chapter, we outline the key differences between Guppy and standard Python code.
