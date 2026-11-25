@@ -139,7 +139,7 @@ Guppy structs are more restrictive than regular Python classes:
 * Adding or reassigning methods outside the class definition is not allowed.
 * Struct types cannot be dynamically created at runtime, they must be declared using the `class` syntax.
 
-Structs are mutable by default. See the [chapter on structs](data_types/structs.md) for further details and more usage examples.
+See the [chapter on structs](data_types/structs.md) for further details and more usage examples.
 
 
 ## Integers
@@ -285,21 +285,21 @@ Also, explicit [panic](../api/generated/guppylang.std.builtins.panic.rst) and [o
 
 For example,
 ```{code-cell} ipython3
-from guppylang.std.quantum import qubit
+from guppylang.std.quantum import h, qubit
 
 @guppy
-def baz[n, m](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
+def baz[n: nat, m: nat](arr1: array[qubit, n], arr2: array[qubit, m]) -> None:
     h(arr1[10])
     h(arr2[11])
 ```
-If `a1` has fewer than 11 elements, or `a2` fewer than 12, then `baz` will panic
-(just as Python). However, if both these problems occur in the same call to `baz`
-then v1.0 does not guaranteed which array access will be reported as failing. Similarly here:
+If `arr1` has fewer than 11 elements or `arr2` has fewer than 12, `baz` will panic.
+If both indices are out of bounds, either array access may be reported first.
+The same applies to an array access followed by an explicit panic.
+
 ```{code-cell} ipython3
 @guppy
 def foo(arr1: array[qubit, 3], i: int) -> None:
-  h(arr1[i])
-  panic("Array access may not have succeeded")
+    h(arr1[i])
+    panic("Array access may not have succeeded")
 ```
-the message `Array access may not have succeeded` is accurate, seeing this
-does not not necessarily mean that the array index was in bounds.
+The message `Array access may not have succeeded` can appear even if `i` is out of bounds.
