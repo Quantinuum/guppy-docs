@@ -36,15 +36,11 @@ def cnx[n: nat](controls: array[qubit, n], target: qubit) -> None:
         x(target)
 
 @guppy
-def main(c0: qubit, c1: qubit, t: qubit) -> None:
-    
-    c2x(c0, c1, t)
+def main(controls: array[qubit, 2], t0: qubit, t1: qubit) -> None:
+    c2x(controls[0], controls[1], t0)
+    cnx(controls, t1)
 
-    controls = array([c0, c1])
-    t2 = qubit()
-    cnx(controls, t2)
-
-cnx.check()
+main.check()
 ```
 
 ## Classical control
