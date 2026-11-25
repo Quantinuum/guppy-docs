@@ -84,38 +84,19 @@ As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)`
 
 
 ```{warning}
-Although the size of an array is known at compile time, the index may not be. If an index computed at runtime is out of bounds, a runtime error will occur.
+Array bounds are checked at runtime, even when the index is an integer literal.
 ```
 
-If our index is an integer literal, the Guppy compiler can detect when the index is out of bounds and give an error. 
-
 ```{code-cell} ipython3
----
-tags: [raises-exception]
----
 from guppylang.std.quantum import h, qubit
 
 @guppy
-def index_out_of_bounds1() -> array[qubit, 3]:
-    qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
-    h(qs[3]) # Access index 3, only (0, 1, 2) indices are within bounds
+def index_out_of_bounds() -> array[qubit, 3]:
+    qs = array(qubit() for _ in range(3))
+    h(qs[3])  # Only indices 0, 1 and 2 are in bounds
     return qs
 
-index_out_of_bounds1.check() # Out of bounds error given
-```
-
-Note that there are some limitations to this bounds checking. If we write the index as an expression i.e. `qs[2+1]` then the compiler is not able to detect that the index is out of bounds. Also if we assign the value 3 to a variable `x` then `qs[x]` will pass the type check.
-
-```{code-cell} ipython3
-@guppy
-def index_out_of_bounds2() -> array[qubit, 3]:
-    qs = array(qubit() for _ in range(3)) # Allocate an array of length 3
-    x = 3 # Assign 3 to a variable
-    h(qs[x]) # Index using the variable x
-    h(qs[1 + 2]) # Index is an arithmetic expression
-    return qs
-
-index_out_of_bounds2.check() # No out of bounds error given
+index_out_of_bounds.check()  # Type checking succeeds
 ```
 
 
@@ -135,29 +116,19 @@ def get_first_four_squares() -> array[int, 4]:
 get_first_four_squares.check()
 ```
 
-Note that as the size of an array has to be statically known we cannot generalize this function using a generic variable.
+We can generalise this function using a compile-time length parameter.
 
 ```{code-cell} ipython3
----
-tags: [raises-exception]
----
 from guppylang.std.num import nat
 
-n = guppy.nat_var("n")
-
 @guppy
-def get_first_n_squares(n: nat) -> array[int, n]:
-    return array(x*x for x in range(n))
+def get_first_n_squares[N: nat]() -> array[int, N]:
+    return array(x * x for x in range(N))
 
 get_first_n_squares.check()
 ```
 
-```{note}
-Note that we can generalize this function provided that the value of `n` is known at compile time. 
-See the section on [comptime arguments](../comptime.md#compile-time-arguments).
-```
-
-For more background on Guppy's static type checker see the section on [Static Compilation and Typing](../static.md).
+The length must be known at compile time. See [Static Compilation and Typing](../static.md#generics) for more on generic parameters.
 
 We cannot use conditional statements in array comprehensions as their values generally can't be known at compile time.
 
