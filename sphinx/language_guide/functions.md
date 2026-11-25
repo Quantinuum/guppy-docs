@@ -148,7 +148,7 @@ from guppylang.std.builtins import array
 @guppy
 def any(f: Callable[[int], bool], xs: array[int, 3]) -> bool:
     for i in range(3):
-        if f(i):
+        if f(xs[i]):
             return True
     return False
 ```
@@ -163,13 +163,27 @@ def is_even(n: int) -> bool:
 @guppy
 def is_positive(n: int) -> bool:
     return n > 0
-    
+
 @guppy
 def test_any() -> bool:
-    xs = array(1, 2, 3)
-    return any(is_even, xs) and any(is_positive, xs)
+    xs = array(1, 3, 5)
+    return not any(is_even, xs) and any(is_positive, xs)
 
 test_any.check()
+```
+
+```{code-cell} python
+---
+tags: [remove-cell]
+---
+from guppylang.std.builtins import output
+# Hidden cell testing the output of test_any()
+
+@guppy
+def run_test_any() -> None:
+    output("result", test_any())
+
+assert run_test_any.emulator(n_qubits=1).run().results[0].entries == [("result", 1)]
 ```
 
 Of course, we are only allowed to pass functions with the correct signature:
