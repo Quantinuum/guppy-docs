@@ -22,11 +22,11 @@ def sx_dg(q: qubit) -> None:
 sx_dg.check()
 ```
 
-For instance, the previous program corresponds to the sequence of operations is equivalent to:
+The previous program is equivalent to the following sequence of operations:
 
 ```
-sdg q;
 h q;
+sdg q;
 ```
 
 Some simple classical operations, such as array indexing, angle construction (e.g. `angle(1/2)`), or arithmetic operations, are allowed inside dagger blocks.
