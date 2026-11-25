@@ -54,19 +54,14 @@ You can also use `while` loops, with `break`, `continue`, and early  `return` st
 We can put all these together for this simplified example where we make sure the qubit is in the $\ket{1}$ state before proceeding:
 
 ```{code-cell} ipython3
-from guppylang.std.quantum import measure, x
+from guppylang.std.quantum import project_z
 
 @guppy
-def repeat_until_success_iter() -> None:
+def repeat_until_success_iter(q: qubit) -> None:
     while True:
-        q = qubit()
-        x(q)
-
-        if not measure(q).read():
-            continue
-
-        # Do something with the qubit here.
-        break
+        h(q)
+        if project_z(q).read():
+            break
 
 repeat_until_success_iter.check()
 ```
@@ -75,14 +70,10 @@ Guppy also supports recursion, so you could also rewrite the function above in t
 
 ```{code-cell} ipython3
 @guppy
-def repeat_until_success_rec() -> None:
-    q = qubit()
-    x(q)
-
-    if not measure(q).read():
-        repeat_until_success_rec()
-
-    # Do something with the qubit here.
+def repeat_until_success_rec(q: qubit) -> None:
+    h(q)
+    if not project_z(q).read():
+        repeat_until_success_rec(q)
 
 repeat_until_success_rec.check()
 ```
