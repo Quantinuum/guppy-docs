@@ -58,24 +58,24 @@ def replicate[T: (Copy, Drop), N: nat](elem: T) -> array[T, N]:
 ```
 
 ### Protocol bounds
- Type parameter syntax is used to specify the _protocols_ that a type argument must implement. In the below example, any type argument `T` to the function `foo` must implement the `MyProto` protocols.
+Type parameter syntax can be used to specify the _protocols_ that a type argument must implement.
 
-Assuming we've defined a protocol, `MyProto`:
+For example, define a protocol whose `foo` method takes a value of type `T`.
+
 ```{code-cell} ipython3
 @guppy.protocol
 class MyProto[T]:
     @guppy.require
-    def foo[T](self, t: T) -> None: ...
+    def foo(self, t: T) -> None: ...
 ```
 
-We can require that it is implemented by a type arg `T` by writing:
+The bound `MyProto[int]` requires the method to accept an `int`.
 
 ```{code-cell} ipython3
- @guppy
- def baz[T: MyProto](t: T) -> None:
-     return t.foo()
-
- ```
+@guppy
+def baz[T: MyProto[int]](t: T) -> None:
+    t.foo(0)
+```
 
 ## Type Arguments to Classes
 Guppy structs and protocols can also take type parameters in the same way. The type parameters will be in scope for the signatures of the methods:
