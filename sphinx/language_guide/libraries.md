@@ -137,7 +137,7 @@ lib_pkg: Package = ...
 user_pkg: Package = ...
 # --- SNIP ---
 
-combined_pkg: Package = user_pkg.link(user_pkg)
+combined_pkg: Package = user_pkg.link(lib_pkg)
 ```
 The order in which the packages are linked does not matter, and linking multiple packages can be done all at once, or in several calls.
 It is also not required that, after linking, there are no remaining calls to (unrelated) function declarations.
