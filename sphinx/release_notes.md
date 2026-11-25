@@ -2,6 +2,17 @@
 
 This page highlights changes in stable [guppylang](https://pypi.org/project/guppylang/) releases. It groups changes from pre-releases with the stable release that includes them. For the full release history, including pre-releases, see the [upstream guppylang changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang/CHANGELOG.md). The separate [guppylang-internals changelog](https://github.com/Quantinuum/guppylang/blob/main/guppylang-internals/CHANGELOG.md) covers compiler changes.
 
+(guppy-release-1-2-2)=
+## 1.2.2 — 19 November 2026
+
+This release fixes a compiler optimisation bug that could drop extensions required by a program's HUGR after optimisation passes ran.
+
+See the [full changelog for 1.2.2](https://github.com/Quantinuum/guppylang/releases/tag/guppylang-v1.2.2).
+
+### Fixes
+
+- Fixed the optimiser dropping extensions that were only introduced by optimisation passes themselves.
+
 (guppy-release-1-2-1)=
 ## 1.2.1 — 11 November 2026
 
