@@ -11,22 +11,22 @@ kernelspec:
 ```{code-cell} ipython3
 from guppylang import guppy
 from guppylang.std.builtins import control, dagger
-from guppylang.std.quantum import h, qubit, s, x
+from guppylang.std.quantum import h, qubit, s
 
 @guppy
-def sx_dg(q: qubit) -> None:
+def sh_dg(q: qubit) -> None:
     with dagger:
         s(q)
         h(q)
 
-sx_dg.check()
+sh_dg.check()
 ```
 
-For instance, the previous program corresponds to the sequence of operations is equivalent to:
+The block applies these gates in order.
 
 ```
-sdg q;
 h q;
+sdg q;
 ```
 
 Some simple classical operations, such as array indexing, angle construction (e.g. `angle(1/2)`), or arithmetic operations, are allowed inside dagger blocks.
