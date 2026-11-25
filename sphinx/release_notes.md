@@ -11,7 +11,7 @@ See the [full changelog for 1.2.2](https://github.com/Quantinuum/guppylang/relea
 
 ### Fixes
 
-- Fixed the optimiser dropping extensions that were only introduced by optimisation passes themselves (for example array and float extensions pulled in by constant folding), which could leave a compiled HUGR referencing extensions not listed in its package, causing validation failures.
+- Fixed the optimiser dropping extensions that were only introduced by optimisation passes themselves.
 
 (guppy-release-1-2-1)=
 ## 1.2.1 — 11 November 2026
