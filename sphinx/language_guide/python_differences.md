@@ -134,13 +134,12 @@ class InventoryItem:
 
 Guppy structs are more restrictive than regular Python classes:
 
-* All structs are immutable.
 * No custom `__init__` constructors.
 * All struct fields and their types must be explicitly declared. Dynamically adding or removing fields as well as [`hasattr`](https://docs.python.org/3/library/functions.html#hasattr), [`getattr`](https://docs.python.org/3/library/functions.html#getattr), and [`setattr`](https://docs.python.org/3/library/functions.html#setattr) are not allowed.
 * Adding or reassigning methods outside the class definition is not allowed.
 * Struct types cannot be dynamically created at runtime, they must be declared using the `class` syntax.
 
-See the [chapter on structs](data_types/structs.md) for further details and more usage examples.
+Structs are mutable by default. See the [chapter on structs](data_types/structs.md) for further details and more usage examples.
 
 
 ## Integers
