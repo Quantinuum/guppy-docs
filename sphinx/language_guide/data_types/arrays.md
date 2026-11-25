@@ -84,7 +84,7 @@ As in Python, Guppy indices start from zero. In the array `arr = array(0, 2, 4)`
 
 
 ```{warning}
-Array bounds are checked at runtime, even when the index is an integer literal.
+Array bounds are not be checked at compile time. This means that out-of-bounds array indexing can lead to costly runtime errors when we execute the program on hardware or simulators.
 ```
 
 ```{code-cell} ipython3
