@@ -173,7 +173,7 @@ changed_control_argument.check()
 ```
 
 
-Only the four recognised methods are allowed inside the class.
+Guppy 1.2.1 recognises only the four methods listed above inside the class.
 Additional methods, class attributes such as `label = "rotation"`, and other class-body statements are rejected.
 For example, defining a class attribute is invalid:
 
@@ -387,6 +387,23 @@ class missing_controlled_and_daggered:
 ```
 
 Supply both missing methods, or enable their automatic generation with `unitary=True` on `__call__`.
+
+### Custom power
+
+On a compiler with custom power dispatch, `powered` takes the ordinary arguments followed by an `exponent: nat`. Using `rotate` from [Nested powers](power.md#nested-powers), we need at most two rotations because three restore the original state. Guppy 1.2.1 does not yet support this method.
+
+```python
+@guppy.unitary
+class custom_rotate:
+    @guppy
+    def __call__(a: qubit, b: qubit, c: qubit) -> None:
+        rotate(a, b, c)
+
+    @guppy
+    def powered(a: qubit, b: qubit, c: qubit, exponent: nat) -> None:
+        for _ in range(exponent % 3):
+            rotate(a, b, c)
+```
 
 ## Custom Modifiers as Struct and Enum Methods
 

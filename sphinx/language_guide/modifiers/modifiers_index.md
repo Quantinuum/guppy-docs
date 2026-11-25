@@ -7,9 +7,9 @@ kernelspec:
 
 # Modifiers
 
-Modifiers transform a block of quantum operations. They can be used to generate controlled and daggered versions of single gate, a block containing many gates or a Guppy function. Guppy generates the transformed operations, this means that the user does not need to provide the implementation of the controlled or daggered operation themselves.
+Modifiers transform a block of quantum operations. Guppy can control, invert, or repeat a single gate, a sequence of gates, or a call to a Guppy function.
 
-The modifier changes the underlying gates. For example, controlling a block adds the control to every gate it produces; effectively, a function `f(q)` becomes a controlled operation `ctrl-f(c, q)` with an additional control-qubit input. A [dagger](dagger.md) block reverses the gate order and replaces each gate with its inverse.
+Controlling a block adds the control to every gate it produces. For example, a function `f(q)` becomes a controlled operation `ctrl-f(c, q)` with an additional control-qubit input. A [dagger](dagger.md) block reverses the gate order and replaces each gate with its inverse. A [power](power.md) block repeats the entire sequence a specified number of times.
 
 ## Syntax
 
@@ -56,7 +56,7 @@ rotate_then_dagger.emulator(n_qubits=2).with_shots(100).run().collated_counts()
 ```
 Since we are applying a rotation followed by its inverse, the qubit is always measured in the $\ket{0}$ state.
 
-Multiple modifiers may also be combined or nested.
+Multiple modifiers may also be combined or nested. See [Nested powers](power.md#nested-powers) for a three-qubit rotation.
 
 ```{code-cell} ipython3
 from guppylang.std.quantum import s, qubit
@@ -145,6 +145,7 @@ local_assignment.check()
 
 control.md
 dagger.md
+power.md
 functions.md
 custom.md
 modifier-gate-decompositions.md
