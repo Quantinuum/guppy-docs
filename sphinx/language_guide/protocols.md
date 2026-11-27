@@ -94,7 +94,7 @@ def main() -> None:
 Unfortunately, this doesn't allow us to use the syntactic sugar `x + y` in `add_two`.
 ```
 
-### Taking protocol arguments
+## Taking protocol arguments
 As shown above, protocols are written as bounds on type arguments using [type parameter syntax](type_arg_syntax.md).
 Naturally this means we can add multiple protocol bounds to a type argument, like
 ```{code-cell} ipython3
@@ -125,6 +125,63 @@ def foo[T: MyProto](t: T) -> ...
 ```{note}
 Type variables declared with `guppy.type_var(...)` cannot be given protocol bounds. Thus, a type variable that needs to implement a protocol must be specified with Python 3.12's type argument syntax.
 ```
+
+## Checking structs
+Optionally, you can annotate structs with protocols. This will check that the
+struct does implement these protocols.
+
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
+@guppy.protocol
+class Proto:
+    @guppy.require
+    def meth(self, x:nat) -> nat: ...
+
+@guppy.struct
+class Good(Proto):
+    @guppy
+    def meth(self, x:nat) -> nat:
+        return x
+# ✔️ Type checks
+
+@guppy.struct
+class Bad(Proto):
+    @guppy
+    def other(self, x:bool) -> bool:
+        return x
+# ❌ Fails type checking with
+# Type `Bad` does not have required method `meth` of protocol `Proto`
+```
+
+
+It is **not** necessary to annotate a struct with a protocol this way for the
+type checker to know that the struct implements the protocol. In fact, such
+annotations make no difference to type checking beyond verifying the struct
+itself.
+
+```{code-cell} ipython3
+---
+tags: [skip-execution]
+---
+@guppy.struct
+class AlsoGood:
+    @guppy
+    def meth(self, x:nat) -> nat:
+        return x
+
+@guppy
+def f[A:Proto](h:A) -> nat:
+    return h.meth(0)
+
+@guppy
+def main() -> None:
+  x = f(Good())  # ✔️
+  y = f(AlsoGood()) # ✔️
+  return
+```
+
 
 ## Example: State Preparation
 Let's see an example of using protocols to make an interface for the state preparation part of an experiment:
