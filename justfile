@@ -5,7 +5,7 @@ build:
     just build-docs
 
 dev:
-    cd sphinx && uv run sphinx-autobuild -b html . build -D nb_execution_mode=off
+    cd sphinx && uv run sphinx-autobuild --ignore api/generated -b html . build -D nb_execution_mode=off
 
 serve: build
     npm exec serve sphinx/build
